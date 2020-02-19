@@ -39,3 +39,4 @@ def main():
     plot_regression_line(x, y, b) 
   
 main()
+#prueba git bien configured

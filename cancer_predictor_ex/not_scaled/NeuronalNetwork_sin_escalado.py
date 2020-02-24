@@ -87,7 +87,7 @@ class NeuronalNetwork:
         self.param["b2"] = self.param["b2"] - self.lr * variaton_b2 #b2 upgrade
         
 
-    def gradient_descend(self, epochs):
+    def gradient_descent(self, epochs):
         np.random.seed(1)                         
         self.nInit()#init weights and bias
         for i in range(0, epochs):#run
@@ -134,7 +134,7 @@ class NeuronalNetwork:
 #     yval=df.iloc[501:683,10:].values.transpose()
 #     #declaring nn
 #     nn = NeuronalNetwork(x,y,0.02)
-#     nn.gradient_descend(200)#gradient descend algorithm
+#     nn.gradient_descent(200)#gradient descent algorithm
 #     #predict and comparing training acurrancy vs validation acurrancy
 #     pred_train = nn.predict(x, y)
 #     pred_test = nn.predict(xval, yval)

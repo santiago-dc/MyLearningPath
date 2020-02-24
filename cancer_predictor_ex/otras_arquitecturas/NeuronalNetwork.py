@@ -23,15 +23,15 @@ class NeuronalNetwork:
     def __init__(self, x, y, lr, dims, lambd):
         self.X=x
         self.Y=y
-        self.Yh=np.zeros((1,self.Y.shape[0]))
-        self.dims= dims
+        self.Yh=np.zeros((1,self.Y.shape[1]))
+        self.dims=dims
         self.param={}
         self.lr=lr
         self.lambd=lambd
-        self.m = self.Y.shape[0]
+        self.m = self.Y.shape[1]
         self.threshold=0.9
         self.error=[]
-        self.m = self.Y.shape[0]
+        self.m = self.Y.shape[1]
     
     def nInit(self): #function where we initialize with random values the parameters of our network
         np.random.seed(1)
@@ -84,7 +84,7 @@ class NeuronalNetwork:
         self.param["b1"] = self.param["b1"] - self.lr * variaton_b1 #b1 upgrade
         self.param["W2"] = self.param["W2"] - self.lr * variaton_W2 #W2 upgrade
         self.param["b2"] = self.param["b2"] - self.lr * variaton_b2 #b2 upgrade
-        
+    
     def backward_regu(self):
         derror = - (np.divide(self.Y, self.Yh ) - np.divide(1 - self.Y, 1 - self.Yh)) #derivate of error function, Cross-Entropy, not MSE
         s2 = derror * dSigmoid(self.param['N2']) #s2 = derivate of error function * derivate of sigmoid function 
@@ -100,7 +100,8 @@ class NeuronalNetwork:
         self.param["b1"] = self.param["b1"] - self.lr * variaton_b1 #b1 upgrade
         self.param["W2"] = self.param["W2"] - self.lr * variaton_W2 #W2 upgrade
         self.param["b2"] = self.param["b2"] - self.lr * variaton_b2 #b2 upgrade
-    
+        
+
     def gradient_descent(self, epochs):
         np.random.seed(1)                         
         self.nInit()#init weights and bias
@@ -109,14 +110,14 @@ class NeuronalNetwork:
             self.backward()
             if i % 100 == 0:
                 print ("Cost after iteration %i: %f" %(i, error)) #cost value every 500 epochs
-                self.error.append(error) #we only updates the error values every 100 epochs to get harder modifications 
+                self.error.append(error) #we only updates the error values every 500 epochs to get harder modifications 
 
         plt.plot(np.squeeze(self.error))
         plt.ylabel('Loss')
         plt.xlabel('Iter')
         plt.title("Lr =" + str(self.lr))
         plt.show()
-
+        
     def gradient_descent_regu(self, epochs):
         np.random.seed(1)                         
         self.nInit()#init weights and bias
@@ -145,16 +146,6 @@ class NeuronalNetwork:
     
         print("Acc: " + str(np.sum((comp == y)/x.shape[1]))) 
         return comp
-    
-    def test(self, x, y): 
-        self.X=x
-        self.Y=np.zeros((1,x.shape[1]))
-        pred, error = self.forward()
-        if pred > self.threshold:
-            print("La frase es spam")
-        else: 
-            print("La frase NO es spam")
-
 
 #borrador del notebook no descomentar
 

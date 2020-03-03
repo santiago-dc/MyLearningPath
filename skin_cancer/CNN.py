@@ -3,7 +3,6 @@ import pandas as pd
 from PIL import Image
 import os
 import glob
-import cv2
 import matplotlib.pyplot as plt
 from keras.utils.np_utils import to_categorical
 np.random.seed(5)
@@ -88,33 +87,41 @@ from tensorflow import keras
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D
 
+# model = Sequential() #Test Acc:  0.7757575511932373
+# #add model layers
+# model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(224,224,3)))#capa de 64 filtros de 3x3. dims 64*28*28*1
+# model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+# model.add(Conv2D(32, kernel_size=3, activation='relu'))#capa de 32 filtros de 3x3. dims 32*28*28*1
+# model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+# model.add(Flatten())# pasa los resultados de matriz a vector
+# model.add(Dense(30, activation='relu'))
+# model.add(Dense(2, activation='softmax'))
+
+# model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=32, epochs=3)
+
+# test_loss, test_acc = model.evaluate(X_test, Y_test)
+# print('Test Acc: ', test_acc)
+
 model = Sequential() #Test Acc:  0.7757575511932373
 #add model layers
-model.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(224,224,3)))#capa de 64 filtros de 3x3. dims 64*28*28*1
+model.add(Conv2D(128, kernel_size=5, activation='relu', input_shape=(224,224,3)))
 model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
-model.add(Conv2D(32, kernel_size=3, activation='relu'))#capa de 32 filtros de 3x3. dims 32*28*28*1
+model.add(Conv2D(128, kernel_size=5, activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
-model.add(Flatten())# pasa los resultados de matriz a vector
+model.add(Conv2D(64, kernel_size=5, activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+model.add(Flatten())
 model.add(Dense(30, activation='relu'))
 model.add(Dense(2, activation='softmax'))
 
-#model = ResNet50(include_top=True,
-#                 weights= None,
-#                 input_tensor=None,
-#                 input_shape=input_shape,
-#                 pooling='avg',
-#                 classes=2)
-
-#model.compile(optimizer = Adam(lr) ,loss = "binary_crossentropy", metrics=["accuracy"])
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-#history = model.fit(X_train, Y_train, validation_split=0.2, epochs= epochs, batch_size= batch_size, verbose=2)
-model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=64, epochs=3)
+model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=16, epochs=3)
 
-test_loss, test_acc = model.evaluate(X_test, Y_test)
+test_loss, test_acc = model.evaluate(X_test, Y_test, batch_size=16)
 print('Test Acc: ', test_acc)
-
-
 
 
 

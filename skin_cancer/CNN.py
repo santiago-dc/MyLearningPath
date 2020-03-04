@@ -85,7 +85,7 @@ epochs = 50
 
 from tensorflow import keras 
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D
+from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, AveragePooling2D
 
 # model = Sequential() #Test Acc:  0.7757575511932373
 # #add model layers
@@ -104,27 +104,46 @@ from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D
 # test_loss, test_acc = model.evaluate(X_test, Y_test)
 # print('Test Acc: ', test_acc)
 
-model = Sequential() #Test Acc:  0.7757575511932373
+
+
+model2 = Sequential() #Test Acc:  0.760606050491333
 #add model layers
-model.add(Conv2D(128, kernel_size=5, activation='relu', input_shape=(224,224,3)))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
-model.add(Conv2D(128, kernel_size=5, activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
-model.add(Conv2D(64, kernel_size=5, activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
-model.add(Flatten())
-model.add(Dense(30, activation='relu'))
-model.add(Dense(2, activation='softmax'))
+model2.add(Conv2D(128, kernel_size=5, activation='relu', input_shape=(224,224,3)))
+model2.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+#model2.add(Conv2D(128, kernel_size=5, activation='relu'))
+#model2.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+#model2.add(Conv2D(64, kernel_size=5, activation='relu'))
+#model2.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+model2.add(Flatten())
+model2.add(Dense(30, activation='relu'))
+model2.add(Dense(2, activation='softmax'))
 
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model2.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=16, epochs=3)
+model2.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=16, epochs=5)
 
-test_loss, test_acc = model.evaluate(X_test, Y_test, batch_size=16)
+test_loss, test_acc = model2.evaluate(X_test, Y_test, batch_size=16)
 print('Test Acc: ', test_acc)
 
 
 
+#model3 = Sequential() #Test Acc:  0.5454545617103577
+#add model layers
+#model3.add(Conv2D(128, kernel_size=5, activation='relu', input_shape=(224,224,3)))
+#model3.add(AveragePooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+#model3.add(Conv2D(128, kernel_size=5, activation='relu'))
+#model3.add(AveragePooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+#model3.add(Conv2D(64, kernel_size=5, activation='relu'))
+#model3.add(AveragePooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+#model3.add(Flatten())
+#model3.add(Dense(30, activation='relu'))
+#model3.add(Dense(2, activation='softmax'))
+
+#model3.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+#model3.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=16, epochs=3)
+#test_loss, test_acc = model3.evaluate(X_test, Y_test, batch_size=16)
+#print('Test Acc: ', test_acc)
 
 
 

@@ -90,7 +90,7 @@ X_test = X_test/255.
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, AveragePooling2D, BatchNormalization, Dropout
 model = Sequential()
-model.add(Conv2D(7, kernel_size=3,padding='same', strides=2, activation='relu', input_shape=(224,224,3)))
+model.add(Conv2D(3, kernel_size=20,padding='same', strides=2, activation='relu', input_shape=(224,224,3)))
 model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
 #model.add(BatchNormalization())
 #model.add(Dropout(0.25))

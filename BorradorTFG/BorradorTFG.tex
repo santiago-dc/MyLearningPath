@@ -21,12 +21,13 @@
 \begin{LARGE}
 Machine Learning \\
 \vspace*{0.15in}
+\UseRawInputEncoding
 Borrador TFG
 \end{LARGE}
 \end{center}
 \begin{center}
 \begin{large}
-Alejandro Vivas Viaña
+Santiago Domínguez
 \end{large}
 \end{center}
 
@@ -514,8 +515,107 @@ raw = raw.dropna(how='any',axis=0)# drop Nan rows
 raw.head()
 \end{lstlisting}
 FOTO2\\
-Como ya hemos comentado, la única información que podemos extraer de los datos son palabras, en total hay aproximadamente 1000. Como no es viable desarro elllar e equipo del que disponemos  
+Como ya hemos comentado, la única información que podemos extraer de los datos son palabras, en total hay aproximadamente 1000. Como no es viable desarrollar en nuestro equipo una red neuronal con 10000 valores en la capa de entrada, debemos sesgar cuáles queremos.\\ En este caso hemos elegido 100, las 100 que más se repiten. Nótese que con intención de hacer un modelo más eficiente, se podrían considerar otros criterios a parte de la frecuencia de aparición en el dataset.\\
+Contamos las palabras:
+\begin{lstlisting}
+columns=[] 
+rows = [] 
+y = list(raw.v1)#lo usaremos luego 
+for i in range (0,len(raw.v2)): 
+    try:
+         rows.append(re.sub("[^\w]", " ", raw.v2[i]).lower().split()) 
+         columns = columns + re.sub("[^\w]", " ", raw.v2[i]).lower().split() 
+    except: 
+        print('Error in:' ,raw.v2[i])
+from collections import Counter 
+    counts = Counter(columns)#dict to value which fields we want to keep (it isn't possible keep the 10000 words)
+    print(counts)
+\end{lstlisting}
+Elegimos las palabras:
+\begin{lstlisting}
+columns = list(dict.fromkeys(columns))#delete repeated values 
+counts_list = [key for key, _ in counts.most_common()] 
+df_columns = counts_list[0:100] 
+df_columns.append('y') 
+print(df_columns)
+\end{lstlisting}
+\subsubsection{Transformar la infromación.}
+Ahora lo relevante es determinar cómo vamos a introducir la infromación en la red. Las redes neuronales no aceptan otra entrada que no sea de caracter numérico, eso nos lleva a transformar nuestro set de datos, utilizaremos un 1 cuando la palabra de la frase sea una de las palabras elegidas como entrada dee la red y utilizaremos un 0.
+\begin{lstlisting}
+binary_rows = np.zeros((len(rows),len(df_columns)),dtype=int) 
+for i in range(0, len(rows)): 
+    for k in range(0,len(rows[i])):
+        if rows[i][k] in df_columns: 
+	    binary_rows[i][df_columns.index(rows[i][k])]=1
+         if k == (len(rows[i])-1) and y[i]=='spam':#si es spam=1 
+            binary_rows[i][100]=1
+print(y[2]) 
+print(binary_rows[2])
+\end{lstlisting}
+FOTO
+Creamos un dataframe nuevo con las frases cargadas como secuencias binarias.
+\begin{lstlisting}
+dataframe = pd.DataFrame(binary_rows,columns=df_columns) 
+dataframe.head(5)
+\end{lstlisting}
+FOTO
+Por último, creamos los datos en listas para imputarlos porteriormente en la red.
+\begin{lstlisting}
+Y = (dataframe.y).to_numpy() 
+dataframe.drop(['y'], axis=1, inplace=True)
+X = dataframe.to_numpy().T 
+size = int(X.shape[1] * 0.70) 
+x_train, x_test = X[:,0:size], X[:,size:] 
+y_train, y_test = Y[0:size], Y[size:]
+\end{lstlisting}
+\subsection{Implementación de la red.}
+De nuevo utilizamos el fichero NeuralNetwork.py, en este caso, la  arquitectura  que mejor rendimiento muestra es la 100-25-1, 25 neuronas en una única capa oculta y un ratio de aprendizaje (learning rate) de 0.2. Diversas arquitecturas puede contrastarse en el anexo de este trabajo.
+\begin{lstlisting}
+from NeuralNetwork import * 
+nn = NeuralNetwork(x_train,y_train,0.02,[100,25,1],0)
+nn.gradient_descent(5000)#gradient descent algorithm
+\end{lstlisting}
+FOTO
+\subsection{Visualización.}
+Implemantamos de nuevo la función de la matriz de confunción. La función es la siguiente:
+\begin{lstlisting}
+def plotCf(a,b,t):
+    cf =confusion_matrix(a,b)
+    plt.imshow(cf,cmap=plt.cm.Blues,interpolation='nearest')
+    plt.colorbar()
+    plt.title(t)
+    plt.xlabel('0         Predicted         1')
+    plt.ylabel('1          Actual            0')
+    tick_marks = np.arange(len(set(a))) # length of classes
+    class_labels = ['0','1']
+    plt.xticks(np.ndarray([0,1]))
+    plt.yticks(np.ndarray([0,1]))
+    for i,j in itertools.product(range(cf.shape[0]),range(cf.shape[1])):
+        plt.text(j,i,format(cf[i,j],'d'),horizontalalignment='center',color='white' if cf[i,j] > (cf.max()*0.7) else 'black')
+    plt.show();
+\end{lstlisting}
+Llamamos de nuevo a la función. Observamos que esta vez el rendimiento está al rededor del 95 por ciento.
+\begin{lstlisting}
+nn.X,nn.Y=x_test, y_test 
+target= nn.Y
+predicted=nn.predict(x_test,y_test) 
+plotCf(target,predicted[0],'Cf Validation Set')
+\end{lstlisting}
+FOTO
+COMENTAR LO QUE HASALIDO
+\subsubsection{Con regularización.}
+En este caso la regularización no aporta nada, este método ha sido evaluado con distintos valores pero ninguna prueba ha aportado ninguna mejora. Teniendo en cuenta esto, es posible que el anterior resultado sea el correspondiente al alcanzar el mínimo absoluto en la función de error.
 
+\subsection{Implementación con regresión logística.}
+Como podemos observar, en este caso la regresión logística es igual de efectiva que la red neuronal, esto es otra indicación que podemos haber hayado el mínimo absoluto de la función de error.
+\begin{lstlisting}
+logistic_regression= LogisticRegression()
+logistic_regression.fit(x_train.T,y_train)
+threshold = 0.5
+y_pred = np.where(logistic_regression.predict_proba(x_train.T)[:,1] > threshold, 1, 0)
+plotCf(target,y_pred,'Cf Validation Set Logistic Regression')
+\end{lstlisting}
+FOTO
 \end{document}	
 
 

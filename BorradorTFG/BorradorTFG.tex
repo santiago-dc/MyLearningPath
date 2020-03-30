@@ -10,6 +10,8 @@
 \usepackage{mathtools}
 \usepackage{ amssymb }
 \usepackage{graphicx}
+\graphicspath{{imagenes/}}
+\usepackage{float}
 \usepackage{listings}
 \usepackage{float}
 \usepackage[none]{hyphenat} %no corta las palabras al compilar el documento
@@ -115,7 +117,11 @@ Hessian de H: $
 \section{Regresión lineal multivariable.}
 \noindent
 El estudio regresión lineal multivariable se utiliza para hallar la relación entre múltiples variables con su salida, con el objetivo de formular una hipótesis que será útil para predecir futuros resultados con nuevas entradas. Supongamos que tenemos las siguientes entradas y salidas: 
-FOTO TABLA REGRESIÓN LINEAL MULTIVARIABLE DE OVERLEAF
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{Annotation 2020-03-23 133547}
+\end{figure}
  \[\text{Hiperespacio } H(a_{1},a_{2},a_{3},a_{4})=\frac{1}{N}\sum_{i=1}^{N}(a_{1}x_i^1+a_{2}x_i^1+a_{3}x_i^1+a_{4}-y_{i})^2 \text{¿ Es } \vec{a}\text{ minimizante?}
 \]
 \[H:R^4\rightarrow R \begin{bmatrix}
@@ -415,7 +421,11 @@ La última columna esta compuesta por los valores 2 y 4,  para hacer el desarrol
 df.iloc[:,10].replace(2, 0,inplace=True)
 df.iloc[:,10].replace(4, 1,inplace=True)
 \end{lstlisting}
-Ahora el set de datos luce así: FOTO
+Ahora el set de datos luce así: 
+\begin{figure}[H]
+\centering
+\includegraphics{Annotation 2020-03-23 185932.png}
+\end{figure}
 \subsubsection{Normalización.}
 Aplicamos normnalización maxmin para mejorar el rendimiento y evistar que la columna con valores más altos monopolize el modelo. 
 \begin{lstlisting}
@@ -434,13 +444,16 @@ xval=scaled_df.iloc[501:683,1:10].values.transpose()
 yval=df.iloc[501:683,10:].values.transpose()#168 para el tets
 \end{lstlisting}
 \subsection{Implementación de la red.}
-En este apartado hacemos uso de las funciones del NeuralNetwork.py, la razón de desarrollar dicho fichero fue poder implementar redes neuronales de forma sencillqy poder aplicarla en distintos problemas sin tener que programar lo mismo otra vez. Ahora lo vemos en práctica.\\
+En este apartado hacemos uso de las funciones del NeuralNetwork.py, la razón de desarrollar dicho fichero fue poder implementar redes neuronales de forma sencilla y poder aplicarla en distintos problemas sin tener que programar lo mismo otra vez. Ahora lo vemos en práctica.\\
 Declaramos la red neuronal con los valores de entrenamiento y un learning rate de 0.01. La red funciona con una arquitectura [9 - 15 - 1], la cual utiliza funciones de salida lineales en la capa intermedia y una sigmoidal en la de salida. Utiliza como función de error, en lugar del clásico MSE, el Cross-Entropy. El algortimo de aprendizaje utilizado es el descenso por gradiente, el cual implementa el algoritmo de backpropagation.\\
 Tanto la arquitectura como el learning rate son valores que hemos definido basandonos en la exoeriencia, en el anexo se muestran diversas implementaciones que nos han llevado a elegir la mejor.
 \begin{lstlisting}
 nn = NeuralNetwork(x,y,0.01,0)
 nn.gradient_descent(50000)
-FOTO DE DESCENSO DEL ERROR
+\begin{figure}[H]
+\centering
+\includegraphics{Annotation 2020-03-23 190119.png}
+\end{figure}
 \end{lstlisting}
 Imprimimos los resultados, nótese que este modelo no usa regularización.
 \begin{lstlisting}
@@ -476,26 +489,25 @@ def plotCf(a,b,t):
     plt.show();
 \end{lstlisting}
 \text{La llamamos, aquí podemos aplicar el threshold que deseamos, como estamos hablando de un tema tan sensible como el cancer, nuestro umbral debe ser alto para solo afirmar en caso de mucha certeza.}
-\begin{lstlisting}
-nn.threshold=0.90#0.85
-nn.X,nn.Y=x, y 
-target=np.around(np.squeeze(y), decimals=0).astype(np.int)
-predicted=np.around(np.squeeze(nn.predict(x,y)), decimals=0).astype(np.int)
-plotCf(target,predicted,'Cf Training Set')
-FOTO DE LAS CONFUSION MATRIX
-\end{lstlisting}
-COMENTAR LO QUE HA SALIDO
+
 \begin{lstlisting}
 nn.X,nn.Y=xval, yval 
 target=np.around(np.squeeze(yval), decimals=0).astype(np.int)
 predicted=np.around(np.squeeze(nn.predict(xval,yval)), decimals=0).astype(np.int)
 plotCf(target,predicted,'Cf Validation Set')
 \end{lstlisting}
-FOTO DE LAS CONFUSION MATRIX
-COMENTAR LO QUE HA SALIDO
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{Annotation 2020-03-23 190419}
+\end{figure}
+El modelo, incluso sin regularización, muestra un resultado excelente. Solo hemos clasificado 3 correos mal, todos eran spam y los hemos clasificado como correos ordinarios.
+
 \subsection{Implementación con regresión logística.}
 Con el fin de comprobar si un modelo más rápido y sencillo podría superar al ya explicado, hemos implementado regresión logística. Como era de esperar, la regresión logística no es suficiente para tratar problemas de esta embergadura.
-FOTO
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{Annotation 2020-03-23 193133.png}
+\end{figure}
 \newpage
 \section{Ejercicio de clasificación de correo electrónico.}
 Al igual que en la sección anterior, éste ejercicio implementa las funciones definidas en el archivo NeuralNetwork.py.\\ En este caso el ejercicio exige un enfoque ligeramente diferente respecto al anterior a causa de los datos. Los datos utilizados son numerosos mensajes, los cuales algunos son spam y otros mensakes corrientes. De dichos mensajes solo se pueden extraer sus palabras, así que en este caso, no tenemos distintas características que evaluar.
@@ -508,13 +520,19 @@ import re
 raw = pd.read_csv('spam.csv', delimiter = ',', encoding='latin-1')
 raw.head()
 \end{lstlisting}
-FOTO1
+\begin{figure}[H]
+\centering
+\includegraphics{Annotation 2020-03-23 174228.png}
+\end{figure}
 \begin{lstlisting}
 raw.drop(['Unnamed: 2' ,'Unnamed: 3' ,'Unnamed: 4'], axis=1, inplace=True)
 raw = raw.dropna(how='any',axis=0)# drop Nan rows
 raw.head()
 \end{lstlisting}
-FOTO2\\
+\begin{figure}[H]
+\centering
+\includegraphics{Annotation 2020-03-23 174341.png}
+\end{figure}
 Como ya hemos comentado, la única información que podemos extraer de los datos son palabras, en total hay aproximadamente 1000. Como no es viable desarrollar en nuestro equipo una red neuronal con 10000 valores en la capa de entrada, debemos sesgar cuáles queremos.\\ En este caso hemos elegido 100, las 100 que más se repiten. Nótese que con intención de hacer un modelo más eficiente, se podrían considerar otros criterios a parte de la frecuencia de aparición en el dataset.\\
 Contamos las palabras:
 \begin{lstlisting}
@@ -531,6 +549,10 @@ from collections import Counter
     counts = Counter(columns)#dict to value which fields we want to keep (it isn't possible keep the 10000 words)
     print(counts)
 \end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics{Annotation 2020-03-23 182424.png}
+\end{figure}
 Elegimos las palabras:
 \begin{lstlisting}
 columns = list(dict.fromkeys(columns))#delete repeated values 
@@ -539,7 +561,7 @@ df_columns = counts_list[0:100]
 df_columns.append('y') 
 print(df_columns)
 \end{lstlisting}
-\subsubsection{Transformar la infromación.}
+\subsubsection{Transformar la información.}
 Ahora lo relevante es determinar cómo vamos a introducir la infromación en la red. Las redes neuronales no aceptan otra entrada que no sea de caracter numérico, eso nos lleva a transformar nuestro set de datos, utilizaremos un 1 cuando la palabra de la frase sea una de las palabras elegidas como entrada dee la red y utilizaremos un 0.
 \begin{lstlisting}
 binary_rows = np.zeros((len(rows),len(df_columns)),dtype=int) 
@@ -549,16 +571,21 @@ for i in range(0, len(rows)):
 	    binary_rows[i][df_columns.index(rows[i][k])]=1
          if k == (len(rows[i])-1) and y[i]=='spam':#si es spam=1 
             binary_rows[i][100]=1
-print(y[2]) 
 print(binary_rows[2])
 \end{lstlisting}
-FOTO
+\begin{figure}[H]
+\centering
+\includegraphics{Annotation 2020-03-23 182035.png}
+\end{figure}
 Creamos un dataframe nuevo con las frases cargadas como secuencias binarias.
 \begin{lstlisting}
 dataframe = pd.DataFrame(binary_rows,columns=df_columns) 
 dataframe.head(5)
 \end{lstlisting}
-FOTO
+\begin{figure}[H]
+\centering
+\includegraphics{Annotation 2020-03-23 182154.png}
+\end{figure}
 Por último, creamos los datos en listas para imputarlos porteriormente en la red.
 \begin{lstlisting}
 Y = (dataframe.y).to_numpy() 
@@ -575,7 +602,10 @@ from NeuralNetwork import *
 nn = NeuralNetwork(x_train,y_train,0.02,[100,25,1],0)
 nn.gradient_descent(5000)#gradient descent algorithm
 \end{lstlisting}
-FOTO
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12.0cm,height=8.5cm]{Annotation 2020-03-23171823}
+\end{figure}
 \subsection{Visualización.}
 Implemantamos de nuevo la función de la matriz de confunción. La función es la siguiente:
 \begin{lstlisting}
@@ -601,8 +631,11 @@ target= nn.Y
 predicted=nn.predict(x_test,y_test) 
 plotCf(target,predicted[0],'Cf Validation Set')
 \end{lstlisting}
-FOTO
-COMENTAR LO QUE HASALIDO
+\begin{figure}[H]
+\centering
+\includegraphics[width=12.0cm, height=8.5cm]{Annotation 2020-03-23 161410}
+\end{figure}
+Hemos fallado 63 mensajes, de los cuales, 14 han sido clasificado erroneamente como spam y 59 como spam
 \subsubsection{Con regularización.}
 En este caso la regularización no aporta nada, este método ha sido evaluado con distintos valores pero ninguna prueba ha aportado ninguna mejora. Teniendo en cuenta esto, es posible que el anterior resultado sea el correspondiente al alcanzar el mínimo absoluto en la función de error.
 
@@ -615,7 +648,10 @@ threshold = 0.5
 y_pred = np.where(logistic_regression.predict_proba(x_train.T)[:,1] > threshold, 1, 0)
 plotCf(target,y_pred,'Cf Validation Set Logistic Regression')
 \end{lstlisting}
-FOTO
+\begin{figure}[H]
+\centering
+\includegraphics[width=12.0cm, height=8.5cm]{Annotation 2020-03-23 161410}
+\end{figure}
 \end{document}	
 
 

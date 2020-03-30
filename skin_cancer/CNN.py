@@ -7,11 +7,17 @@ import matplotlib.pyplot as plt
 from keras.utils.np_utils import to_categorical
 np.random.seed(5)
 
-benign_train_folder = 'data/train/benign'
-malignant_train_folder = 'data/train/malignant'
+# benign_train_folder = 'data/train/benign'
+# malignant_train_folder = 'data/train/malignant'
 
-benign_test_folder = 'data/test/benign'
-malignant_test_folder = 'data/test/malignant'
+# benign_test_folder = 'data/test/benign'
+# malignant_test_folder = 'data/test/malignant'
+
+benign_train_folder = 'data/melanoma/DermMel/train/NotMelanoma'
+malignant_train_folder = 'data/melanoma/DermMel/train/Melanoma'
+
+benign_test_folder = 'data/melanoma/DermMel/test/NotMelanoma'
+malignant_test_folder = 'data/melanoma/DermMel/test/Melanoma'
 
 def read(folder_path):
     data_path = os.path.join(folder_path,'*jpg')
@@ -56,10 +62,10 @@ Y_test = Y_test[s]
 # np.random.shuffle(s)
 # X = X[s]
 # Y = Y[s]
-# X_conv_train = X[0:3000]#2637
-# X_conv_test = X[3000:]
-# Y_conv_train = Y[0:3000]
-# Y_conv_test = Y[3000:]
+# X_train = X[0:2000]#2637
+# X_test = X[2000:]
+# Y_train = Y[0:2000]
+# Y_test = Y[2000:]
 
 
 # Display first 15 images of moles, and how they are classified
@@ -83,43 +89,58 @@ Y_train = to_categorical(Y_train, num_classes= 2)
 Y_test = to_categorical(Y_test, num_classes= 2)
 
 # Normalization
-X_train = X_train/255.
-X_test = X_test/255.
+# X_train = X_train/255.
+# X_test = X_test/255.
+
+
+import tensorflow as tf
+from keras.callbacks import Callback
+
+ACCURACY_THRESHOLD = 0.75
+# Implement callback function to stop training
+# when accuracy reaches e.g. ACCURACY_THRESHOLD = 0.95
+class myCallback(tf.keras.callbacks.Callback): 
+    def on_epoch_end(self, epoch, logs={}): 
+        if(logs.get('val_acc') is not  None):
+            if(logs.get('val_acc') > ACCURACY_THRESHOLD):   
+                print("\nReached %2.2f%% accuracy, so stopping training!!" %(ACCURACY_THRESHOLD*100))   
+                self.model.stop_training = True
+
+callbacks = myCallback()
 
 #Model
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, AveragePooling2D, BatchNormalization, Dropout
 model = Sequential()
-model.add(Conv2D(3, kernel_size=20,padding='same', strides=2, activation='relu', input_shape=(224,224,3)))
+model.add(BatchNormalization())
+model.add(Conv2D(3, kernel_size=7 ,padding='same', strides=2, activation='relu', input_shape=(450,600,3)))
 model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
 #model.add(BatchNormalization())
 #model.add(Dropout(0.25))
 
-# model.add(Conv2D(3, kernel_size=3,padding='same', strides=2, activation='relu'))
-# model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
-# model.add(BatchNormalization())
+model.add(Conv2D(3, kernel_size=3,padding='same', strides=2, activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
+#model.add(BatchNormalization())
 #model.add(Dropout(0.25))
 
-# model.add(Conv2D(64, kernel_size=3, activation='relu'))
-# model.add(MaxPooling2D(pool_size=(2, 2), strides=2, padding='same', data_format=None))
-# model.add(BatchNormalization())
-#model.add(Dropout(0.25))
+
 from keras import regularizers  
 model.add(Flatten())
 #model.add(Dropout(0.25))
-# model.add(Dense(450, activation='relu',kernel_regularizer=regularizers.l2(0.01)))
+model.add(Dense(450, activation='relu',kernel_regularizer=regularizers.l2(0.01)))
 # model.add(Dropout(0.25))
 model.add(Dense(200, activation='relu',kernel_regularizer=regularizers.l2(0.01)))
-model.add(Dropout(0.25))
+#model.add(Dropout(0.25))
 model.add(Dense(100, activation='relu',kernel_regularizer=regularizers.l2(0.01)))
-model.add(Dropout(0.25))
+#model.add(Dropout(0.25))
 model.add(Dense(30, activation='relu',kernel_regularizer=regularizers.l2(0.01)))
 model.add(Dense(2, activation='softmax')) 
 
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=10, epochs=100)
+model.fit(X_train, Y_train, validation_data=(X_test, Y_test), batch_size=10, epochs=500)
+
 test_loss, test_acc = model.evaluate(X_test, Y_test, batch_size=10)
 print('Test Acc: ', test_acc)
 print(':)')

@@ -111,11 +111,13 @@ y_test=y_test['ClassId'].values
 data=[]
 
 for f in labels:
-    image=cv2.imread('D:/santi/Documents/MyLearningPath/traffic_sign/data/Test/'+f.replace('Test/', ''))
-    image_from_array = Image.fromarray(image, 'RGB')
-    size_image = image_from_array.resize((height, width))
-    data.append(np.array(size_image))
-
+    try:
+        image=cv2.imread('D:/santi/Documents/MyLearningPath/traffic_sign/data/Test/'+f.replace('Test/', ''))
+        image_from_array = Image.fromarray(image, 'RGB')
+        size_image = image_from_array.resize((height, width))
+        data.append(np.array(size_image))
+    except AttributeError:
+            print(" ")
 X_test=np.array(data)
 X_test = X_test.astype('float32')/255 
 pred = model.predict_classes(X_test)

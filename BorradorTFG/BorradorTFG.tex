@@ -652,6 +652,89 @@ plotCf(target,y_pred,'Cf Validation Set Logistic Regression')
 \centering
 \includegraphics[width=12.0cm, height=8.5cm]{Annotation 2020-03-23 161410}
 \end{figure}
+
+\newpage
+\section{Redes convolucionales.}
+En este apartado explicaremos las redes neuronales que vamos a necesitar para implementar el último ejercicio del trabajo; estas son las redes convolucionales, en adelante CNN. Las CNN se utilizan en problemas de clasificación de imágenes como alternativa al tipo de red que ya hemos visto, pues este queda absoleto ante una gran cantidad de datos en la capa de entrada, como es en el caso de las imágenes.\\ Procedemos a explicar las novedades y conceptos que dicha red incorpora.\\
+
+\subsection{Filtros.}
+Los filtros son matrices de tamaño configurable, siempre menores que la matriz de entrada, estos se aplican por toda la imagen. El resultado es una nueva matriz cuyos datos derivan de los productos matriciales del filtro y la fotografía. Estos filtros son capaces de extraer características como líneas, curvas, contronos, etc.  \\Es decir, si aplicamos un filtro para las líneas verticales y otro para las horizontales, el resultado serán dos imágenes, cada una solo con la información para la que hemos aplicado el filtro.
+\begin{figure}[H]
+\centering
+\includegraphics[width=12.0cm, height=4.5cm]{Annotation 2020-04-13 191448.png}
+\end{figure}
+Hay tres parámetros imprescindibles a la hora de definir un filtro:
+\begin{itemize}
+\item Tamaño: podemos definir el tamaño del filtro, que varía en función del tamaño de la imagen y de las características que nos gustaría extraer.  Normalmente se utilizan matrices. cuadradas
+\item Stride:  es el intervalo de posiciones en el que aplicamos el filtro. Si nuestro filtro tiene un stride de 1, el filtro se desplazará por la imagen de píxel en píxel,  si ponemos el valor a dos, lo hará de dos píxeles en dos píxeles. Es decir, se aplicará el filtro cubriendo todos los valores de la imagen, pero el centro del filtro solo coincidirá con la mitad los datos de la imagen. 
+\item Padding: es evidente que al aplicar un filtro no es posible que este recorra la matriz de forma equitativa independientemente del stride. Por ejemplo, en caso de los datos de las esquinas solo se les aplicaría una vez según la explicación dada. El padding indica un margen adicional que introducimos con valores de cero alrededor de la matriz para permitir aplicar el filtro por la totalidad de la imagen. \\Existen dos tipos de padding:
+	\begin{itemize}
+	\item Valid: implica que no hay padding, lo que hace que se pierda información de los contornos de la imagen.\begin{figure}[H]
+\centering
+\includegraphics[width=10.0cm, height=4.5cm]{Annotation 2020-04-13 214927.png}
+\end{figure}
+	\item Same: incluye tantas como sea necesario para que el tamaño de la salida sea igual al de entrada.\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm, height=4.5cm]{Annotation 2020-04-13 215118.png}
+\end{figure}
+	\end{itemize}
+\end{itemize}
+Estos factores son los que determinan el tamaño de la matriz de salida (n), siendo el tamaño del filtro (f), el de la matriz de entrada (i), padding (p) y stride(s).
+\[
+n=\frac{i+2p-f}{s}  +1
+\]
+
+
+\subsection{Capa convolucional.}
+Las capas convolucionales son el núcleo de las CNN, son las capas de la arquitectura donde se aplica la operación de convolución. La operación consiste en desplazar el filtro por la matriz, aplicándolo en cada dato hasta cubrirla completamente. En cada desplazamiento se realiza un producto matricial. Dicho proceso se repite tantas veces como números de filtros hayamos dispuesto en nuestra capa convolucional (k), de forma que si hemos dispuesto 32 filtros para una imagen de 28*28 píxeles, la salida será de 28*28*32 = 25.088 píxeles.
+ \\La siguente fórmula muestra cómo se calcula el número de datos correspondiente a la salida de la capa convolucional.
+
+\[
+n=\frac{i+2p-f}{s}  +1
+\]
+\[
+output = k * n
+\]
+A primera vista puede parecer que 25.088 datos para una foto tan simple resulta algo disparatado, pero si nos planteamos la cantidad de datos que habría en una red neuronal convencional, no lo es. Supongamos que tenemos la misma imagen, pero en lugar de una capa convolucional, implementamos una capa con el mismo número de neuronas que el de la capa de entrada. Si cada entrada está conectada a todas las neuronas de la capa siguiente (característica bastante frecuente), el resultado del número de datos sería el cuadrado de la entrada, es decir, 614.656 datos, solo para abordar los pesos. \\
+Aún con esta ventaja, las CNN cuentan con otro mecanismo para aligerar la carga de información.
+\subsection{La capa de pooling.}
+Esta es la capa que se encarga de realizar la reducción del volumen de datos, perdiendo la menor información posible. Supongamos que tenemos el mismo bloque de datos del ejemplo anterior, 25.088 datos en una matriz de 28*28*32. Es evidente que si queremos reducir la dimensionalidad de la matriz, no podemos alterar la dimension de 32, pues estaríamos quitando filtros que se han añadido en la capa convolucional.\\
+Existen dos tipos de pooling:
+\begin{itemize}
+\item Max pooling: consiste en reducir las dimensiones de una matriz, separándola en subconjuntos de tamaño configurable y conservando solo el valor mayor de cada fragmento. Dichos subconjuntos se hacen siguendo el mismo criterio que seguimos para desplazar los filtros, de forma que, a mayor stride, más se reducirá la matriz.
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm, height=4.5cm]{maxpool.png}
+\end{figure}
+\item Mean pooling: el proceso es análogo al maxpooling, solo que en esta ocasión, el valor conservado es el medio de los subconjuntos.
+\begin{figure}[H]
+\centering
+\includegraphics[width=11.0cm, height=4.5cm]{meanpool.png}
+\end{figure}
+\end{itemize}
+\subsection{Fully connected layer y red neuronal.}
+Esta capa, también conocida como flatten, es una capa a la que se conectan a todas las salidas de la capa anterior (convolucional o de pooling) con una capa con tantas neuronas como datos. Posteriormente se realiza una arquitectura con una o dos capas intermedias y una capa de salida con tantas neuronas como clases tenga nuestro problema de clasificación. En estas capas puede aplicarse regularización.
+\subsection{Arquitecturas.}
+En el desarrollo de la CNN, podemos usar nuestros conocimientos teóricos para programar, pero existen ciertas redes muy conocidas que han demostrado en numerosos problemas un buen rendimiento. En la práctica intentaremos imitar la arquitectura de dichas redes.
+\begin{itemize}
+\item LeNet: es una red neuronal desarrollada por Yann LeCun en 1998. Su versión más conocida es la arquitectura con cinco capas. \begin{figure}[H]
+\centering
+\includegraphics[width=14.0cm, height=4.5cm]{lenet5.png}
+\end{figure}
+\item AlexNet: desarrollada por Alex Krizhevsky, ganó el concurso ImageNet Large Scale Visual Recognition Challenge en septiembre de 2012. Es una red neuronal muy eficiente pero que conlleva un alto coste computacional debido a su parelilización en dos CNN , es inviable usarla sin GPU.\begin{figure}[H]
+\centering
+\includegraphics[width=14.0cm, height=4.5cm]{AlexNet2012.png}
+\end{figure}
+\item VGG16: propuesta por K. Simonyan y A. Zisserman. El modelo alcanzó un 0.927 de precisión en ImageNet, un dataset de 14 milliones de imagenes en 1000 classes. \begin{figure}[H]
+\centering
+\includegraphics[width=12.0cm, height=4.5cm]{vgg16-1-e1542731207177.png}
+\end{figure} 	
+\item ResNet: desarrollada por Microsoft en 2015, también ganó el ImageNet Large Scale Visual Recognition Challenge. Tiene varias configuraciones: con 50, 101 y 152 capas.\begin{figure}[H]
+\centering
+\includegraphics[width=12.0cm, height=4.5cm]{resnet.png}
+\end{figure} 	
+
+\end{itemize}
 \end{document}	
 
 

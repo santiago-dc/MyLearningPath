@@ -79,6 +79,6 @@ model.compile(
 )
 #using ten epochs for the training and saving the accuracy for each epoch
 epochs = 150
-history = model.fit(X_train, y_train, batch_size=32, epochs=epochs,validation_data=(X_val, y_val))
+model.fit(X_train, y_train, batch_size=32, epochs=epochs,validation_data=(X_val, y_val))
 
 print(':)')

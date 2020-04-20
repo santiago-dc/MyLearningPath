@@ -70,6 +70,7 @@ from keras.utils import to_categorical
 y_train = to_categorical(y_train, 43)
 y_val = to_categorical(y_val, 43)
 
+# %%
 #Compilation of the model
 model=build_model()
 model.compile(

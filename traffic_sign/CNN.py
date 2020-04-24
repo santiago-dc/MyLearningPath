@@ -1,3 +1,5 @@
+# %%
+
 import numpy as np 
 import pandas as pd 
 import matplotlib.pyplot as plt
@@ -8,6 +10,7 @@ from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout
 import cv2
 from PIL import Image
 import os
+# %%
 
 def load_train(folders,size):
     X=[]
@@ -25,6 +28,7 @@ def load_train(folders,size):
             except AttributeError:
                 print("Error loading picture ", img)
     return np.asarray(X),np.asarray(Y)
+# %%
 
 def build_model():
     #Model
@@ -58,12 +62,14 @@ np.random.shuffle(s)
 X=X[s]
 Y=Y[s]
 
+# %%
 
 #Spliting the images into train and validation sets
 (X_train,X_val)=X[(int)(0.2*len(Y)):],X[:(int)(0.2*len(Y))]
 X_train = X_train.astype('float32')/255 
 X_val = X_val.astype('float32')/255
 (y_train,y_val)=Y[(int)(0.2*len(Y)):],Y[:(int)(0.2*len(Y))]
+# %%
 
 #Using one hote encoding for the train and validation Y
 from keras.utils import to_categorical

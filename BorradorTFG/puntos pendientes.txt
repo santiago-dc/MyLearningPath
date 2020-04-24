@@ -1,0 +1,10 @@
+puntos pendientes:
+-estado del arte: machine learning and AI
+-objetivos del  trabajo
+-hablar de vision artificial
+-quizas hablar de optimizador adam
+-se me ha olvidado decir que las redes usan relu
+-hablar de python y porque lo uso
+-hablar de tensorflow y keras y porque lo uso
+-apartado de experimentos y resultados??
+-hablar de regularizacion dropout

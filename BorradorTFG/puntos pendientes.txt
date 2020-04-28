@@ -1,5 +1,6 @@
 puntos pendientes:
 -estado del arte: machine learning and AI
+-machine learning y deep learning ¿dónde está la barrera?
 -objetivos del  trabajo
 -hablar de vision artificial
 -quizas hablar de optimizador adam

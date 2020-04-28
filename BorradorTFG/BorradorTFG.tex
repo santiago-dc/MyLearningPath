@@ -38,8 +38,8 @@ Santiago Domínguez
 \label{}
 
 El estudio de optimización se lleva a cabo con el objetivo de maximizar o minimizar una función \textit{f}.
-Por ejemplo, en nuestro caso, minimizar la función de error implica hallar los parámetros que la definen, cuando en los valores de estos la función alcanza su mínimo.
-Nos serviremos de la teoría de la optimización para alcanzar los valores en los que la función alcanza su mínimo absoluto. Estos valores son referidos como parámetros óptimos.
+En nuestro caso, minimizar la función de error implica hallar los parámetros que la definen, cuando en los valores de estos la función alcanza su mínimo.
+Nos serviremos de la teoría de la optimización para alcanzar los valores en los que la función alcanza su mínimo y así obtener el mejor resultado posible de nuestro modelo. Estos valores son referidos como parámetros óptimos.
 \subsection{Teorema de Weierstrass.}
 
 El teorema de Weierstrass establece que en toda función continua \textit{f}, alojada en un intervalo cerrado y acotado, dicha función alcanza sus valores máximos y mínimos en puntos del intervalo.
@@ -85,7 +85,7 @@ Sea \textit{f}, $\textit{D} \subseteq R \rightarrow R^2$, \textit{D}  un conjunt
 
 \subsection{Convexidad.}
 
-El estudio de la convexidad permite afirmar que un mínimos relativo es absoluto, por lo tanto, nos interesa demostrar la convexidad de la función de error para determinar nuestro prámetros óptimos.
+El estudio de la convexidad permite afirmar que un mínimos relativo es absoluto. Por lo tanto, nos interesa demostrar la convexidad de la función de error para determinar nuestro prámetros óptimos.
 
 \begin{itemize}
 \item El dominio es cerrado y acotado: gradualmente expresado con restricciones de desigualdad. Algoritmo de Karush-Khun-Tucker.
@@ -136,7 +136,7 @@ El estudio regresión lineal multivariable se utiliza para hallar la relación e
 
 \subsection{Método directo.}
 
-El anterior método explicado en el apartado de regresión lineal multivariable muestra cómo obtener la hipótesis de forma directa, analítica, no obstante en la realidad, el cálculo de la inversa de una matriz se evita en la mayoría de las ocasiones debido a la complejidad que esta requiere O($n^3$).\\
+El anterior método explicado en el apartado de regresión lineal multivariable muestra cómo obtener la hipótesis de forma directa, analítica, no obstante en la realidad, el cálculo de la inversa de una matriz se evita en la mayoría de las ocasiones debido a la complejidad que esta requiere (O($n^3$)).\\
 En su lugar, métodos iterativos como steepest descent, el cual “desciende” por la función de error gracias al cálculo constante de los parámetros en cada iteración, muestran una complejidad inferior O(n2), la cual es viable computacionalmente para trabajar. 
 
 \subsection{Regresión polinomial.}
@@ -169,14 +169,14 @@ El coeficiente de Pearson es válido solo cuando se cumplan las siguientes condi
 \end{itemize}
 \subsubsection{Coeficiente de Spearman.}
 
-El coeficiente de Spearman ($\rho$) es una medida de correlación utilizada en lugar del coeficiente de Pearson, cuando no se cumple algunas de las condiciones mencionadas en el apartado anterior. el resultado de este se interpreta al igual que en el coeficiente de Pearson, si el resultado es ceacano 1 ó -1, no es necesario aplicar regresión polinomial.
+El coeficiente de Spearman ($\rho$) es una medida de correlación utilizada en lugar del coeficiente de Pearson, cuando no se cumple algunas de las condiciones mencionadas en el apartado anterior. el resultado de este se interpreta al igual que en el coeficiente de Pearson. \\Si el resultado es cercano 1 ó -1, no es necesario aplicar regresión polinomial.
 \[
 \rho = 1 - \frac{6\sum D^2}{N(N^2 - 1)}
 \]
 Siendo D la diferencia entre los correspondientes estadísticos de orden de x - y, y siendo N el número de datos.
 \subsubsection{Determinación del número de parámetros.}
 
-Partiendo del supuesto de que los datos de nuestro problema presenten una clara necesidad de ser abordados por regresión polinomial, El siguiente paso para definir el modelo será encontrar un número de parámetros que se ajuste bien a los datos sin presentar overffiting, o por el contrario underffiting, el cual se dice cuando nuestra curva presenta un vago ajuste los datos. 
+Partiendo del supuesto de que los datos de nuestro problema presenten una clara necesidad de ser abordados por regresión polinomial. El siguiente paso para definir el modelo será encontrar un número de parámetros que se ajuste bien a los datos sin presentar overffiting, o por el contrario underffiting, el cual se dice cuando nuestra curva presenta un vago ajuste los datos. 
 \[
 Error (x) = (E[\hat{f}(x)]-f(x)^2+E[(\hat{f}(x)-E[\hat{f}(x)])^2]+\sigma^2_irr (\text{error irreducible})
 \]
@@ -185,10 +185,10 @@ Error (x) = (E[\hat{f}(x)]-f(x)^2+E[(\hat{f}(x)-E[\hat{f}(x)])^2]+\sigma^2_irr (
 \[
 y=\theta_0+\theta_{1}x+\theta_{2}x^2
 \]
-Realmente la distinción entre regresión multivariable y polinomial puede verse reducida a un mero formalismo cuando consideramos que la nueva parte de la hipótesis no es más que una nueva variable de entrada en nuestro problema, variable la cual es completamente dependiente de al menos una de las variables anteriores.
+Realmente la distinción entre regresión multivariable y polinomial puede verse reducida a un mero formalismo. Cuando consideramos que la nueva parte de la hipótesis no es más que una nueva variable de entrada en nuestro problema, variable la cual es completamente dependiente de al menos una de las variables anteriores.
 \subsection{Regularización.}
 \noindent
-Durante el desarrollo de nuestro modelo, aplicando la teoría explicada hasta ahora, nos surge la duda de cuál es el grado que mejor resultado nos dará, o dicho de otra forma; ¿Qué grado en nuestro modelo es el que mejor se ajusta a nuestras necesidades y evita los problemas de bias y variance?\\
+Durante el desarrollo de nuestro modelo, aplicando la teoría explicada hasta ahora, nos surge la duda de cuál es el grado que mejor resultado nos dará, o dicho de otra forma; ¿Qué grado en nuestro modelo es el que mejor se ajusta a nuestras necesidades? ¿Evita los problemas de bias y variance?\\
 La regularización es la respuesta, se define regularización como la técnica que penaliza los términos de mayor gardo de nuestro modelo, permitiendonos así utilizar hipótesis de un grado considerable, por lo que no hay lugar a que aparezca el problema de bias, mientras que eludimos el problema de variance. Por ejemplo, en una hipótesis que con grado 4 nos daría variance:
 \[
  y=\theta_0+\theta_1 x+\theta_2 x^2+1000\theta_3 x^3+1000\theta_4 x^4 = h_\theta (x)
@@ -200,14 +200,14 @@ El anterior ejemplo nos sirve para el caso en el que sabemos qué es lo que hay 
 J(\vec{\theta})=\frac{1}{2m}\left[\sum_{i=1}^{m} \left(h_\theta (x^{(i)})-y^{(i)}\right)-\lambda \sum_{j=1}^{n}\theta_{j}^2\right]
 \]
 Como vemos, aparece la variable lambda, la cual será definida de forma empírica, una lambda muy superior a 1, provocaría variance, y si es muy cercana a 0, provocaría bias. Los valores típicos suele rondar el 0,95.\\
-Además de ser una manera eficar para mejorar nuestro modelo, previniendo dos de los problemas más comunes en el desarrollo del aprendizaje automático, la implementación será tan sencilla como modificar nuestro algoritmo de aprendizaje, modificando todos los términos a partir de $\theta_0$ \\
+Además de ser una manera eficar para mejorar nuestro modelo, previniendo dos de los problemas más comunes en el desarrollo del aprendizaje automático. La implementación será tan sencilla como modificar nuestro algoritmo de aprendizaje, modificando todos los términos a partir de $\theta_0$ .\\
 \[
 \frac{J(\theta)}{\partial\theta_j} = \frac{1}{m} \sum_{i=1}^{m} \left(h_\theta (x^{(i)})-y^{(i)}\right) x_{j}^{(i)}-\frac{\lambda}{m} \theta_j 
 \]
 \subsection{Escalamiento de variables (feature scaling).}
 \noindent
 Durante el planteamiento del problema a resolver mediante el aprendizaje automático es frecuente encontrarse con disversas variables no relacionadas, con distinto rango y dominios. Esto puede causar un aprendizaje más lento, lo que supone más tiempo de entrenamiento para peores resultados. \\
-Esto ocasiona, por ejemplo, en un problema en el que consideramos las variables de temperatura y velocidad del viento para predecir futuras precipitaciones, la $\theta$ correspondiente a  velocidad del viento, al tener valores muy superiores respecto a la temperatura, adquirirá más relevancia para determinar el resultado, aunque en la realidad esto no ocurra. En las redes neuronales, que veremos más adelante, esto se traduce en pesos con una relevancia desorbitada respecto a los demás.\\
+Esto ocasiona, por ejemplo, en un problema en el que consideramos las variables de temperatura y velocidad del viento para predecir futuras precipitaciones, la $\theta$ correspondiente a  velocidad del viento, al tener valores muy superiores respecto a la temperatura, adquirirá más relevancia para determinar el resultado, aunque en la realidad esto no ocurra.\\ En las redes neuronales, que veremos más adelante, esto se traduce en pesos con una relevancia desorbitada respecto a los demás.\\
 Esto se evita escalando las variables para que todas queden con el mismo rango, y a priori, con la misma relevancia:
 \[
 x_i \longleftarrow \frac{x_i - \overline{x}}{s_i} \epsilon [-1,1]
@@ -238,9 +238,9 @@ De un modo más formal, podemos definir las neuronas artificales como una estruc
 
 \begin{itemize}
     \item Entradas (X): las entradas son el equivalente a las dentritas de la célula cerbral, son los datos del problema que estemos tratando de resolver o la salida de otra neurona.
-    \item Pesos (W): los pesos son un valor numérico que respresentan la importancia o relevancia de la entrada correspondiente, al principio del ejercicio suelen ser definidos de forma aleatoria. Son la parte más importante del modelo, pues como veremos en adelante, a través del entrenamientom son lo que vamos a modificar con el objetivo de que la NN aloje los mejores resultados posibles.
-    \item Bias (b): El bias comparte similitudes con los pesos, puede ser establecido de forma aleatoria, aunque algunas veces se le da el valor 0 ó 1 de manera arbitraria,   también es modificado durante el aprendizaje del modelo, se diferencia en que es un solo valor por neurona. El bias es el elemento que actúa como sesgo, para evitar que un peso crezca o decrezca más de la cuenta y perjudique el rendimiento del modelo.
-    \item N: $N=(X*W)+b$
+    \item Pesos (W): los pesos son un valor numérico que respresentan la importancia o relevancia de la entrada correspondiente, al principio del ejercicio suelen ser definidos de forma aleatoria. Son la parte más importante del modelo, pues como veremos en adelante, a través del entrenamientom son los valores que vamos a modificar con el objetivo de que la NN aloje los mejores resultados posibles.
+    \item Bias (b): el bias comparte similitudes con los pesos, puede ser establecido de forma aleatoria, aunque algunas veces se le da el valor 0 ó 1 de manera arbitraria. También es modificado durante el aprendizaje del modelo, se diferencia en que es un solo valor por neurona. El bias es el elemento que actúa como sesgo, para evitar que un peso crezca o decrezca más de la cuenta y perjudique el rendimiento del modelo.
+    \item N: es la salida de la neurona después del cómputo entre entrada, peso y bias.\\                                           \[N=(X*W)+b\]
     \item Función de activación (f(N)): función que recibe N como entrada. Las tres funciones más utilizadas son:
     \begin{itemize}
     \item Lineal: $f(x)=x$ 
@@ -261,7 +261,7 @@ De un modo más formal, podemos definir las neuronas artificales como una estruc
 Durante los primeros años de investigación en NN, se concluyó que una sola neurona no es capaz de resolver problemas complejos. De modo que se introduce el concepto de arquitectura de las NN. Las múltiples neruonas de nuestro modelo se organizan en niveles, conocidos como capas, con distinto número de neuronas. Dichas neuronas interactúan entre capas enviando las variables de salida como entrada para la siguente capa.
 Existen tres tipos de capas:
 \begin{itemize}
-    \item Capa de entrada: es siempre la primera de la arquitectura, tiene tantas neuronas como entradas haya en nuestro problema. 
+    \item Capa de entrada: es siempre la primera de la arquitectura. Las entradas se imputan directamente a ella. No tiene pesos ni bias.
     \item Capa de salida: es siempre la última de la arquitectura, tiene tantas neuronas como posibles salidas tenga el problema. Por ejemplo, si queremos determinar si un correo electrónico es spam o no, bastará una neurona en la capa de salida para representar esto, siendo la salida 0 y 1 para cada clase de mensaje. 
     \item Capa oculta: estas pueden ser más de una, de mayor, igual o menor número de neuronas que las capas que les preceden o suceden en la arquitectura.
 \end{itemize} 
@@ -275,7 +275,7 @@ La función de error es aquella definida por los valores de error que muestra el
 MSE=\frac{1}{m}\sum_{i=1}^m (y_i - \hat{y_i})^2
 \]
 \subsubsection{Función de error Cross Entropy}
-Esta es la función de error más utilizada en problemas de clasificación y es la que implementamos en los modelos sobre los que hablaremos más adelante: 
+Esta es la función de error más utilizada en problemas de clasificación y es la que implementaremos en los modelos sobre los que hablaremos más adelante: 
 \[
 CE=-\sum_{i=1}^m y_i \log\hat{y_i}
 \]
@@ -297,12 +297,12 @@ Es el algoritmo de aprendizaje más utilizado . Su objetivo es minimizar la func
 \end{itemize}
 \newpage
 \section{Código de NeuralNetwork.py.}
-En este apartado explicaremos el código base desarrollado en el fichero NeuralNetwok.py para las redes neuronales utilizadas en los ejercicios de clasificación de tumores y detección de spam. Dicha red no se nutre de librerías de Machine Learning, solo de librerías para manejo de los datos.
+En este apartado explicaremos el código base desarrollado en el fichero NeuralNetwok.py para las redes neuronales utilizadas en los ejercicios de clasificación de tumores y detección de spam. Dicha red no se nutre de librerías de Machine Learning, solo de librerías para manejo de los datos.\\ El obetivo de este ejercicio es demostrar el conocimiento en NN antes de utilizar librerías de Machine y Deep Learning.
 \subsection{Clase NeuralNetwork.}
-\noindent
-La red se instancia como objeto de la clase NeuralNetwork, se pasan por parámetro sus datos de entrada (x) y de salida (y), el learning rate que vamos a utilizar en el gradient descent, las dimensiones de la red (dims), las cuales solo pueden tener 3 capas: una de entrada, una oculta y una de salida. Y por último el parámetro lambda para la regularización. Además de estos parámetros, la clase cuanta con algunos más por defecto:
+
+La red se instancia como objeto de la clase NeuralNetwork, se pasan por parámetro sus datos de entrada (x) y de salida (y), el learning rate que vamos a utilizar en el gradient descent, las dimensiones de la red (dims), las cuales solo pueden tener 3 capas: una de entrada, una oculta y una de salida. Y por último el parámetro lambda para la regularización. Además de estos parámetros, la clase cuenta con algunos más por defecto:
 \begin{itemize}
-    \item Yh: vector de salidas de lared, inicialmente está a 0, y mide lo mismo que el vector de entrada Y.
+    \item Yh: vector de salidas de la red, inicialmente está a 0, y mide lo mismo que el vector de entrada Y.
     \item Param: es un diccionario (en python, digamos que un diccionario es una especie de lista con mucha más flexibilidad a la que se accede por palabras, no índices) donde vamos a guardar los pesos de la red, los bias, las salidas de la neurona antes (N) y depués de pasar por la función de activación (A).
     \item Threshold: el threshold o umbral es una varible opcional en nuestro diseño de la red, la cual sirve para establecer un límite para filtrar las salidas de la red, para que de esta forma, no estemos obligados a que toda salida mayor que 0.5 sea igual a 1 y viceversa.
     \item Error: es una lista donde iremos guardando la evolución del error de la red durante la ejecución.
@@ -323,7 +323,7 @@ class NeuralNetwork:
         self.m = self.Y.shape[1]
 \end{lstlisting}
 \subsection{Inicialización de pesos y bias.}
-\noindent
+
 La función nInit se encarga de generar aleatoriamente tanto los pesos como los bias de las capas de la red.
 \begin{lstlisting}
 def nInit(self): 
@@ -341,8 +341,8 @@ def nInit(self):
       
 \end{lstlisting}
 \subsection{Gradient descent.}
-\noindent
-La siguiente función corresponde al algoritmo de gradient descent, en ella inicianilazamos los pesos y bias llamando a nInint(), se avanza y retrocede por la red tantas veces como épocas hayamos introducido por parámetro. También imprimimos y cada 100 iteraciones el valor del error en ese momento, y al final de la ejecución, se imprime una gráfica de la evolución de la función de error a través de las épocas.
+
+La siguiente función corresponde al algoritmo de gradient descent, en ella instanciamos los pesos y bias llamando a nInint(), se avanza y retrocede por la red tantas veces como épocas hayamos introducido por parámetro. \\También imprimimos y cada 100 iteraciones el valor del error en ese momento, y al final de la ejecución, se imprime una gráfica de la evolución de la función de error a través de las épocas.
 \begin{lstlisting}
 def gradient_descent(self, epochs):
         np.random.seed(1)                         
@@ -362,8 +362,8 @@ def gradient_descent(self, epochs):
 
 \end{lstlisting}
 \subsection{Forward Propagation.}
-\noindent
-En la función forward() aplicamos el algoritmo de forward propagation, hay que remarcar que en esta función los pesos y bias no se modifican. Calculamos las salidas de las neuronas antes y después de la función de activación acorde a la teoría y las guardamos en el diccionario param. Posterirormente calculamos el error. En la función devolvemos la salida de la red y el error.
+
+En la función forward() aplicamos el algoritmo de forward propagation, hay que remarcar que en esta función los pesos y bias no se modifican. Calculamos las salidas de las neuronas antes y después de la función de activación acorde a la teoría y las guardamos en el diccionario param.\\ Posterirormente calculamos el error y devolvemos la salida de la red y el error.
 \begin{lstlisting}
 def forward(self):
     N1 = self.param['W1'].dot(self.X) + self.param['b1']
@@ -377,9 +377,10 @@ def forward(self):
 			      np.dot(1-self.Y, np.log(1-Yh).T))
     return A2, error
 \end{lstlisting}
+Esta función es invocada cuando utilizamos el Gradient descent.
 \subsection{Backpropagation.}
-\noindent
-En la función backward() aplicamos el algoritmo de back propagation, ejecutamos esta función después de llamar a la función forward(). En esta funcioón actualizamos los pesos y bias de la red, trasmitiendo el error calculado en la iteración, para ello derivamos la función de error y las funciones de activación de toda la red neuronal. A su vez, calculamos el factor de regularización para aplicarselo a los pesos y bias en el momento en los que los actualizamos.
+
+En la función backward() aplicamos el algoritmo de back propagation, ejecutamos esta función después de llamar a la función forward(). \\Actualizamos los pesos y bias de la red, trasmitiendo el error calculado en la iteración, para ello derivamos la función de error y las funciones de activación de toda la red neuronal. \\A su vez, calculamos el factor de regularización para aplicarselo a los pesos y bias en el momento en los que los actualizamos.
 \begin{lstlisting}
 def backward(self):
     derror = - (np.divide(self.Y, self.Yh ) - 
@@ -411,9 +412,10 @@ def backward(self):
     self.param["b2"] = self.param["b2"] - self.lr * variaton_b2
         
 \end{lstlisting}
+Esta función es invocada cuando utilizamos el Gradient descent.
 \subsection{Predict.}
-\noindent
-La función predict es la que ultilizamos para predecir o clasificar datos que no hemos utilizado en el entrenamiento. Su funcionamiento radica en llamar a la función forward() y guardar los resultados, al no llamar a la función backward(), la red no aprende de sus errores. Como nuestra función de activación en la ultima capa es una sigmoide, los resulatdos estarán entre 0 y 1, y con la variable threshold filtramos las salidas para que sean estricatmente 0 ó 1.  
+
+La función predict es la que ultilizamos para predecir o clasificar datos que no hemos utilizado en el entrenamiento.\\ Su funcionamiento radica en llamar a la función forward() y guardar los resultados, al no llamar a la función backward(), la red no aprende de sus errores. \\Como nuestra función de activación en la ultima capa es una sigmoide, los resultados estarán entre 0 y 1, y con la variable threshold filtramos las salidas para que sean estricatmente 0 ó 1.  
 \begin{lstlisting}
 def predict(self, x, y):#predict when the model has trained
     self.X=x
@@ -468,7 +470,7 @@ yval=df.iloc[501:683,10:].values.transpose()#168 para el tets
 \end{lstlisting}
 \subsection{Implementación de la red.}
 En este apartado hacemos uso de las funciones del NeuralNetwork.py, la razón de desarrollar dicho fichero fue poder implementar redes neuronales de forma sencilla y poder aplicarla en distintos problemas sin tener que programar lo mismo otra vez. Ahora lo vemos en práctica.\\
-Declaramos la red neuronal con los valores de entrenamiento y un learning rate de 0.01. La red funciona con una arquitectura [9 - 15 - 1], la cual utiliza funciones de salida lineales en la capa intermedia y una sigmoidal en la de salida. Utiliza como función de error, en lugar del clásico MSE, el Cross-Entropy. El algortimo de aprendizaje utilizado es el descenso por gradiente, el cual implementa el algoritmo de backpropagation.\\
+Declaramos la red neuronal con los valores de entrenamiento y un learning rate de 0.01. La red funciona con una arquitectura [9 - 15 - 1], la cual utiliza funciones de salida lineales en la capa intermedia y una sigmoidal en la de salida. Utiliza como función de error, en lugar del clásico MSE, el Cross-Entropy. \\El algortimo de aprendizaje utilizado es el descenso por gradiente, el cual implementa el algoritmo de backpropagation.\\
 Tanto la arquitectura como el learning rate son valores que hemos definido basandonos en la exoeriencia, en el anexo se muestran diversas implementaciones que nos han llevado a elegir la mejor.
 \begin{lstlisting}
 nn = NeuralNetwork(x,y,0.01,0)
@@ -684,12 +686,11 @@ plotCf(target,y_pred,'Cf Validation Set Logistic Regression')
 La visión humana es un sistema muy complejo y poderoso. Simplemente
 visualizando una fotografía, el sistema visual humano es capaz
 de percibir y deducir una gran cantidad de información acerca de ella. Por ejemplo, con la fotografía mostrada, podemos interpretar una inmensa varideda de tonos y colores deducidos del efecto de la luz incidiendo en los pétalos de la flor.
-Gracias al proceso de detección que realiza el ojo humano, podemos reconocer figuras, bordes, contornos, etc., podemos incluso segmentar la foto del resto dela imagen e interpretar factores como la profundidad a pesar de estar viendo una imágen en dos dimensiones (virtualmente).\\
-El proceso seguido para ello consta de dos partes. Por un lado, la luz reflejada por los objetos
-atraviesa llega hasta nuestos ojos, formándose en la retina una imagen invertida en dos
+\\Gracias al proceso de detección que realiza el ojo humano, podemos reconocer figuras, bordes, contornos, etc., podemos incluso segmentar la foto del resto dela imagen e interpretar factores como la profundidad a pesar de estar viendo una imágen en dos dimensiones (virtualmente).\\
+El proceso seguido para ello consta de dos partes. Por un lado, la luz reflejada por los objetos llega hasta nuestos ojos, formándose en la retina una imagen invertida en dos
 dimensiones.  Por otro lado, dicha imagen estransformada en impulsos nervisoso y trasladada a la parte posterior de cerebro, 
 el cual reconstruye un modelo en tres dimensiones de la imagen, gracias a la intervención de millones de neuronas. 
-Al mismo tiempo nuestro cerebro asocia la imagen con el concepto previamente asimilado de lo que es de una flor y la reconoce como tal.
+\\Al mismo tiempo nuestro cerebro asocia la imagen con el concepto previamente asimilado de lo que es de una flor y la reconoce como tal.
 \begin{figure}[H]
 \centering
 \includegraphics[width=8.5cm, height=5.35cm]{flor.jpg}
@@ -701,10 +702,43 @@ En las siguientes subsecciones veremos las aplicaciones más comunes de la visi�
 En la actualidad existe una gran variedad de aplicaciones de la visión artificial, es una ciencia que está presente en muchísimos campos. Los más comunes son:
 \begin{itemize}
 \item Reconocimiento óptico de carácteres (OCR): esta técnica consiste en la lectura e identificación de los carácteres alfanuméricos de una imagen. A día de hoy está considerado un problema sencillo de resolver. Su primera aplicación data de los años 60, y fue empleado en el reconocimiento de códigos postales por el servicio de correo de Estados Unidos.
-\item Construcción de modelos 3D (fotogrametría). esta técnica se basa en la construcción de figuras 3D mediante imágenes 2D.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{ocr.jpg}
+\end{figure}
+\item Construcción de modelos 3D (fotogrametría): esta técnica se basa en la construcción de figuras 3D mediante imágenes 2D.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{fotogrametria-png.png}
+\end{figure}
+\item Monitorización: La capacaidad de reconocer cualquier objeto captado por la cámara da lugar a multitud de aplicaciones. Un claro ejemplo se puede ver en la vigilancia de carreteras. En la actualidad existen sistemas para detectar accidentes de tráfico en el momento en el que sucede.
+\begin{figure}[H]
+\centering
+\includegraphics[width=10.5cm, height=4cm]{cars.png}
+\end{figure}
 \item Medicina: la medicina es uno de los campos que más partido saca de la visión artificial. Un ejemplo es la detección automática de melanomas.
-\item Monitorización:
+\item Conducción autómata: la concucción autómata es uno de los campos más invertigados actualemente. Empresas como Tesla están a la cabeza en la investigación sobre este tema. A día de hoy ya es posible circular en un vehículo que conduce solo por vías fuera de poblado.
+\begin{figure}[H]
+\centering
+\includegraphics[width=6.5cm, height=4.5cm]{melanoma.jpg}\hfill
+\includegraphics[width=6.5cm, height=4.5cm]{cars.jpg}
+\end{figure}
 \end{itemize}
+
+\subsection{Problemas y limitaciones de la Visión Artificial.}
+El rendimiento de los algoritmos de Visión Artificial está drásticamente ligado a la calidad de los datos. Es mucho más difícil adquirir un buen set de datos cuando hablamos de imágenes que en el caso de otras ramas del Machine Learning.
+\\Aunque existen técnicas de filtrado digital es frecuente encontrarse con limitaciones que dificultan el trabajo del los profesionales. Estas son:
+\begin{itemize}
+\item Variaciones en el punto de vista: es frecuente encontrarse en los set de imágenes que han sido tomadas desde diferentes tipos de vista. \\En ocasiones, como en la conducción automática, esto es inevitable y tratar con ello es parte de la tarea de desarrollo. Pero este problema también se presenta en campos como en la medicina, donde no hay una razón aparente que justifique esta inconveniencia. ESTO PUEDE SERVIR DE GANCHO PARA METER EL EJERCICIO DE MELANOMAS.
+\item Variaciones de escala: es frecuente encontrar imágenes con distintos tamaño, bien por la posición desde donde se han tomado o por las cámaras que se han usado.
+\item Variación lumínica: una variación en la luz puede cambiar drásticamente los valores de una imagen: Recordemos que una imagen es interpretada como una matriz de píxeles por el ordenador.
+\item Oclusión:  un objeto puede estar oculto parcialmente en la imagen. Por ejemplo, un peatón que otro coche tapa parcialemente.
+\item Ruido inherente: existen matices frecuentes en algunas fotografías que dificultan mucho el tratamiento de estas. Por ejemplo, la presencia del cabello del paciente en una foto de su lunar.
+
+\end{itemize}
+
+
+
 \newpage
 \section{Redes convolucionales.}
 En este apartado explicaremos las redes neuronales que vamos a necesitar para implementar el último ejercicio del trabajo; estas son las redes convolucionales, en adelante CNN. Las CNN se utilizan en problemas de clasificación de imágenes como alternativa al tipo de red que ya hemos visto, pues este queda absoleto ante una gran cantidad de datos en la capa de entrada, como es en el caso de las imágenes.\\ Procedemos a explicar las novedades y conceptos que dicha red incorpora.\\
@@ -853,6 +887,21 @@ X_train = X_train.astype('float32')/255 #Train normalization
 X_val = X_val.astype('float32')/255 #Test normalization
 (y_train,y_val)=Y[(int)(0.2*len(Y)):],Y[:(int)(0.2*len(Y))]
 \end{lstlisting}
+Imprimimos la simágenes a tratar:
+\begin{lstlisting}
+fig=plt.figure(figsize=(10,10))
+img=[]
+for i in range(1, 13):
+    ax = fig.add_subplot(3, 4, i)
+    ax.title.set_text('Senal {0}'.format(i))
+    plt.imshow(X_train[i][:, :, [2, 1, 0]], interpolation='nearest')
+plt.show()
+\end{lstlisting}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{Annotation 2020-04-28 121743.png}
+
+\end{figure}
 \subsection{Arquitectura.}
 La arquitectura escogida es una versión simplificada que al modelo VGG16. La arquitectura es la siguiente.
 \begin{itemize}
@@ -891,12 +940,10 @@ history=model.fit(X_train, y_train, batch_size=32, epochs=epochs,
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics[width=6.0cm, height=4.5cm]{Annotation 2020-04-24 115814.png}
-\end{figure}
-\begin{figure}[H]
-\centering
+\includegraphics[width=6.0cm, height=4.5cm]{Annotation 2020-04-24 115814.png}\hfill
 \includegraphics[width=6.0cm, height=4.5cm]{Annotation 2020-04-24 120025.png}
 \end{figure}
+
 \noindent
 Vemos que la red funciona de forma correcta, con una rápida convergencia de la función de error. Como resultado en el set de prueba, obtenemeos una precisión del 96\%.
 

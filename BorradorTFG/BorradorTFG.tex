@@ -2,6 +2,14 @@
 
 \author{Santiago Domínguez Collado}
 \title{Borrador TFG}
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}
@@ -14,6 +22,9 @@
 \graphicspath{{imagenes/}}
 \usepackage{float}
 \usepackage{listings}
+\newtheorem{theorem}{Teorema}
+\newtheorem{proposition}{Proposición}
+\newtheorem{definition}{Definición}
 \usepackage{float}
 \usepackage[none]{hyphenat} %no corta las palabras al compilar el documento
 \sloppy %como no se cortan las palabras el texto se descuadra, justifica los p�rrafos
@@ -34,70 +45,103 @@ Santiago Domínguez
 \end{large}
 \end{center}
 
-\section{Base matemática del Machine Learning.}
+\section{Introducción.}
+\section{Machine Learning.}
+\subsection{Discusión preliminar.}
+\subsection{Base matemática del Machine Learning.}
 \label{}
 
-El estudio de optimización se lleva a cabo con el objetivo de maximizar o minimizar una función \textit{f}.
+El estudio de optimización se lleva a cabo con el objetivo de maximizar o minimizar una función \textit{f} en su dominio.
 En nuestro caso, minimizar la función de error implica hallar los parámetros que la definen, cuando en los valores de estos la función alcanza su mínimo.
 Nos serviremos de la teoría de la optimización para alcanzar los valores en los que la función alcanza su mínimo y así obtener el mejor resultado posible de nuestro modelo. Estos valores son referidos como parámetros óptimos.
-\subsection{Teorema de Weierstrass.}
+\subsubsection{Teorema de Weierstrass.}
 
-El teorema de Weierstrass establece que en toda función continua \textit{f}, alojada en un intervalo cerrado y acotado, dicha función alcanza sus valores máximos y mínimos en puntos del intervalo.
- \[Si \hspace{0.20cm} \textit{f} \in C(A) \Rightarrow \exists x_{1},x_{2} \in A \mid f(x_{0}) \leq f(x) \leq f(x_{1}) \hspace{0.20cm} \forall x \in A\] 
-\textbf{Definición 1.1. (Condición necesaria de extremo.)}
-\noindent
-\[Sea \hspace{0.20cm} \vec{x} \in \mathring{A}, y\hspace{0.20cm} \textit{f}\hspace{0.20cm} derivable\hspace{0.20cm} en \hspace{0.20cm}x \Rightarrow \nabla f(\vec{x}) = (0,...,0)\]
-\textbf{Demostración:} \[f \text{derivable en x } \Rightarrow f(\vec{x}+tei)=\textit{g(t)}\Rightarrow \] 
-\[ \Rightarrow \text{g'} (0)=0= <\text{ei,} \nabla f(\vec{x}) >\] 
-\[\text{ Siendo }  \nabla f(\vec{x})= \frac{\partial f}{\partial xi} \partial xi (\vec{x})\]
-La condición anterior no es suficiente, puesto que:
-\begin{itemize}
-    \item Puede ocurrir que $\nabla f(A) = 0$ y sea punto de silla.
-    \item Puede ser el extremo relativo.
-\end{itemize}
-\subsection{Búsqueda de mínimo absoluto.}
+El teorema de Weierstrass establece que en toda función continua \textit{f}, definida en un dominio cerrado y acotado, dicha función alcanza sus valores máximos y mínimos en puntos del intervalo.
+\begin{theorem}
+Sea A un conjunto cerrado y acotado, denotemos por $\mathcal{C}(A,\mathbb{R})$  el conjunto de funciones continuas de $A$ en $\mathbb{R}$ entonces existen $ x_{1},x_{2} \in A$, tales que $ f(x_{1}) \leq f(x) \leq f(x_{2})$ para todo valor de $x$ en $A$.
+\end{theorem}
 
-Debemos buscar un máximo o mínimo en el conjunto interior $\mathring{A}$, empezando por los puntos en la frontera del conjunto, después los puntos sin derivada y por último los puntos con derivada nula. Existen condiciones para comprobar si cada punto con derivada nula es o no máximo o mínimo. Con matriz M y vector $\vec{x}$:
+\begin{proposition}
+Condición necesaria de extremo.Sea $\mathring{A}$ el interiot de $A$es decir, el mayor conjunto abierto
+contenido en $A$, y sea $x \in A$, entonces $ \nabla f(\vec{x}) = (0,...,0)$.\\
+Una vez sabemos que se alcanzan los extremos, veamos cómo calcularlos.
+\end{proposition}
+\begin{definition}
+Máximo realtivo: Se dice que la función $f$ tiene un valor máximo relativo en un punto $c$, si $c \in (a, b)$, tal que $f(c)  \geqslant f(x)$ para todo $x \in (a, b)$. El valor máximo relativo de $f$ en $(a, b)$ es $d = f(c)$.
+\end{definition}
+\begin{definition}
+Mínimo realtivo: Se dice que la función $f$ tiene un valor máximo relativo en un punto $c$, si $c \in (a, b)$, tal que $f(c)  \leqslant f(x)$ para todo $x \in (a, b)$. El valor máximo relativo de $f$ en $(a, b)$ es $d = f(c)$.
+\end{definition}
+El siguiente resultado es una condición necesaria de primer orden:
+Sea $f$ derivable en $x$,\\$  f(\vec{x}+tei)=\textit{g(t)}\Rightarrow 
+ \Rightarrow \text{g'} (0)=0= <\text{ei,} \nabla f(\vec{x}) > $.
+${ Siendo }  \nabla f(\vec{x})= \frac{\partial f}{\partial xi} \partial xi (\vec{x})$.\\
+La condición anterior no es suficiente, puesto que puede ocurrir que $\nabla f(x) = 0$
+y $x$ sea punto de silla.
+
+
+\subsubsection{Búsqueda de mínimo absoluto.}
+Para buscar los extremos en el conjunto A, examinamos, por un lado, los
+puntos interiores de gradiente cero (extremos relativos, conforme a la proposición
+1), los puntos de la frontera, y los puntos interiores sin derivada. 
+\\A continuación, enunciaremos las condiciones suficientes de extremo local de
+segundo orden, para lo que necesitamos que f sea dos veces diferenciable.
 \begin{itemize}
 \item M es definida positiva $\Longleftrightarrow x^TMx \geq 0$y$x^TMx=0\Leftrightarrow x=0$
 \item M es definida negativa  $\Longleftrightarrow x^TMx \leq0$y$x^TMx=0\Leftrightarrow x=0$
 \item M es semidefinida positiva  $\Longleftrightarrow x^TMx \geq0$y$x^TMx\neq0\Leftrightarrow x=0$
 \item M es semidefinida negativa  $\Longleftrightarrow x^TMx \leq0$y$x^TMx\neq0\Leftrightarrow x=0$
 \end{itemize}
-\textbf{Definición 1.2. (Matriz Hessiana.)}
-Sea \textit{f}, se dice matriz hessiana a la matriz tal que, $\textit{D} \subseteq R \rightarrow R^2$, \textit{A} un punto perteneciente al conjunto \textit{D}, tal que \textit{f} es diferenciable dos veces en el punto \textit{A}.
-\[
-\begin{vmatrix}\textit{H(A)}\end{vmatrix}=
-\begin{vmatrix}
-    f_{xx} & f_{xy} \\
-    f_{yx} & f_{yy}
-\end{vmatrix}
-\]
-\textbf{Teorema 1.1. (Clasificación de extremos mediante matriz hessiana.)}
-Sea \textit{f}, $\textit{D} \subseteq R \rightarrow R^2$, \textit{D}  un conjunto abierto, con derivadas segundas continuas en un entorno de \textit{A} punto críticos de \textit{f}. Y considerando $\begin{vmatrix}\textit{H(A)}\end{vmatrix}$ como el determinante de la matriz hessiana en el punto \textit{A}:
+
+\begin{definition}
+Matriz Hessiana:  Denotemos por $\mathcal{C^2}(A,\mathbb{R})$  el conjunto de las funciones definidas
+sobre $A$, dos veces diferenciables con continuidad y con valores en $\mathbb{R}$ y sea $f \in
+C^2(A, \mathbb)$. La matriz Hessiana de $f$ en $(x, y) \in A$, se define del siguiente modo:
+
+$$
+H_f(x,y)=\left(
+\begin{array}{cc}
+\frac{\partial^2f}{\partial x^2}(x,y) & \frac{\partial^2f}{\partial y\partial x}(x,y) \\
+\frac{\partial^2f}{\partial y\partial x}(x,y) & \frac{\partial^2f}{\partial y^2}(x,y)
+\end{array}
+\right)
+$$
+\\
+Su determinante $|H_f(x,y)|$ se denomina Hessiano de $f$.
+\end{definition}
+\begin{theorem}
+Criterio de Silvester: Sea $D\in\mathbb{R}^n$ un conjunto convexo y abierto, y $f\in\mathcal{C}^2(D,\mathbb{R})$ una función convexa. Si $\overline{x}_0=(x_0,y_0)\in D$ es un mínimo local, entonces es también el único mínimo global. En particular, si $H_f(x_0,y_0)$ es semidefinida positiva, entonces, $(x_0,y_0)$ es el único mínimo global.
 \begin{itemize}
-    \item Si $\begin{vmatrix}\textit{H(A)}\end{vmatrix}>0$ y $ f_{xx}(A)>0$, entoces \textit{f} tiene un mínimo realtivo en \textit{A}.
-    \item Si $\begin{vmatrix}\textit{H(A)}\end{vmatrix}>0$ y $ f_{xx}(A)<0$, entoces \textit{f} tiene un máximo realtivo en \textit{A}.
-    \item Si $\begin{vmatrix}\textit{H(A)}\end{vmatrix}<0$, entoces \textit{f} tiene un punto de silla en \textit{A}.
-    \item Si $\begin{vmatrix}\textit{H(A)}\end{vmatrix}=0$, entoces no podemos sacar conclusiones.
+    \item Si $\begin{vmatrix}\textit{H(A)}\end{vmatrix}>0$ y $ f_{xx}(A)>0$ y definida positiva, entoces \textit{f} tiene un mínimo realtivo en \textit{A}.
+    \item Si $\begin{vmatrix}\textit{H(A)}\end{vmatrix}>0$ y $ f_{xx}(A)<0$ y definida negativa, entoces \textit{f} tiene un máximo realtivo en \textit{A}.
+    \item Si $\begin{vmatrix}\textit{H(A)}\end{vmatrix}<0$ y $f$ es semidefinida positiva, entoces \textit{f} tiene un punto de silla en \textit{A}.
+    \item Si $\begin{vmatrix}\textit{H(A)}\end{vmatrix}$ y $f$ es semidefinida negativa , entoces no podemos sacar conclusiones.
 \end{itemize}
 
+\end{theorem}
 
-\subsection{Convexidad.}
 
-El estudio de la convexidad permite afirmar que un mínimos relativo es absoluto. Por lo tanto, nos interesa demostrar la convexidad de la función de error para determinar nuestro prámetros óptimos.
+\subsubsection{Convexidad.}
+
+El estudio de la convexidad permite estudiar si un extremo relativo es absoluto. Por lo tanto, nos interesa demostrar la convexidad de la función de error para determinar nuestro prámetros óptimos.
 
 \begin{itemize}
 \item El dominio es cerrado y acotado: gradualmente expresado con restricciones de desigualdad. Algoritmo de Karush-Khun-Tucker.
 \item Hay restricciones de igualdad: Algoritmo de multiplicadores de Lagrange.
 \item En dominios convexos.
 \end{itemize}
-\textbf{Definición 1.3.} 
+\begin{definition} Conjunto convexo. \\
 \[x_{L} \rightarrow \text{mínimo local. Si } exists x_{1} |  f(x_{1}) < f(x_{L})\]
 \[f(x_{L})\leq f(tx_{L})+(1-t)x_{1}\leq tf(x_{L})+(1-t)f(x_{1})<f(x_{1})\]
-\textbf{Definición 1.4.}
+\end{definition}
+\begin{definition} Función convexa. \\
 $\textit{f}: \textit{A}\rightarrow (R)$, \textit{f} es convexa en $x_{0}$ si lo es en un entorno de $x_{0}$. En tal caso, \textit{Hf($x_{0}$)} es definida positiva.
-\subsection{Regresión Lineal}
+\end{definition}
+El siguiente resultado es una condición suficiente de extremo global para funciones convexas.
+\begin{theorem}
+Sea $D\in\mathbb{R}^n$ un conjunto convexo y abierto, y $f\in\mathcal{C}^2(D,\mathbb{R})$ una función convexa. Si $\overline{x}_0=(x_0,y_0)\in D$ es un mínimo local, entonces es también el único mínimo global. En particular, si $H_f(x_0,y_0)$ es semidefinida positiva, entonces, $(x_0,y_0)$ es el único mínimo global.
+\end{theorem}
+\section{Regresión Lineal}
 
 Sea un conjunto de datos $(xi,yi)^n_{i=1}$, queremos obtener la recta  que mejor se ajuste a la hipótesis $h\theta(x)= ax+b$ (puede tener  más parámetros). Para ello, hallamos los parámetros de h$\theta$  minimizando la función del error cuadrático medio.
 
@@ -123,17 +167,19 @@ El estudio regresión lineal multivariable se utiliza para hallar la relación e
 \centering
 \includegraphics[scale=0.8]{Annotation 2020-03-23 133547}
 \end{figure}
- \[\text{Hiperespacio } H(a_{1},a_{2},a_{3},a_{4})=\frac{1}{N}\sum_{i=1}^{N}(a_{1}x_i^1+a_{2}x_i^1+a_{3}x_i^1+a_{4}-y_{i})^2 \text{¿ Es } \vec{a}\text{ minimizante?}
+ \[\text{Hiperespacio } H(a_{1},a_{2},a_{3},a_{4})=\frac{1}{N}\sum_{i=1}^{N}(a_{1}x_i^1+a_{2}x_i^1+a_{3}x_i^1+a_{4}-y_{i})^2
 \]
-\[H:R^4\rightarrow R \begin{bmatrix}
+Estudiemos en qué condiciones es $\vec{a}$ un mínimo local. 
+\\Procedemos a calcular el mínimo de lso coeficientes que acompañan a las variables de problema, es decir, el mínimo de $\vec{a}$.
+\[I:R^4\rightarrow R \begin{bmatrix}
     x_{1}^1 & x_{1}^2 & x_{1}^3 & x_{1}^4 1 \\
     .&.&.&.\\
     .&.&.&.\\
     .&.&.&.\\
     x_{N}^1 & x_{N}^2 & x_{N}^3 & x_{N}^4 1
-\end{bmatrix} \in M_{M*n}. \hspace{0.20cm} y=\begin{bmatrix}y_{1}\\y_{2}\\.\\.\\.\\y_{N}\end{bmatrix}\] \\ \[H(\vec{a},b)=||X\vec{a}-y||^2 = <x\vec{a}-\vec{y},x\vec{a}-y>=<x\vec{a},x\vec{a}>-2<X\vec{a},y>+<y,y>\]
-\[\nabla H(a)=\nabla<x\vec{a},x\vec{a}>-2\nabla<x\vec{a},\vec{y}>=0\Leftrightarrow \boxed{ \vec{a}=(X^T X)^{-1} X^T y}\]
-
+\end{bmatrix} \in M_{M*n}. \hspace{0.20cm} y=\begin{bmatrix}y_{1}\\y_{2}\\.\\.\\.\\y_{N}\end{bmatrix}\] \\ \[I(\vec{a},b)=||X\vec{a}-y||^2 = <x\vec{a}-\vec{y},x\vec{a}-y>=<x\vec{a},x\vec{a}>-2<X\vec{a},y>+<y,y>\]
+\[\nabla I(a)=\nabla<x\vec{a},x\vec{a}>-2\nabla<x\vec{a},\vec{y}>=0\Leftrightarrow \boxed{ \vec{a}=(X^T X)^{-1} X^T y}\]
+Al igual que en la Regresión Lineal univariable, se demuestra que la función EMC es convexa, por lo tanto $\vec{a}$ es un mínimo global.
 \subsection{Método directo.}
 
 El anterior método explicado en el apartado de regresión lineal multivariable muestra cómo obtener la hipótesis de forma directa, analítica, no obstante en la realidad, el cálculo de la inversa de una matriz se evita en la mayoría de las ocasiones debido a la complejidad que esta requiere (O($n^3$)).\\
@@ -143,14 +189,17 @@ En su lugar, métodos iterativos como steepest descent, el cual “desciende” 
 
 Cuando nuestro modelo no se ajusta a una linea recta, la Regresión Lineal no nos sirve para definir una hipótesis que se ajuste a nuestro modelo de datos.
 IMAGEN DE GRÁFICA 1
-La solución más tentaiva que se plantea para aborar este dataset es añadir un nuevo parámetro a nuestra hipótesis que multiplique a la variable ya presente, pero esta vez, elevada a un factor mayor. 
+Recurrimos a la regresión no lineal, añadiendo un nuevo parámetro a nuestra hipótesis que multiplique a la variable ya presente, pero esta vez, elevada a un factor mayor.\\
+La regresóon no lineal abarca diversos modelos: los más utilizados son: regresión exponencial, regresión potencial, regresión logarítmica y regresión polinomial. Se utiliza cada modelo cuando el dataset tiende a ajustarse por una curva
+respectivamente exponencial, potencial, logarítmica o polinomial. Nosotros nos
+ocuparemos sólo de la regresión polinomial .
 \[
  y=\theta_0+\theta_1 x+\theta_2 x^2
 \]
 \[
  min\sum_{i=1}^{N}(y-\theta_0-\theta_1 x-\theta_2 x^2)^2\longrightarrow \hat{\theta_0},\hat{\theta_1},\hat{\theta_2} \Rightarrow \text{esto ha funcionado. GRÁFICA 1 CON UNA CURVA DECENTE}
 \] 
-Si consideraramos una hipótesis más ambiciosa como $y=\theta_0+\theta_1 x+\theta_2 x^2 ...\hspace{0.15cm} \theta_20 x^n$ pero esto nos llevaría a un ajuste de nuestro modelo demasiado preciso como para funcionar correctamente con datos de testeo. Esto se conoce como \textit{Overfitting} o \textit{Variance problem}.
+Podríamos considerar una hipótesis más ambiciosa como $y=\theta_0+\theta_1 x+\theta_2 x^2 ...\hspace{0.15cm} \theta_20 x^n$ pero esto nos podrá llevar a un ajuste de nuestro modelo demasiado preciso como para funcionar correctamente con datos de testeo. Esto se conoce como \textit{Overfitting} o \textit{Variance problem}.
 \\Eso nos lleva al problema de determinar el número de parámetros del modelo. Es decir, necesitamos saber cómo aplicar regresión polinomial.
 \subsection{Aplicación de regresión polinomial.}
 
@@ -164,8 +213,9 @@ r_{xy}=\frac{s_{xy}}{s_x s_y}
 El coeficiente de Pearson es válido solo cuando se cumplan las siguientes condiciones:
 \begin{itemize}
     \item Los datos sean muestras independientes, es decir, no haya auto-correlación entre ellos.
-    \item Los datos presenten una distrubución normal.
-    \item Homocedaesticida (pone en internet que esto es en los modelos, preguntar a iván)
+    \item Los errores presenten una distrubución normal.
+    \item Los errores deben ser homoced´asticos: es decir, deben tener la misma
+varianza poblacional.
 \end{itemize}
 \subsubsection{Coeficiente de Spearman.}
 
@@ -185,10 +235,15 @@ Error (x) = (E[\hat{f}(x)]-f(x)^2+E[(\hat{f}(x)-E[\hat{f}(x)])^2]+\sigma^2_irr (
 \[
 y=\theta_0+\theta_{1}x+\theta_{2}x^2
 \]
-Realmente la distinción entre regresión multivariable y polinomial puede verse reducida a un mero formalismo. Cuando consideramos que la nueva parte de la hipótesis no es más que una nueva variable de entrada en nuestro problema, variable la cual es completamente dependiente de al menos una de las variables anteriores.
+Realmente la distinción entre regresión multivariable y polinomial puede verse reducida a un mero formalismo. La diferencia sustancial radica en que en la regresión polinomial las variables son dependientes entre ellas, eso tiene una implicación crítica, se rompe la convexidad, por lo que el mínimo local puede no ser único, eso se da cuando la matriz de variables no es invertible.
 \subsection{Regularización.}
 \noindent
 Durante el desarrollo de nuestro modelo, aplicando la teoría explicada hasta ahora, nos surge la duda de cuál es el grado que mejor resultado nos dará, o dicho de otra forma; ¿Qué grado en nuestro modelo es el que mejor se ajusta a nuestras necesidades? ¿Evita los problemas de bias y variance?\\
+\begin{definition}Bias: Se define problema de bias cuando nuestra hipótesis o modelo no se ajusta correctamente a los datos. También se conoce como underfitting.
+\end{definition}Variance: Se define problema de variance cuando nuestra hipótesis o modelo se ajusta demasiado a los datos de nuestro problema, siendo solo capaz de predecir correctamente dichos datos, y no nuevos. También se conoce como overfitting.
+
+\begin{definition}
+\end{definition}
 La regularización es la respuesta, se define regularización como la técnica que penaliza los términos de mayor gardo de nuestro modelo, permitiendonos así utilizar hipótesis de un grado considerable, por lo que no hay lugar a que aparezca el problema de bias, mientras que eludimos el problema de variance. Por ejemplo, en una hipótesis que con grado 4 nos daría variance:
 \[
  y=\theta_0+\theta_1 x+\theta_2 x^2+1000\theta_3 x^3+1000\theta_4 x^4 = h_\theta (x)
@@ -204,6 +259,7 @@ Además de ser una manera eficar para mejorar nuestro modelo, previniendo dos de
 \[
 \frac{J(\theta)}{\partial\theta_j} = \frac{1}{m} \sum_{i=1}^{m} \left(h_\theta (x^{(i)})-y^{(i)}\right) x_{j}^{(i)}-\frac{\lambda}{m} \theta_j 
 \]
+
 \subsection{Escalamiento de variables (feature scaling).}
 \noindent
 Durante el planteamiento del problema a resolver mediante el aprendizaje automático es frecuente encontrarse con disversas variables no relacionadas, con distinto rango y dominios. Esto puede causar un aprendizaje más lento, lo que supone más tiempo de entrenamiento para peores resultados. \\
@@ -217,12 +273,14 @@ x_i \longleftarrow \frac{x_i - \overline{x}}{s_i} \epsilon [-1,1]
 s_i \hspace{0.20cm} = \  max\hspace{0.20cm}x_{i}^j -min\hspace{0.20cm}x_{i}^j \hspace{0.20cm}
 \]
 \newpage
+\section{Regresión logística.}
 \section{Redes neuronales.}
-\
-Se define red neuronal (en adelante NN) como un modelo o estructura algorítmica que imita el comportamiento del cerebro humano con el objetivo de resolver, clasificar o predecir partiendo de unos datos de entrada.\\
+
+Se define red neuronal (en adelante NN o ANN) como un modelo o estructura algorítmica que imita el comportamiento del cerebro humano con el objetivo de resolver, clasificar o predecir partiendo de unos datos de entrada.\\
 Su elemento mínimo es la neurona artifical, en las NN se implementan diversas neuronas en múltiples capas de acuerdo a las necesidades del problema.
 Las NN envuelven múltiples algortimos y características que normalmente varían de forma poco rigurosa en función del rendimiento que estas muestran y de la naturaleza del problema a abordar. Dichos aspectos irán siendo explicados en los siguientes apartados.
-\subsection{Neurona Artificial.}
+\subsection{Componentes.}
+\subsubsection{Neurona Artificial.}
 La neurona artificial es la unidad mínima de la que se componen las NN, dichas neuronas están basadas en la célula cerebral simplifciada, denominada neurona de \textbf{McCullock-Pitts (MCP).} Las nueronas son células nervisas interconectadas del cerebro que participan en el proceso y transmisión de señales eléctricas y químicas, como se uestra en la siguiente figura: \\
 \begin{figure}[H]
 \centering
@@ -257,7 +315,7 @@ De un modo más formal, podemos definir las neuronas artificales como una estruc
     \item Resultado (a): es el resultado de aplicar la variable N a la función de activación.
         
 \end{itemize}
-\subsection{Arquitectura.}
+\subsubsection{Arquitectura.}
 Durante los primeros años de investigación en NN, se concluyó que una sola neurona no es capaz de resolver problemas complejos. De modo que se introduce el concepto de arquitectura de las NN. Las múltiples neruonas de nuestro modelo se organizan en niveles, conocidos como capas, con distinto número de neuronas. Dichas neuronas interactúan entre capas enviando las variables de salida como entrada para la siguente capa.
 Existen tres tipos de capas:
 \begin{itemize}
@@ -269,7 +327,7 @@ Existen tres tipos de capas:
 \centering
 \includegraphics[width=10cm, height=5.625cm]{arq.png}
 \end{figure}
-\subsection{Función de error.}
+\subsubsection{Función de error.}
 La función de error es aquella definida por los valores de error que muestra el modelo durante la ejecución de su entrenamiento. Se obtiene a partir de la diferencia entre el resultado esperado y el resultado real.\\ Existen numerosos algoritmos para calcular el error pero el más común es el error cuadátrico medio o MSE. El cual se obtiene a partir de la diferencia entre valor real y estimado en m casos:
 \[
 MSE=\frac{1}{m}\sum_{i=1}^m (y_i - \hat{y_i})^2
@@ -279,11 +337,11 @@ Esta es la función de error más utilizada en problemas de clasificación y es 
 \[
 CE=-\sum_{i=1}^m y_i \log\hat{y_i}
 \]
-\subsection{Gradient Descent.}
+\subsubsection{Gradient Descent.}
 Es el algoritmo de aprendizaje más utilizado . Su objetivo es minimizar la función de error, busca el mínimo absoluto avanzando en cada iteracción del entrenamiento, para ello actualiza constantemente los pesos y bias de la red. Consta de dos fases o subalgoritmos para ello: 
 \begin{itemize}
-    \item Forward Propagation: la información se expande por la red, cada neurona calcula su salida y transmite la información resultante por la red hasta llegar al final de la red, donde se genera un resultado(Yh). Durante el entrenamiento dicho resultado es comparado con el resultado real(Y) y se calcula su error para propagarlo.
-    \item Back Propagation: es el responsable del aprendizaje del modelo, una vez calculado el error el algoritmo de backpropagation distribuye dicho error por todas las capas de lared con el objetivo de que los pesos y bias se reajusten de cara a errar en menor medida en la próxima iteración (k+1). \\Los pesos y bias se actualizan siguiendo las siguientes fórmulas:
+    \item Forward Propagation: en adelante propagación hacia adelante o (FP). La información se expande por la red con la configuración inicial de los pesos, los cuales se actualizarán mediante la back propagation. Cada neurona calcula su salida y transmite la información resultante por la red hasta llegar al final de la misma, donde se genera un resultado(Yh). Durante el entrenamiento dicho resultado es comparado con el resultado real(Y) y se calcula su error para propagarlo.
+    \item Back Propagation: en adelante retropropagación hacia adelante o (BP). Es el responsable del aprendizaje del modelo, una vez calculado el error el algoritmo de backpropagation distribuye dicho error por todas las capas de lared con el objetivo de que los pesos y bias se reajusten de cara a errar en menor medida en la próxima iteración (k+1). \\Los pesos y bias se actualizan siguiendo las siguientes fórmulas:
     \[
     W^i (k+1) = W^i (k) - \alpha s^i (a^{i-1})^T
     \]
@@ -295,16 +353,17 @@ Es el algoritmo de aprendizaje más utilizado . Su objetivo es minimizar la func
     \]
     
 \end{itemize}
-\newpage
-\section{Código de NeuralNetwork.py.}
-En este apartado explicaremos el código base desarrollado en el fichero NeuralNetwok.py para las redes neuronales utilizadas en los ejercicios de clasificación de tumores y detección de spam. Dicha red no se nutre de librerías de Machine Learning, solo de librerías para manejo de los datos.\\ El obetivo de este ejercicio es demostrar el conocimiento en NN antes de utilizar librerías de Machine y Deep Learning.
-\subsection{Clase NeuralNetwork.}
+
+En los siguientes apartados se implementará toda la teoría explicada en esta sección. Empezaremos por un fichero para generar NN y luego veremos su aplicación en dos ejercicios.
+\subsection{Código de NeuralNetwork.py.}
+En este apartado explicaremos el código base desarrollado en el fichero NeuralNetwok.py para las redes neuronales utilizadas en los ejercicios de clasificación de tumores y detección de spam. Dicha red no se nutre de librerías de Machine Learning, solo de librerías para manejo de los datos. También cabe destacar que la red que genera este fichero es solo de 3 capas, pues es suficiente para abordar los ejercicios posteriores.\\ El obetivo de este ejercicio es demostrar el conocimiento en NN antes de utilizar librerías de Machine y Deep Learning.
+\subsubsection{Clase NeuralNetwork.}
 
 La red se instancia como objeto de la clase NeuralNetwork, se pasan por parámetro sus datos de entrada (x) y de salida (y), el learning rate que vamos a utilizar en el gradient descent, las dimensiones de la red (dims), las cuales solo pueden tener 3 capas: una de entrada, una oculta y una de salida. Y por último el parámetro lambda para la regularización. Además de estos parámetros, la clase cuenta con algunos más por defecto:
 \begin{itemize}
-    \item Yh: vector de salidas de la red, inicialmente está a 0, y mide lo mismo que el vector de entrada Y.
+    \item Yh: vector de salidas de la red, inicialmente está a 0, y mide lo mismo que el vector de las salidas Y.
     \item Param: es un diccionario (en python, digamos que un diccionario es una especie de lista con mucha más flexibilidad a la que se accede por palabras, no índices) donde vamos a guardar los pesos de la red, los bias, las salidas de la neurona antes (N) y depués de pasar por la función de activación (A).
-    \item Threshold: el threshold o umbral es una varible opcional en nuestro diseño de la red, la cual sirve para establecer un límite para filtrar las salidas de la red, para que de esta forma, no estemos obligados a que toda salida mayor que 0.5 sea igual a 1 y viceversa.
+    \item Umbral: es una varible opcional en nuestro diseño de la red, la cual sirve para establecer un límite para filtrar las salidas de la red, para que de esta forma, no estemos obligados a que toda salida mayor que 0.5 sea igual a 1 y viceversa.
     \item Error: es una lista donde iremos guardando la evolución del error de la red durante la ejecución.
     \item m: es el número de samples o casos que tenemos en nuestro set de datos, es decir, el número de filas de X o Y.
 \end{itemize}
@@ -322,7 +381,7 @@ class NeuralNetwork:
         self.error=[]
         self.m = self.Y.shape[1]
 \end{lstlisting}
-\subsection{Inicialización de pesos y bias.}
+\subsubsection{Inicialización de pesos y bias.}
 
 La función nInit se encarga de generar aleatoriamente tanto los pesos como los bias de las capas de la red.
 \begin{lstlisting}
@@ -340,7 +399,7 @@ def nInit(self):
     self.param['a2'] = np.zeros((self.dims[2], 1))   
       
 \end{lstlisting}
-\subsection{Gradient descent.}
+\subsubsection{Gradient descent.}
 
 La siguiente función corresponde al algoritmo de gradient descent, en ella instanciamos los pesos y bias llamando a nInint(), se avanza y retrocede por la red tantas veces como épocas hayamos introducido por parámetro. \\También imprimimos y cada 100 iteraciones el valor del error en ese momento, y al final de la ejecución, se imprime una gráfica de la evolución de la función de error a través de las épocas.
 \begin{lstlisting}
@@ -361,7 +420,8 @@ def gradient_descent(self, epochs):
         plt.show()        
 
 \end{lstlisting}
-\subsection{Forward Propagation.}
+
+\subsubsection{Forward Propagation.}
 
 En la función forward() aplicamos el algoritmo de forward propagation, hay que remarcar que en esta función los pesos y bias no se modifican. Calculamos las salidas de las neuronas antes y después de la función de activación acorde a la teoría y las guardamos en el diccionario param.\\ Posterirormente calculamos el error y devolvemos la salida de la red y el error.
 \begin{lstlisting}
@@ -378,7 +438,7 @@ def forward(self):
     return A2, error
 \end{lstlisting}
 Esta función es invocada cuando utilizamos el Gradient descent.
-\subsection{Backpropagation.}
+\subsubsection{Backpropagation.}
 
 En la función backward() aplicamos el algoritmo de back propagation, ejecutamos esta función después de llamar a la función forward(). \\Actualizamos los pesos y bias de la red, trasmitiendo el error calculado en la iteración, para ello derivamos la función de error y las funciones de activación de toda la red neuronal. \\A su vez, calculamos el factor de regularización para aplicarselo a los pesos y bias en el momento en los que los actualizamos.
 \begin{lstlisting}
@@ -413,9 +473,9 @@ def backward(self):
         
 \end{lstlisting}
 Esta función es invocada cuando utilizamos el Gradient descent.
-\subsection{Predict.}
+\subsubsection{Predict.}
 
-La función predict es la que ultilizamos para predecir o clasificar datos que no hemos utilizado en el entrenamiento.\\ Su funcionamiento radica en llamar a la función forward() y guardar los resultados, al no llamar a la función backward(), la red no aprende de sus errores. \\Como nuestra función de activación en la ultima capa es una sigmoide, los resultados estarán entre 0 y 1, y con la variable threshold filtramos las salidas para que sean estricatmente 0 ó 1.  
+La función predict es la que ultilizamos para predecir o clasificar datos que no hemos utilizado en el entrenamiento.\\ Su funcionamiento radica en llamar a la función forward() y guardar los resultados, al no llamar a la función backward(), la red no aprende de sus errores. \\Como nuestra función de activación en la ultima capa es una sigmoide, los resultados estarán comprendidos entre 0 y 1, y con la variable threshold filtramos las salidas para que sean estrictamente 0 ó 1.  
 \begin{lstlisting}
 def predict(self, x, y):#predict when the model has trained
     self.X=x
@@ -431,9 +491,9 @@ def predict(self, x, y):#predict when the model has trained
     return comp
 \end{lstlisting}
 \newpage
-\section{Ejercicio de clasificación de tumores.}
+\subsection{Ejercicio de clasificación de tumores.}
 En este apartado vamos a explicar de forma detallada el proceso de desarrollo de una red neuronal capaz de clasificar tumores como benignos o malignos. Posteriormente, se comparará dicho modelo con otras arquitecturas, se mostrarará el resultado al aplicar regularización y se mostrará dicho modelo con regresión logística en lugar de una red neuronal. Todo el código está adjuntado en el anexo del trabajo.
-\subsection{Carga y transformación de los datos.}
+\subsubsection{Carga y transformación de los datos.}
 Los datos utilizados corresponden a un fichero csv proporcionado por el hospital de Wisconsin.\\
 Dicho dataset incluye 11 columnas de datos, las cuales son: Person ID, Clump Thickness, Uniformity of Cell Size, Uniformity of Cell Shape, Marginal Adhesion, Single Epithelial Cell Size, Bare Nuclei, Bland Chromatin, Normal Nucleoli, Mitoses, Output.\\
 Tras cargar el csv eliminamos las filas con los posibles valores nulos que pueda haber en el archivo.
@@ -451,7 +511,7 @@ Ahora el set de datos luce así:
 \centering
 \includegraphics{Annotation 2020-03-23 185932.png}
 \end{figure}
-\subsubsection{Normalización.}
+\paragraph{Normalización.}
 Aplicamos normnalización maxmin para mejorar el rendimiento y evistar que la columna con valores más altos monopolize el modelo. 
 \begin{lstlisting}
 names = df.columns[0:10]
@@ -460,7 +520,7 @@ scaled_df = scaler.fit_transform(df.iloc[:,0:10])
 scaled_df = pd.DataFrame(scaled_df, columns=names)
 scaled_df[10]= df[10]
 \end{lstlisting}
-\subsubsection{Separar los datos.}
+\paragraph{Separar los datos.}
 En este ejercicio separamos los datos en 2 sets, el de entrenamiento y el de test. Aprovechamos la versatilidad de la librería pandas para quitar la primera columna, pues el ID del paciento no influye en nada. Trasponemos los datos para que el finchero NeuralNetwork.py pueda trabajar con ellos.
 \begin{lstlisting}
 x=scaled_df.iloc[0:500,1:10].values.transpose()#500 para train
@@ -468,7 +528,7 @@ y=df.iloc[0:500,10:].values.transpose()
 xval=scaled_df.iloc[501:683,1:10].values.transpose()
 yval=df.iloc[501:683,10:].values.transpose()#168 para el tets
 \end{lstlisting}
-\subsection{Implementación de la red.}
+\paragraph{Implementación de la red.}
 En este apartado hacemos uso de las funciones del NeuralNetwork.py, la razón de desarrollar dicho fichero fue poder implementar redes neuronales de forma sencilla y poder aplicarla en distintos problemas sin tener que programar lo mismo otra vez. Ahora lo vemos en práctica.\\
 Declaramos la red neuronal con los valores de entrenamiento y un learning rate de 0.01. La red funciona con una arquitectura [9 - 15 - 1], la cual utiliza funciones de salida lineales en la capa intermedia y una sigmoidal en la de salida. Utiliza como función de error, en lugar del clásico MSE, el Cross-Entropy. \\El algortimo de aprendizaje utilizado es el descenso por gradiente, el cual implementa el algoritmo de backpropagation.\\
 Tanto la arquitectura como el learning rate son valores que hemos definido basandonos en la exoeriencia, en el anexo se muestran diversas implementaciones que nos han llevado a elegir la mejor.
@@ -487,7 +547,7 @@ pred_test = nn.predict(xval, yval)
 Acc: 0.9240000000000003
 Acc: 0.9835164835164836
 \end{lstlisting}
-\subsubsection{Con regularización.}
+\paragraph{Con regularización.}
 Tras diversas pruebas, el valor 0.7 el que mejor rendimiento aporta. Elevando el acierto en el test al máximo.
 \begin{lstlisting}
 pred_train = nn.predict(x, y)
@@ -495,8 +555,8 @@ pred_test = nn.predict(xval, yval)
 Acc: 0.9360000000000003
 Acc: 1.0
 \end{lstlisting}
-\subsection{Visualización.}
-Para visualizar los datos de dorma más explicativa se ha recurrido a una matriz de confunción que muestra el número de positivos clasificados correctamente, falsos positivos, falsos negativos, y  negativos clasificados correctamente. La función es la siguiente:
+\subsubsection{Visualización.}
+Para visualizar los datos de dorma más explicativa se ha recurrido a una matriz de confusión que muestra el número de positivos clasificados correctamente, falsos positivos, falsos negativos, y  negativos clasificados correctamente. La función es la siguiente:
 \begin{lstlisting}
 def plotCf(a,b,t):
     cf =confusion_matrix(a,b)
@@ -528,16 +588,18 @@ plotCf(target,predicted,'Cf Validation Set')
 \end{figure}
 El modelo, incluso sin regularización, muestra un resultado excelente. Solo hemos clasificado 3 correos mal, todos eran spam y los hemos clasificado como correos ordinarios.
 
-\subsection{Implementación con regresión logística.}
+\subsubsection{Implementación con regresión logística.}
 Con el fin de comprobar si un modelo más rápido y sencillo podría superar al ya explicado, hemos implementado regresión logística. Como era de esperar, la regresión logística no es suficiente para tratar problemas de esta embergadura.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.8]{Annotation 2020-03-23 193133.png}
 \end{figure}
 \newpage
-\section{Ejercicio de clasificación de correo electrónico.}
+\subsection{Ejercicio de clasificación de correo electrónico.}
 Al igual que en la sección anterior, éste ejercicio implementa las funciones definidas en el archivo NeuralNetwork.py.\\ En este caso el ejercicio exige un enfoque ligeramente diferente respecto al anterior a causa de los datos. Los datos utilizados son numerosos mensajes, los cuales algunos son spam y otros mensakes corrientes. De dichos mensajes solo se pueden extraer sus palabras, así que en este caso, no tenemos distintas características que evaluar.
-\subsection{Carga, comprensión y transformación de los datos.}
+
+
+\subsubsection{Carga, comprensión y transformación de los datos.}
 Como ya hemos dicho, el dataset está compuesto por frases y su correspondiente etiqueta, hay tres columnas vacías que quitamos.
 \begin{lstlisting}
 import pandas as pd
@@ -588,7 +650,8 @@ df_columns = counts_list[0:100]
 df_columns.append('y') 
 print(df_columns)
 \end{lstlisting}
-\subsubsection{Transformar la información.}
+
+\paragraph{Transformar la información.}
 Ahora lo relevante es determinar cómo vamos a introducir la infromación en la red. Las redes neuronales no aceptan otra entrada que no sea de caracter numérico, eso nos lleva a transformar nuestro set de datos, utilizaremos un 1 cuando la palabra de la frase sea una de las palabras elegidas como entrada dee la red y utilizaremos un 0.
 \begin{lstlisting}
 binary_rows = np.zeros((len(rows),len(df_columns)),dtype=int) 
@@ -622,7 +685,7 @@ size = int(X.shape[1] * 0.70)
 x_train, x_test = X[:,0:size], X[:,size:] 
 y_train, y_test = Y[0:size], Y[size:]
 \end{lstlisting}
-\subsection{Implementación de la red.}
+\subsubsection{Implementación de la red.}
 De nuevo utilizamos el fichero NeuralNetwork.py, en este caso, la  arquitectura  que mejor rendimiento muestra es la 100-25-1, 25 neuronas en una única capa oculta y un ratio de aprendizaje (learning rate) de 0.2. Diversas arquitecturas puede contrastarse en el anexo de este trabajo.
 \begin{lstlisting}
 from NeuralNetwork import * 
@@ -633,8 +696,8 @@ nn.gradient_descent(5000)#gradient descent algorithm
 	\centering
 	\includegraphics[width=12.0cm,height=8.5cm]{Annotation 2020-03-23171823}
 \end{figure}
-\subsection{Visualización.}
-Implemantamos de nuevo la función de la matriz de confunción. La función es la siguiente:
+\subsubsection{Visualización.}
+Implemantamos de nuevo la función de la matriz de confusión. La función es la siguiente:
 \begin{lstlisting}
 def plotCf(a,b,t):
     cf =confusion_matrix(a,b)
@@ -667,7 +730,7 @@ Hemos fallado 63 mensajes, de los cuales, 14 han sido clasificado erroneamente c
 \subsubsection{Con regularización.}
 En este caso la regularización no aporta nada, este método ha sido evaluado con distintos valores pero ninguna prueba ha aportado ninguna mejora. Teniendo en cuenta esto, es posible que el anterior resultado sea el correspondiente al alcanzar el mínimo absoluto en la función de error.
 
-\subsection{Implementación con regresión logística.}
+\subsubsection{Implementación con regresión logística.}
 Como podemos observar, en este caso la regresión logística es igual de efectiva que la red neuronal, esto es otra indicación que podemos haber hayado el mínimo absoluto de la función de error.
 \begin{lstlisting}
 logistic_regression= LogisticRegression()
@@ -682,10 +745,10 @@ plotCf(target,y_pred,'Cf Validation Set Logistic Regression')
 \includegraphics[width=12.0cm, height=8.5cm]{Annotation 2020-03-23 161410}
 \end{figure}
 \newpage
-\section{Visión Artificial.}
+\subsection{Visión Artificial.}
 La visión humana es un sistema muy complejo y poderoso. Simplemente
 visualizando una fotografía, el sistema visual humano es capaz
-de percibir y deducir una gran cantidad de información acerca de ella. Por ejemplo, con la fotografía mostrada, podemos interpretar una inmensa varideda de tonos y colores deducidos del efecto de la luz incidiendo en los pétalos de la flor.
+de percibir y definir una gran cantidad de información acerca de ella. Por ejemplo, con la fotografía mostrada, podemos interpretar una inmensa varideda de tonos y colores deducidos del efecto de la luz incidiendo en los pétalos de la flor.
 \\Gracias al proceso de detección que realiza el ojo humano, podemos reconocer figuras, bordes, contornos, etc., podemos incluso segmentar la foto del resto dela imagen e interpretar factores como la profundidad a pesar de estar viendo una imágen en dos dimensiones (virtualmente).\\
 El proceso seguido para ello consta de dos partes. Por un lado, la luz reflejada por los objetos llega hasta nuestos ojos, formándose en la retina una imagen invertida en dos
 dimensiones.  Por otro lado, dicha imagen estransformada en impulsos nervisoso y trasladada a la parte posterior de cerebro, 
@@ -698,7 +761,8 @@ el cual reconstruye un modelo en tres dimensiones de la imagen, gracias a la int
 \noindent
 La Visión Artificial, conocida también como visión por computador, es la disciplina que trata de otorgar a los ordenadores la capacidad de percibir, procesar  e interpretar imágenes de forma análoga a la visión humana. Nótese que el ordenador percibe imágenes como matrices de valores numéricos, típicamente comprendidos en el rango de 0 a 255. En el caso de las imágenes RGB este rango se mantiene pero se amplia la cantidad de información a tres matrices, una por color.\\
 En las siguientes subsecciones veremos las aplicaciones más comunes de la visión artificial, además de explicar sus limitaciones.
-\subsection{Aplicaciones.}
+
+\subsubsection{Aplicaciones.}
 En la actualidad existe una gran variedad de aplicaciones de la visión artificial, es una ciencia que está presente en muchísimos campos. Los más comunes son:
 \begin{itemize}
 \item Reconocimiento óptico de carácteres (OCR): esta técnica consiste en la lectura e identificación de los carácteres alfanuméricos de una imagen. A día de hoy está considerado un problema sencillo de resolver. Su primera aplicación data de los años 60, y fue empleado en el reconocimiento de códigos postales por el servicio de correo de Estados Unidos.
@@ -725,7 +789,7 @@ En la actualidad existe una gran variedad de aplicaciones de la visión artifici
 \end{figure}
 \end{itemize}
 
-\subsection{Problemas y limitaciones de la Visión Artificial.}
+\subsubsection{Problemas y limitaciones de la Visión Artificial.}
 El rendimiento de los algoritmos de Visión Artificial está drásticamente ligado a la calidad de los datos. Es mucho más difícil adquirir un buen set de datos cuando hablamos de imágenes que en el caso de otras ramas del Machine Learning.
 \\Aunque existen técnicas de filtrado digital es frecuente encontrarse con limitaciones que dificultan el trabajo del los profesionales. Estas son:
 \begin{itemize}
@@ -740,15 +804,17 @@ El rendimiento de los algoritmos de Visión Artificial está drásticamente liga
 
 
 \newpage
-\section{Redes convolucionales.}
+\subsection{Redes convolucionales.}
 En este apartado explicaremos las redes neuronales que vamos a necesitar para implementar el último ejercicio del trabajo; estas son las redes convolucionales, en adelante CNN. Las CNN se utilizan en problemas de clasificación de imágenes como alternativa al tipo de red que ya hemos visto, pues este queda absoleto ante una gran cantidad de datos en la capa de entrada, como es en el caso de las imágenes.\\ Procedemos a explicar las novedades y conceptos que dicha red incorpora.\\
 
-\subsection{Filtros.}
+\subsubsection{Filtros.}
 Los filtros son matrices de tamaño configurable, siempre menores que la matriz de entrada, estos se aplican por toda la imagen. El resultado es una nueva matriz cuyos datos derivan de los productos matriciales del filtro y la fotografía. Estos filtros son capaces de extraer características como líneas, curvas, contronos, etc.  \\Es decir, si aplicamos un filtro para las líneas verticales y otro para las horizontales, el resultado serán dos imágenes, cada una solo con la información para la que hemos aplicado el filtro.
 \begin{figure}[H]
 \centering
 \includegraphics[width=12.0cm, height=4.5cm]{Annotation 2020-04-13 191448.png}
 \end{figure}
+\noindent
+Si lo comparamos con una ANN, los filtros son los pesos que se entrenan. De esta forma, comenzando con filtros aleatorios, estos se modifican hasta ser los más adecuados para procesar y clasificar las imágenes que conciernen.\\
 Hay tres parámetros imprescindibles a la hora de definir un filtro:
 \begin{itemize}
 \item Tamaño: podemos definir el tamaño del filtro, que varía en función del tamaño de la imagen y de las características que nos gustaría extraer.  Normalmente se utilizan matrices. cuadradas
@@ -771,7 +837,7 @@ n=\frac{i+2p-f}{s}  +1
 \]
 
 
-\subsection{Capa convolucional.}
+\subsubsection{Capa convolucional.}
 Las capas convolucionales son el núcleo de las CNN, son las capas de la arquitectura donde se aplica la operación de convolución. La operación consiste en desplazar el filtro por la matriz, aplicándolo en cada dato hasta cubrirla completamente. En cada desplazamiento se realiza un producto matricial. Dicho proceso se repite tantas veces como números de filtros hayamos dispuesto en nuestra capa convolucional (k), de forma que si hemos dispuesto 32 filtros para una imagen de 28*28 píxeles, la salida será de 28*28*32 = 25.088 píxeles.
  \\La siguente fórmula muestra cómo se calcula el número de datos correspondiente a la salida de la capa convolucional.
 
@@ -781,9 +847,13 @@ n=\frac{i+2p-f}{s}  +1
 \[
 output = k * n
 \]
+
+Normalmente, tras la capaconvolución, todas las salidas son procesadas por una función ReLu.\\
 A primera vista puede parecer que 25.088 datos para una foto tan simple resulta algo disparatado, pero si nos planteamos la cantidad de datos que habría en una red neuronal convencional, no lo es. Supongamos que tenemos la misma imagen, pero en lugar de una capa convolucional, implementamos una capa con el mismo número de neuronas que el de la capa de entrada. Si cada entrada está conectada a todas las neuronas de la capa siguiente (característica bastante frecuente), el resultado del número de datos sería el cuadrado de la entrada, es decir, 614.656 datos, solo para abordar los pesos. \\
 Aún con esta ventaja, las CNN cuentan con otro mecanismo para aligerar la carga de información.
-\subsection{La capa de pooling.}
+
+
+\subsubsection{La capa de pooling.}
 Esta es la capa que se encarga de realizar la reducción del volumen de datos, perdiendo la menor información posible. Supongamos que tenemos el mismo bloque de datos del ejemplo anterior, 25.088 datos en una matriz de 28*28*32. Es evidente que si queremos reducir la dimensionalidad de la matriz, no podemos alterar la dimension de 32, pues estaríamos quitando filtros que se han añadido en la capa convolucional.\\
 Existen dos tipos de pooling:
 \begin{itemize}
@@ -798,9 +868,12 @@ Existen dos tipos de pooling:
 \includegraphics[width=11.0cm, height=4.5cm]{meanpool.png}
 \end{figure}
 \end{itemize}
-\subsection{Fully connected layer y red neuronal.}
+
+\subsubsection{Capa totalmente conectada y red neuronal.}
 Esta capa, también conocida como flatten, es una capa a la que se conectan a todas las salidas de la capa anterior (convolucional o de pooling) con una capa con tantas neuronas como datos. Posteriormente se realiza una arquitectura con una o dos capas intermedias y una capa de salida con tantas neuronas como clases tenga nuestro problema de clasificación. En estas capas puede aplicarse regularización.
-\subsection{Arquitecturas.}
+\subsubsection{Regularización Dropout.}
+Aunque este tipo de regularización no es exclusiva de las CNN, la regularización dropout nos será de grán utilidad en la práctica. \\Esta consiste en desechar aleatoriamente el porcentaje indicado de pesos de una capa en concreto. Dichos pesos ignorados, serán diferentes en cada iteración del entrenamiento, dejando al azar cuales lo son de forma consecutiva y cuales no.\\ Este método, aunque pueda paraecer algo tosco, es una herramienta muy utilizada en algunos campos del Machine Learning y su eficacia ha sido ampliamente probada.
+\subsubsection{Arquitecturas.}
 En el desarrollo de la CNN, podemos usar nuestros conocimientos teóricos para programar, pero existen ciertas redes muy conocidas que han demostrado en numerosos problemas un buen rendimiento. En la práctica intentaremos imitar la arquitectura de dichas redes.
 \begin{itemize}
 \item LeNet: es una red neuronal desarrollada por Yann LeCun en 1998. Su versión más conocida es la arquitectura con cinco capas. \begin{figure}[H]
@@ -823,12 +896,12 @@ En el desarrollo de la CNN, podemos usar nuestros conocimientos teóricos para p
 
 \newpage
 
-\section{Aplicación práctica: Clasificación de señales de tráfico.}
+\subsection{Aplicación práctica: Clasificación de señales de tráfico.}
 En el siguiente ejercicio vamos a clasificar 43 tipos de imágenes de señales de tráfico en python mediante una CNN. \\
 El set de datos que utilizaremos contiene 32902 imágenes divididas en carpetas en función del tipo para el entrenamiento y 12630 para el test.
-\subsection{Carga de los datos.}
+\subsubsection{Carga de los datos.}
 En esta ocasión los datos de entrenamiento y test están almacenados de distinta forma, por ello es necesario que implementemos dos funciones para realizar la carga.
-\subsubsection{Carga de datos de entrenamiento.}
+\paragraph{Carga de datos de entrenamiento.}
 Los datos de entrenamiento están almacenados dentro en 43 carpetas detro de la carpeta "Train". Debemos recorrer dicho directorio, importar las imágenes RGB y transformarlas en un array de cara a poder manejarlas posteriormente. Como no todas las fotos presentan el mismo tamaño, modificamos ligeramente sus dimensiones con el fin de trabajar siempre con matrices del mismo tamaño, en este caso de 30*30.\\
 Determinaremos la clase de cada imagen en el momento de carga basandonos en la carpeta en la que se encuentre. Una vez relizada la carga, devolvemos las imégenes y su clase en formato de matriz.
 \begin{lstlisting}
@@ -849,7 +922,8 @@ def load_train(folders,size):
                 print("Error loading picture ", img)
     return np.asarray(X),np.asarray(Y)
 \end{lstlisting}
-\subsubsection{Carga de datos de prueba.}
+
+\paragraph{Carga de datos de prueba.}
 Esta función carga los datos de prueba. A diferencia de en el apartado anterior, la clase de cada foto se extrae de un archivo csv de con los metadatos. En el resto de la función es como igual a la utilizada en la carga de datos.
 
 \begin{lstlisting}
@@ -870,7 +944,8 @@ def load_train(folders,size):
                 print("Error loading picture ", img)
     return np.asarray(X),np.asarray(Y)
 \end{lstlisting}
-\subsection{Manipulación de los datos.}
+
+\subsubsection{Manipulación de los datos.}
 Tras cargar los datos debemos mezclar los datos. El modelo debe tener las imágenes barajadas para no ir entrenando clase por clase, esto afecta drásticamente al rendimiento. \\
 Tambíen creamos un set de datos de validación del 20\% del volumen total de entrenamiento para estudiar la evolución del entrenamiento en tiempo real.
 \begin{lstlisting}
@@ -902,7 +977,9 @@ plt.show()
 \includegraphics[scale=0.8]{Annotation 2020-04-28 121743.png}
 
 \end{figure}
-\subsection{Arquitectura.}
+
+
+\subsubsection{Arquitectura.}
 La arquitectura escogida es una versión simplificada que al modelo VGG16. La arquitectura es la siguiente.
 \begin{itemize}
 \item Capa convolucional: 32 filtros de tamaño 5*5, stride de 1 y valid para el padding.
@@ -923,7 +1000,9 @@ Los elementos de la arquitectura han sido elegidos como resultado del estudio de
 \item Dado que en todas las fotografías las señales no se ajustan a los bordes, los píxeles que forman el controno de la imagen no aportan información respecto a la naturaleza de la señal, es por ello que hemos decidido establecer el padding como valid.
 \item Por otro lado, la razón de que el stride sea igual a 1, lo cual supone una bajada de rendimiento como se muestra en la fórmula del apartado X, es que no queremos perder información de imágenes con tan poca cantidad de píxeles.
 \end{itemize}
-\subsection{Entrenamiento y resultados.}
+
+
+\subsubsection{Entrenamiento y resultados.}
 Por último, entrenamos la CNN utilizando el optimizador adam y el errore de crross-entropy, durante 5 iteraciones.
 \begin{lstlisting}
 #Compilation of the model
@@ -957,6 +1036,38 @@ print(accuracy_score(Y_test, y_pred))
 0.9691211401425178#casi un 97%
 \end{lstlisting}
 
+
+\section{Marco técnico.}
+En este apartado cubriremos las herramientas utilizadas en el desarrollo del trabajo. Estas se desglosan en :
+\begin{itemize}
+\item Lenguaje de programación utilizado.
+\item Librerías y bibliotecas adicionales de minería de datos y machine learning que aportan algoritmos ya desarrollados.
+\item Entornos  de desarrollo.
+\end{itemize}
+\subsection{Python.}
+Python es un lenguaje de programación	más usado actualmente, destaca por la legibilidad en su código. Su nombre es en honor al grupo británico de cómicos Monty Python, su creador decidió llamarlo así debido a que el lenguaje es "sencillo y divertido".\\
+Es un lenguaje interpretado y  multiparadigma, ya que soporta programación orientada objetos, imperativa y funcional. Otro de los grandes puntos a favor es que Python es un lenguaje no tipado.\\
+Todas estas características describen una herramienta versátil ideal para este trabajo. 
+\subsection{Frameworks y librerías.}
+Los frameworks y librerías de Python son la razón de que sea el lenguaje ideal para el desarrollo de inteligencia artificial. Acontinucaión se describen los más usados en este trabajo.
+\begin{itemize}
+\item Numpy: es la librería utilizada para las operaciones de datos. Permite realizar cálculos tediosos en una sola línea de código. Su mejor faceta reside en las listas de la librería, las cuales pueden ser n-dimensionales.
+\item Pandas: es la librería refernte en extracción de datos. Durante todo el dearrollo trabajaremos cargando los datos gracias a esta librería y suando constantemente sus dataframes.
+\item Matplotlib: librería muy utilizada para visualización de datos. En este traajo solo utilizaremos un ápice de su potencial.
+\item Tensorflow: es el framework que utilizaremos para los modelos. Es un framework de código abierto desarrollado por Google. Permite instanciar redes neuronales, así como configurar sus capas en pocas líneas de código, solo preocupandonos de los parámetros a configurar. En el trabajo usaremos su versión de GPU, la cual utiliza la tarjeta gráfica para procesar la información, agilizando mucho la tarea de entrenamiento del modelo.
+\item Keras: es la librería "front end"  de Tensorflow, esto significa que es el intermediario entre nosotros y el propio framework. En el desarrollo, utilizaremos keras pero Tensorflow hará el trabajo  computacional.
+\end{itemize}
+
+\subsection{Entornos de desarrollo.}
+Los entornos de desarrollo (o IDE's) son las herramientas que nos permiten programar de manera más sencilla y eficaz. A continuación describimos los utilizados en el trabajo.
+\subsubsection{Visual Studio Code.}
+Es un entorno creado por Microsoft a caballo entre los entornos clásicos y los editores de texto. No es exclusivo de Python pero aporta multitud de facilidades al desarrollador gracias a su gran cantidad de extensiones.
+\subsection{Jupyter Notebooks.}
+Es uno de los entornos más utilizados en Ciencia de Datos. Tiiene dos características que lo hacen ideal para este área:
+\begin{itemize}
+\item  Celdas: permite ejecutar el código por celdas o bloques. Esto agiliza mucho el desarrollo, permitiendo realizar la carga de datos una sola vez pero realizar tantas modificaciones como queramos en el modelo.
+\\Además, permite implementar celdas en lenguaje Markdown, un lenguaje sencillo que permite añadir explicaciones al código. El resultado es un notebook en el que se explica cada paso y resultado del código de una forma muy intuitiva.
+\end{itemize}
 \end{document}	
 
 

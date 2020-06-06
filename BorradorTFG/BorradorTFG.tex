@@ -47,15 +47,16 @@ Santiago Domínguez
 
 
 \tableofcontents
-\newpage
+
 
 
 
 \section{Introducción.}
 El Aprendizaje Automático (o Machine Learning, ML, en inglés) es la rama de la inteligencia artificial que permite la inferencia de un modelo, de manera autónoma, por parte de un ordenador (Samuel 1959). En la pasada década, el ML ha permitido un espectacular desarrollo de la conducción autónoma (aún en fase experimental), el reconocimiento de voz y escritura manual, la búsqueda efectiva en la web y una vasta mejora del conocimiento del genoma humano. El ML es tan omnipresente que probablemente lo usamos decenas de veces al día sin saberlo. Desde Los sistemas de recomendación de publicidad basados en nuestros clicks en páginas webs hasta el clasificador de spam de nuestra cuenta de correo electrónico usan algoritmos de ML (supervisado, en el segundo caso, no-supervisado en el primero). Y en conexión con áreas de investigación de nuestro departamento, es necesario mencionar el proyecto EMPATIA-BIND, conjunto con la UC3M, de cara a la prevención y combate de a violencia de género, que ha ganado un proyecto europeo recientemente.
 El ML se nutre de una importante base de cálculo diferencial, optimización, álgebra lineal y análisis numérico, así como estadística exploratoria, bayesiana y teoría de la probabilidad, y en su parte inferencial, puede tender a solaparse con la estadística, aunque a diferencia de esta, son cruciales el estudio e implementación de algoritmos atendiendo al orden de complejidad y su explotación en plataformas escalables.
-
+\newpage
 \section{Machine Learning.}
+
 \subsection{Discusión preliminar.}
 \subsection{Base matemática del Machine Learning.}
 \label{}
@@ -344,36 +345,107 @@ s_i \hspace{0.20cm} = \  max\hspace{0.20cm}x_{i}^j -min\hspace{0.20cm}x_{i}^j \h
 \]
 \newpage
 \section{Regresión logística.}
-En los problemas de clasificación, se busca encontrar un modelo que sea capaz de distinguir diferentes entradas en función de sus características, o dicho de otra forma, que sea capaz de reconocer si un elemento pertenece a una clase u otra. Esto ocurre en multitud de casos como en la detección de tumores, clasificadores de spam, reconocimiento de dígitos, etc. \\Cuando en nuestro problema necesitamos distinguir entre dos clases, estamos hablando de clasificación binaria.\\
-La regresión logística es un algoritmo de clasificación binaiaea que se utiliza para estimar la probabilidad de una variable dependiente, la cual es una variable binarea que puede suele ser codificada como 0 ó 1.
-\\Este modelo logístico binario se utiliza para evaluar la probabilidad de
-una respuesta binaria fundamentada en una o más variables independientes. \\Se utiliza como alternativa a la regresión lineal, la cual no sirve para definir un umbral ajustado en problemas de clasificación.
+En los problemas de clasificación, se busca encontrar un modelo que sea capaz de distinguir diferentes entradas en función de sus características, o dicho de otra forma, que sea capaz de reconocer si un elemento pertenece a una clase u otra. Esto se aplica
+en multitud de casos como en la detección de tumores, clasificación de spam,
+reconocimiento de dígitos, escritura manual, voz, etc.
+ \\Cuando en nuestro problema necesitamos distinguir entre dos clases, estamos hablando de clasificación binaria. En el próximo
+capítulo veremos cómo clasificar en varias categorías, utilizando redes neuronales.\\
+La regresión logística nos permite establecer un umbral de probabilidad rebasado el cual interpretamos que la variable aleatoria binaria bajo estudio toma el valor
+1, en tanto que si no se rebasa, estimaremos que su valor es 0.
+\\Observemos que la variable dependiente la podemos interpretar como una etiqueta, que a diferencia de la regresión lineal, adquiere solo dos valores posibles,
+y es dependiente de varias características (variables independientes), por lo que
+se trata igualmente de un modelo de aprendizaje supervisado.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=10.50cm, height=4.5cm]{1_Vd9ZTC1zWJPtV7iXPMJk1Q.png}
 \end{figure}
-Este modelo conlleva que las variables deben cumplir con una serie de requisitos para obtener una precisión exacta:
+A modo de resumen, enumeramos las propiedades básicas del modelo logístico y lo comparamos con la regresión lineal:
+
 \begin{itemize}
-\item Al ser la variable de salida binaria, el problema de clasificación debe de ser binario. Por ejemplo, si queremos distinguir entre si un animal es perro o gato, la regresión logística serviría. Pero no serviría para distinguir imágenes de dígitos en base decimal.
-\item La regresión logística no acepta ningún error en la variable dependiente, por lo que habría que eliminar las muestras mal clasificadas de los datos de entrenamiento.
-\item No puede converger. Si el número de datos es limitado o si
-hay muchas entradas altamente correlacionadas, es posible que en el proceso de estimación de probabilidad los coeficientes convergieran.\\
-La regresión logística es uno de los algoritmos más utilizados en Machine Learning, esto se debe a su gran eficiencia, simplicidad y fácil implementación.
+\item Al ser la variable de salida binaria, el problema de clasificación debe de ser binario. Por ejemplo, si queremos distinguir entre si un animal es perro o gato, la regresión logística serviría. Pero no serviría para distinguir imágenes de dígitos en base decimal. Como hemos señalado más arriba, la clasificación en más de dos categorías la abordamos mediante redes neuronales.
+\item Como la variable dependiente es en este caso discreta (en particular, es acotada), no se puede proponer sin más un modelo de regresión lineal cuya salida
+podamos redondear al entero más próximo. La estrategia sería, esencialmente,
+como veremos a continuación, someter una función lineal a lo que interpretaremos como una medida de probabilidad: la función sigmoide. La función lineal
+definirá una región umbral tal que si esta se rebasa, estaremos clasificando en la
+categoría 1 con una probabilidad prefijada.
+
+\item Como veremos a continuación, en regresión logística, no es fácil a priori utilizar el error cuadrático medio como función de pérdida. Se prefiere, en general,
+usar la entropía cruzada, lo que convierte el problema de mínimo en un problema
+de máximo. La entropía cruzada se usará también en redes neuronales.
+
 \end{itemize}
- El mayor contrapunto de la regresión logística es que solo puede ser utiilizada en problemas de clasificación binaria.
+La regresión logística es uno de los algoritmos más utilizados en Machine Learning, esto se debe a su gran eficiencia, simplicidad y fácil implementación.\\
+El mayor inconveniente de la regresión logística es que solo puede ser utiilizada en problemas de clasificación binaria.
+
 \subsection{La función sigmoide.}
-En regresión logística principalmente se emplea la función sigmoide para resolver problemas, se expresa de la siguiente manera: 
+En regresión logística principalmente se emplea la función sigmoide para resolver problemas, que se define de la siguiente manera: 
 \[
 \sigma(x)=\frac{1}{1+e^{-x}}
 \]
-El resultado de esta función siempre estará comprendido entre 0 y 1, y en la práctica se interpretará como la probabilidad de que pertenezca a una clase u otra.\\
-Es importante destacar la derivada de la función sigmoide, la cual utilizaremos en la implementación del gradient descent en ejercicios posteriores.
+El resultado de esta función siempre estará comprendido entre 0 y 1, y en la práctica se interpretará como la probabilidad de que la variable dependiente pertenezca a una clase u otra.\\
+La propiedad crucial de la función sigmoide, que nosotros utilizaremos en nuestro algoritmo de clasificación, es la siguiente ecuación diferencial de primer
+orden que recibe el nombre de ecuación logística contínua (o de Vershulst) y se demuestra con un sencillo cálculo:
 \[
 \frac{d}{dx}\sigma(x)=\frac{d}{dx}\left[\frac{1}{1+e^{-x}}\right]=\sigma(x)\cdot(1-\sigma(x))
 \]
 
+\subsection{Algoritmo de regresión logística con regularización.}
 
+Asumiremos por simplicidad que solo hay una característica (por ejemplo,
+diámetro medio de los leucocitos) y tratamos de predecir la variable Y , que
+toma el valor 1 si el paciente padece leucemia y 0 en caso contrario. El modelo
+de regresión logística estima la probabilidad de que si una combinación lineal de
+las características cae en una cierta región geométrica, la variable Y tome el
+valor 1, y ello mediante los datos de entrenamiento. Esta probabilidad se expresa
+mediante la igualdad:
+\[
+P(Y=k|X=c)=\frac{1}{1+e^{-(\theta_0+\theta_1 x)}}=\frac{e^{\theta_0+\theta_1 x}}{1+e^{\theta_0+\theta_1 x}}
+\]
+\\
+Por otro lado, la función sigmoide se puede ajustar de forma fácil con
+métodos de regresión lineal si se emplea su versión logarítmica.
+\[
+ln\left( \frac{p(Y=k|X=x)}{1-p(Y=k|X=x)}\right)=\theta_0 + \theta_1 X
+\]
+El objetivo de nuestro problema es optimizar los parámetros $\theta_0$ y $\theta_1$ de tal
+manera que las cantidades $\sigma (\theta_0 + \theta_1 x_{i})$ se ajusten de la mejor manera posible,
+en el sentido que explicaremos a continuación, a los valores yi
+, con $1 \leq i \leq m$.
+Este sentido en el que se deben ajustar los datos, viene descrito por la función de
+máxima verosimilitud, que es el análogo logístico del error cuadrático medio.
 
+Denotemos por $P(x_1, x_2, x_3, ..., x_m; \theta)$ la probabilidad de que la variable Y tome
+de valores los datos $x_1, ..., x_m$, en m observaciones sucesivas, sujeto a que el error
+residual de las características se distribuya normalmente y con su media y varianza en función de los parámetros $\theta_0$ y $\theta_1$. Omitimos por razones de extensión la
+manera explícita de dicha dependencia dependencia. El objetivo es, pues estimar
+los parámetros $\theta_0$ y $\theta_1$ que maximizan esa probabilidad.\\
+Asumimos además que los residuos son independientes, por lo que esta probabilidad factoriza como producto de m factores, y debido a la inestabilidad
+numérica de estimar el producto, en su lugar, estimaremos la suma de los logaritmos $\sum_{i=1}^m log(P(x_i ;\theta))$.
+\\
+
+A partir de la función sigmoide explicada anteriormente,
+supongamos que $P(y = 1 | x; \theta) = g_0(x) = \sigma(\theta_0(x))$, siendo $h_{\theta}$ un
+modelo lineal $(\theta_0(x) = \theta_0 + \theta_1 x)$. De manera análoga:  $P(y = 0 | x; \theta) = 1-g_0(x)$.
+
+De esta forma, la definición de máxima verosimilitud es:
+
+\[
+L(\theta)=\prod_{i=1}^{m}P(y^{(i)}|x^{(i)};\theta)=\prod_{i=1}^{m}g_0(x^{(i)})^{y(i)}(1-g_0(x^{(i)})^{1-y^{(i)}}
+\]
+Queremos maximizar $L(\theta)$,  para
+ello vamos a maximizar $l = \log{(L(\theta))}$, quedando de la siguiente manera:
+
+\[
+l(\theta)=\sum_{i=1}^my^{(i)}\log{(g_0(x^{(i)}))}+(1-y^{(i)})\log{(1-g_0(x^{(i)}))}
+\]
+Utilizando el método de descenso de gradiente sobre la función $l(\theta)$ con un
+parámetro $\alpha$ de tasa de aprendizaje e incluyendo un término de regularización
+para evitar el sobreajuste, el algoritmo iterativo que resuelve nuestro problema
+es, en la iteración k-ésima:
+\[
+\theta_j^{(k)}=\theta_j^{(k-1)}-\alpha\frac{\partial l(\theta^{(k)})}{\theta_j}-\frac{\alpha}{m}\theta_j
+\]
 
 \newpage
 \section{Redes neuronales.}
@@ -384,24 +456,24 @@ Su elemento mínimo es la neurona artificial, en las NN se implementan diversas 
 \subsection{Componentes.}
 Las NN envuelven múltiples algoritmos y características que normalmente varían de forma poco rigurosa en función del rendimiento que estas muestran y de la naturaleza del problema a abordar. Dichos aspectos irán siendo explicados en los siguientes apartados.
 \subsubsection{Neurona Artificial.}
-La neurona artificial es la unidad mínima de la que se componen las NN, dichas neuronas están basadas en la célula cerebral simplificada, denominada neurona de \textbf{McCullock-Pitts (MCP).}\\ Las neuronas son células nervoisas interconectadas del cerebro que participan en el proceso y transmisión de señales eléctricas y químicas, como se muestra en la siguiente figura: \\
+La neurona artificial es la unidad mínima de la que se componen las NN, dichas neuronas están basadas en la célula cerebral simplificada, denominada neurona de \textbf{McCullock-Pitts (MCP).}\\ Las neuronas son células nerviosas interconectadas del cerebro que participan en el proceso y transmisión de señales eléctricas y químicas, como se muestra en la siguiente figura: \\
 \begin{figure}[H]
 \centering
 \includegraphics[width=10.50cm, height=4.5cm]{neuronamcc.png}
 \end{figure}
 \noindent
 McCullock y Pitts describieron una neurona como una simple puerta binaria que arroja una salida a partir de sus entradas o dendritas, transmitiendo dicha salida mediante el axón a sus terminaciones nerviosas, las cuales están conectadas a las dendritas de otras neuronas.\\
-De un modo más formal, podemos definir las neuronas artificiales como una estructura simple, que suma y multiplica las entradas con sus pesos, que tras sesgar dicho resultado, genera un resultado dependiendo de su función de activación. \\Todos estos términos se definen a continuación:
+De un modo más formal, podemos definir las neuronas artificiales como una estructura simple, que suma y multiplica las entradas con sus pesos, y que tras sesgar dicho resultado, genera un resultado dependiendo de su función de activación. \\Todos estos términos se definen a continuación:
 \begin{figure}[H]
 \centering
 \includegraphics[width=10.50cm, height=4.5cm]{neuronanormal.jpeg}
 \end{figure}
 
 \begin{itemize}
-    \item Entradas (X): las entradas son el equivalente a las dentritas de la célula cerbral, son los datos del problema que estemos tratando de resolver o la salida de otra neurona.
-    \item Pesos (W): los pesos son un valor numérico que representan la importancia o relevancia de la entrada correspondiente, al principio del ejercicio suelen ser definidos de forma aleatoria. Son la parte más importante del modelo, pues como veremos en adelante, serán modificados durante el proceso de entrenamiento con el objetivo de que la NN aloje los mejores resultados posibles.
-    \item Bias (b): los bias comparten similitudes con los pesos, pueden ser establecidos de forma aleatoria, aunque algunas veces se les da el valor 0 ó 1 de manera arbitraria. También son modificados durante el aprendizaje del modelo, se diferencian en que son solo valor por neurona. Los bias son un elemento que actúa como sesgo, para evitar que un peso crezca o decrezca más delo debido y perjudique el rendimiento del modelo.
-    \item N: es la salida de la neurona después del cómputo entre entrada, peso y bias.\\                                           \[N=(X*W)+b\]
+    \item Entradas: las entradas son el equivalente a las dendritas de la célula cerebral, son los datos del problema que estemos tratando de resolver o la salida de otra neurona. Denotamos el vector de entradas por $X=(x_1,...,x_m)$.
+    \item Pesos: los pesos son un valor numérico que representan la importancia o relevancia de la entrada correspondiente, al principio del ejercicio suelen ser definidos de forma aleatoria. Son la parte más importante del modelo, pues como veremos en adelante, serán modificados durante el proceso de entrenamiento con el objetivo de que la NN aloje los mejores resultados posibles. Denotamos el vector de pesos por $W=(w_1,...,w_m)$.
+    \item Bias (b): los bias comparten similitudes con los pesos, pueden ser establecidos de forma aleatoria, aunque algunas veces se les da el valor 0 ó 1 de manera arbitraria. También son modificados durante el aprendizaje del modelo, se diferencian en que son solo un valor por neurona. Los bias son un elemento que actúa como sesgo, para evitar que un peso crezca o decrezca más de lo debido y perjudique el rendimiento del modelo.
+    \item N: es la salida de la neurona después del cómputo entre entrada, peso y bias.\\                                           \[N=(W+X^t)+b\]
     \item Función de activación (f(N)): función que recibe N como entrada. Las tres funciones más utilizadas son:
     \begin{itemize}
     \item Lineal: $f(x)=x$ 
@@ -419,7 +491,11 @@ De un modo más formal, podemos definir las neuronas artificiales como una estru
         
 \end{itemize}
 \subsubsection{Arquitectura.}
-Durante los comienzos del ML, se concluyó que una sola neurona no es capaz de resolver problemas complejos. De modo que se introduce el concepto de arquitectura de las NN.\\
+Durante los comienzos del ML, se concluyó que una sola neurona no es capaz de
+resolver problemas moderadamente complejos. Se trataba del modelo perceptrón,
+que en ocasiones da buenos resultados frente a la regresión logística en problemas
+de clasificación binaria, pero pronto quedó obsoleto. Así pues, se introdujo el
+concepto de arquitectura de las NN, que describimos a continuación:\\
 Las múltiples neuronas de nuestro modelo se organizan en niveles, conocidos como capas, con distinto número de neuronas. Dichas neuronas interactúan entre capas enviando las variables de salida como entrada para la siguiente capa.
 Existen tres tipos de capas:
 \begin{itemize}
@@ -437,27 +513,39 @@ La función de error es aquella definida por los valores de error que muestra el
 MSE=\frac{1}{m}\sum_{i=1}^m (y_i - \hat{y_i})^2
 \]
 \subsubsection{Función de error Cross Entropy}
-Esta es la función de error más utilizada en problemas de clasificación y es la que implementaremos en los modelos sobre los que hablaremos más adelante: 
+Como se vio en el capítulo de regresión logística, la función de error más
+utilizada en problemas de clasificación binaria, y que también veremos como se
+usa en el contexto de NN, es la entropía cruzada, asociada a la función de máxima
+verosimilitud, que, recordemos, se define como:
+
 \[
 CE=-\sum_{i=1}^m y_i \log\hat{y_i}
 \]
-\subsubsection{Gradient Descent.}
-Es el algoritmo de aprendizaje más utilizado. Su objetivo es minimizar la función de error, busca el mínimo absoluto avanzando en cada iteración del entrenamiento, para ello actualiza constantemente los pesos y bias de la red. Consta de dos fases o subalgoritmos para ello: 
+\subsubsection{NN-Gradient descent.}
+Es el algoritmo de aprendizaje más utilizado en NN. Su objetivo es estimar
+la configuración de pesos de todas las capas que minimiza la función de error
+cross entropy (o equivalentemente, maximiza la función de verosimilitud). Esto
+se lleva a cabo mediante un algoritmo iterativo de descenso de gradiente sobre
+dicha función de verosimilitud, que en el caso de NN es significativamente mucho
+más compleja (y más en modelos multicapa), que en los casos de regresión lineal
+y logística. En concreto, este algoritmo actualiza constantemente los pesos y bias
+de la red mediante dos fases o subalgoritmos:
+
 \begin{itemize}
     \item Forward Propagation: en adelante propagación hacia adelante o (FP). La información se expande por la red con la configuración inicial de los pesos, los cuales se actualizarán mediante la back propagation. Cada neurona calcula su salida y transmite la información resultante por la red hasta llegar al final de la misma, donde se genera un resultado(Yh). Durante el entrenamiento dicho resultado es comparado con el resultado real(Y) y se calcula su error para propagarlo.
-    \item Back Propagation: en adelante retropropagación hacia adelante o (BP). Es el responsable del aprendizaje del modelo, una vez calculado el error el algoritmo de backpropagation distribuye dicho error por todas las capas de la red con el objetivo de que los pesos y bias se reajusten de cara a errar en menor medida en la próxima iteración (k+1). \\Los pesos y bias se actualizan siguiendo las siguientes fórmulas:
+    \item Back Propagation: en adelante retropropagación hacia adelante o (BP). Es el responsable del aprendizaje del modelo, una vez calculado el error del algoritmo de backpropagation, se distribuye dicho error por todas las capas de la red con el objetivo de que los pesos y bias se reajusten de cara a errar en menor medida en la próxima iteración (k+1). \\Los pesos y bias se actualizan siguiendo las siguientes fórmulas:
     \[
-    W^i (k+1) = W^i (k) - \alpha s^i (a^{i-1})^T
+    W_{k+1}^i  = W_{k}^i  - \alpha s^i (a^{i-1})^T
     \]
     \[
-    b^i (k+1) = W^i (k) - \alpha s^i
+    b_{k+1}^i = W_{k}^i  - \alpha s^i
     \]
     \[
     s^i = -2\dot{F}^i(N^i)(Y-Yh)
     \]
-    
+    Siendo W y b, un peso y un bias de la neurona i, F la función de coste y siendo s, la sensibilidad de dicha neurona.
 \end{itemize}
-
+\noindent
 En los siguientes apartados se implementará toda la teoría explicada en esta sección. Empezaremos por un fichero para generar NN y luego veremos su aplicación en dos ejercicios.
 \subsection{Código de NeuralNetwork.py.}
 En este apartado explicaremos el código base desarrollado en el fichero NeuralNetwok.py para las redes neuronales utilizadas en los ejercicios de clasificación de tumores y detección de spam.\\ Esta red no se nutre de librerías de Machine Learning, solo de librerías para manejo de los datos. También cabe destacar que la red que genera este fichero es solo de 3 capas, pues es suficiente para abordar los ejercicios posteriores.\\ El objetivo de este ejercicio es demostrar el conocimiento en NN antes de utilizar librerías de Machine y Deep Learning.
@@ -643,7 +731,7 @@ nn.gradient_descent(50000)
 \end{lstlisting}
 \begin{figure}[H]
 \centering
-\includegraphics{Annotation 2020-03-23 190119.png}
+\includegraphics[scale=0.6]{Annotation 2020-03-23 190119.png}
 \end{figure}
 
 Imprimimos los resultados, nótese que este modelo no usa regularización.
@@ -1113,6 +1201,28 @@ Los elementos de la arquitectura han sido elegidos como resultado del estudio de
 \item Por otro lado, la razón de que el stride sea igual a 1, lo cual supone una bajada de rendimiento como se muestra en la fórmula del apartado X, es que no queremos perder información de imágenes con tan poca cantidad de píxeles.
 \end{itemize}
 
+Esta arquitectura se implementa en la siguiente función:
+\begin{lstlisting}
+def build_model():
+    model = Sequential()
+    model.add(Conv2D(32, kernel_size=5,padding='valid', strides=1, 
+                     activation='relu', input_shape=(30,30,3)))
+    model.add(Conv2D(64, kernel_size=3,padding='valid', strides=1,
+                     activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=1, padding=
+                     'valid', data_format=None))
+    model.add(Dropout(0.25))
+    model.add(Conv2D(64, kernel_size= 3,padding='same', strides=1, 
+                     activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=1, padding=
+                      'valid', data_format=None))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+    model.add(Dense(256, activation='relu')
+    model.add(Dropout(rate=0.5))
+    model.add(Dense(43, activation='softmax'))
+    return model
+\end{lstlisting}
 
 \subsubsection{Entrenamiento y resultados.}
 Por último, entrenamos la CNN utilizando  la función de error de crross-entropy y el optimizador adam, el cual es una versión mejorada del gradient descent que permite modificar el learning rate durante el entrenamiento. Entrenamos 5 iteraciones.

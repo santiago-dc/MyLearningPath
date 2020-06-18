@@ -20,6 +20,7 @@
 \usepackage{graphicx}
 \usepackage[margin=1.50in]{geometry}
 \graphicspath{{imagenes/}}
+\usepackage{appendix}
 \usepackage{float}
 \usepackage{listings}
 \newtheorem{theorem}{Teorema}
@@ -37,14 +38,23 @@
 \begin{titlepage}
 \centering
 {\bfseries\LARGE Universidad de Alcalá de Henares \par}
-\vspace{1cm}
+\vspace{0.5cm}
 {\scshape\Large Escuela Politécnica Superior \par}
+\vspace{0.5cm}
+{\scshape\Large Departamento de matemáticas \par}
+
+\vspace{1.5cm}
+{\includegraphics[width=0.6\textwidth]{logouah}} 
+
+
+\vspace{1cm}
+{\scshape\Large Estudio de fundamentos de Machine Learning y desarrollo de redes neuronales en problemas de clasificación \par}
 \vspace{3cm}
-{\scshape\Large ESTUDIO DE FUNDAMENTOS DE MACHINE LEARNING Y DESARROLLO DE REDES NEURONALES EN PROBLEMAS DE CLASIFICACIÓN \par}
-\vspace{3cm}
-{\itshape\Large Proyecto Fin de Grado \par}
-\vfill
-{\Large Autor: \par}
+
+{\Large Grado en Ingeniería Informática \par}
+\vspace{0.5cm}
+{\Large Tutor: Iván Blanco Chacón\par}
+\vspace{0.5cm}
 {\Large Santiago Domínguez Collado \par}
 \vfill
 {\Large Junio 2020 \par}
@@ -52,6 +62,31 @@
 
 
 \tableofcontents
+
+\newpage
+\chapter{\textbf{\large Resumen.}}\\
+
+
+El Aprendizaje Automático, es la rama de la inteligencia artificial que permite la inferencia de un modelo, de manera autónoma, por parte de un ordenador. En la pasada década, el Aprendizaje Automático (en adelante ML) ha permitido un espectacular desarrollo de la conducción autónoma, el reconocimiento de voz y escritura manual, búsqueda efectiva en la web, así como una vasta mejora del conocimiento del genoma humano. En este contexto, nos permite aprovechar la inmensa cantidad de información disponible en internet.\\
+
+\noindent
+El presente trabajo comienza con el estudio de la parte más fundamental del ML, haciendo hincapié en su aspecto matemático; continúa con el análisis y aplicación de las redes neuronales, uno de los algoritmos más potentes de la rama. Por último, abordamos el campo de la visión artificial y el desarrollo de código para para la resolución de un problema concreto de clasificación de imágenes.\\
+
+
+\textbf{Palabras clave:} redes neuronales convolucionales, aprendizaje automático supervisado, reconocimiento de patrones, regularización, aprendizaje profundo.
+
+\newpage
+
+\chapter{\textbf{\large Abstract.}}\\
+
+
+Machine Learning is one branch of artificial intelligence that allows a computer to perform automaton, model-based inference. During the last decade, Machine Learning has achieved an outstanding development of autonomous driving, voice and handwriting recognition, and smart search, as well as a wide improvement of knowledge of the human genome. In this context, Machine Learning enables to make the most of the vast quantity of information available on the internet, by applying it to many different purposes. \\
+
+\noindent
+Thus, this bachelor thesis begins with the study of the most fundamental part of Machine Learning, by stressing on its mathematical aspect. It continues with the analysis and practical applications of neural networks, which are one of the main algorithms used on this field. Lastly, we will approach artificial vision and coding development to solve an image classification problem.\\
+
+
+\textbf{Key words:} convolutional neural networks, supervised learning, pattern recognition, regularization, deep learning.
 
 
 
@@ -117,7 +152,7 @@ La sección 6 es una breve explicación de las herramientas utilizadas en este t
 \section{Machine Learning. Visión general y fundamentos matemáticos.}
 
 \subsection{Machine Learning.}
-El Machine Learning o aprendizaje automático es la rama de la Inteligencia artificial que engloba un conjunto de algoritmos y técnicas con el objetivo de crear sistemas capaces de predecir, estimar o clasificar en base a datos de experiencias pasadas.\\
+El Machine Learning o aprendizaje automático es la rama de la Inteligencia artificial que engloba un conjunto de algoritmos y técnicas con el objetivo de crear sistemas capaces de predecir, estimar o clasificar en base a datos de experiencias pasadas. En esta sección seguiremos las referencias \cite{andrew} \cite{redes}.\\
 
 \noindent
 Andrew Ng, profesor de la Universidad de Stanford, define ML como \textit{la ciencia de hacer que las computadoras actúen sin estar explícitamente programadas}.\\
@@ -126,18 +161,18 @@ Andrew Ng, profesor de la Universidad de Stanford, define ML como \textit{la cie
 Una definición más precisa podría ser la de Tom Michel, profesor de la Universidad Carnegie Mellon, quien define el Machine Learning como \textit{programas que aprenden de una experiencia E, con respecto a alguna clase de tareas T y con una medida de rendimiento P. Mejorando su rendimiento en tareas T, medidas por P, con experiencia E.}\\
 
 \noindent
-Durante el desarrollo de este trabajo, mencionaremos repetidas veces el término modelo, referido a ello como la representación matemática que relaciona los distintos conjuntos de datos con el objetivo de generar una respuesta. Se puede entender un modelo en ML como el centro de los programas de los que habla Tom Michel en su definición.\\
+Durante el desarrollo de este trabajo mencionaremos repetidas veces el término modelo, refiriéndonos a ello como la representación matemática que relaciona los distintos conjuntos de datos con el objetivo de generar una respuesta. Se puede entender un modelo en ML como el centro de los programas de los que habla Tom Michel en su definición.\\
 
 \noindent
 El proceso de aprendizaje de cualquier modelo en Machine Learning está compuesto por tres fases:
 \begin{itemize}
-\item Entrenamiento: en esta fase el modelo recibe los datos del problema, es la más importante y la que mayor tiempo lleva. Esta es la etapa en la que se espera que el modelo aprenda a clasificar o predecir.
-\item Validación: en la fase de validación se comprueban los resultados del entrenamiento, si estos no son satisfactorios, el modelo vuelve a dicha fase. Es imprescindible que los datos utilizados en esta etapa no hayan sido implementados en el entrenamiento. Esta fase es la única no obligatoria dentro del desarrollo de un modelo, si bien posee numerosas ventajas, en ejercicios de baja magnitud y dificultad no es necesaria.
-\item Prueba o test: aquí se pone a prueba el resultado del ejercicio, el modelo recibe datos distintos a los de la fase de entrenamiento y de validación (si ha habido) y se evalúa su tasa de acierto en las estimaciones que hace.
+\item Entrenamiento: en esta fase el modelo recibe los datos del problema; es la más importante y la que mayor tiempo lleva. Esta es la etapa en la que se espera que el modelo aprenda a clasificar o predecir.
+\item Validación: en la fase de validación se comprueban los resultados del entrenamiento. Si estos no son satisfactorios, el modelo vuelve a dicha fase. Es imprescindible que los datos utilizados en esta etapa no hayan sido implementados en el entrenamiento. Esta fase es la única no obligatoria dentro del desarrollo de un modelo, si bien posee numerosas ventajas en ejercicios de baja magnitud y dificultad, no siempre es determinante.
+\item Prueba o test: aquí se pone a prueba el resultado del ejercicio. El modelo recibe datos distintos a los de la fase de entrenamiento y de validación (si ha habido) y se evalúa su tasa de acierto en las estimaciones que hace.
 \end{itemize}
 
 \subsection{Tipos de Machine Learning.}
-El Machine Learning abarca una inmensa cantidad de algoritmos, dichos algoritmos, al margen de su naturaleza, se agrupan en tres categorías.
+El Machine Learning abarca una inmensa cantidad de algoritmos. Dichos algoritmos, al margen de su naturaleza, se agrupan en tres categorías.
 \subsubsection{Aprendizaje supervisado.}
 Los algoritmos de aprendizaje supervisado son aquellos que entrenan con datos compuestos por pares. El primer par está compuesto por las características del problema, mientras que en el segundo par está alojado el resultado esperado. El algoritmo entrena con la respuesta del problema y la utiliza para optimizar sus resultados. La forma de utilizarlos será explicada durante el desarrollo del trabajo, pero en esencia, consiste en técnicas matemáticas para “penalizar” el modelo cuando falla en su estimación.\\
 
@@ -147,25 +182,23 @@ Por ejemplo, en un problema en el que se tienen múltiples datos de personas (al
 \subsubsection{Aprendizaje no supervisado.}
 En los algoritmos de aprendizaje no supervisado se desconoce el resultado esperado de los datos durante el entrenamiento. Es decir, en estos algoritmos el modelo no cuenta con la “y” para comprobar si sus respuestas son correctas.
 \subsubsection{Aprendizaje por refuerzo.}
-El aprendizaje por refuerzo es el menos popular dentro de los tipos de ML, se basa en técnicas similares a las del aprendizaje supervisado, solo que, en este caso, además de “penalizar” el fallo, se “premia” el acierto.
+El aprendizaje por refuerzo es el menos popular dentro de los tipos de ML. Se basa en técnicas similares a las del aprendizaje supervisado, solo que, en este caso, además de “penalizar” el fallo, se “premia” el acierto.
 \subsection{Tipos de algoritmos.}
-Existen 4 grupos principales de algoritmos en el ML, estos son clasificados al margen de si son modelos supervisados o no supervisados.
+Existen 4 grupos principales de algoritmos en el ML. Estos son clasificados al margen de si son modelos supervisados o no supervisados.
 
 \subsubsection{Algoritmos de clasificación.}
-Los problemas de clasificación son aquellos en los que se busca etiquetar diferentes datos en una o varias variables categóricas. \\
-
-\noindent
+Los problemas de clasificación son aquellos en los que se busca etiquetar diferentes datos en una o varias variables categóricas. 
 Por ejemplo, clasificar tumores como benignos o malignos en base a características como el tamaño, forma, etc.\\
 
 \noindent
-Algoritmos como el SVD (support vector machine) o la regresión logística son muy utilizados en problemas de una sola incógnita, es decir problemas de clasificación entre 2 clases, donde una única variable usado como etiqueta es suficiente para distinguir entre clases. 
+Algoritmos como el SVD (support vector machine) o la regresión logística son muy utilizados en problemas de una sola incógnita, es decir, problemas de clasificación entre 2 clases donde una única variable usada como etiqueta es suficiente para distinguir entre clases. 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.3]{clasification}
-\caption{Ejemplo de problema de clasificación. La línea diagonal ha sido definida ultilizando algún algoritmo de clasificación.}
+\caption{Ejemplo de problema de clasificación. La línea diagonal ha sido definida utilizando algún algoritmo de clasificación.}
 \end{figure}
 \noindent
-Otros algoritmos muy utilizados son los árboles de decisión, los cuales siguiendo una estructura arbórea extraen de los datos las condiciones necesarias para la clasificación. Estos algoritmos valen para cualquier número de clases.
+Otros algoritmos muy utilizados son los árboles de decisión, los cuales, siguiendo una estructura arbórea, extraen de los datos las condiciones necesarias para la clasificación. Estos algoritmos valen para cualquier número de clases.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{tree}
@@ -188,10 +221,10 @@ Más adelante se hablará sobre este algoritmo en profundidad.
 Los problemas de regresión son aquellos que se utilizan para predecir o estimar variables continuas.\\
 
 \noindent
-Por ejemplo, para estimar el precio de una casa basándonos en características como los metros cuadrados de la parcela, el número de habitaciones, baños, ubicación etc.\\
+Por ejemplo, para estimar el precio de una casa basándonos en características como los metros cuadrados de la parcela, el número de habitaciones, baños, ubicación, etc.\\
 
 \noindent
-Los métodos más utilizados en este tipo de problemas son la regresión linea, polinomial y las redes neuronales, las cuales también permiten predecir variables continuas.\\
+Los métodos más utilizados en este tipo de problemas son la regresión lineal, polinomial y las redes neuronales, las cuales también permiten predecir variables continuas.\\
 
 \begin{figure}[H]
 \centering
@@ -200,7 +233,7 @@ Los métodos más utilizados en este tipo de problemas son la regresión linea, 
 \end{figure}
 
 \subsubsection{Algoritmos de agrupación o clustering.}
-Los algoritmos de clustering son aquellos utilizados en tareas en las que es necesario agrupar datos, es decir, hay que estimar la clase a la que pertenece cada dato. \\
+Los algoritmos de clustering son aquellos utilizados en tareas en las que es necesario agrupar datos; es decir, hay que estimar la clase a la que pertenece cada dato. \\
 
 \noindent
 Se diferencian respecto a la clasificación en que normalmente en estos problemas los criterios para clasificar en grupos están basados en alguna métrica, como puede ser la densidad de datos o la distancia euclídea entre estos.\\
@@ -209,17 +242,19 @@ Se diferencian respecto a la clasificación en que normalmente en estos problema
 Normalmente estos algoritmos están basados en la asignación aleatoria de los centros de los grupos (centroides) y en su posterior ajuste siguiendo el criterio de alguna métrica, por ejemplo, la distancia euclídea. \\
 
 \noindent
-Los algoritmos más conocidos de este tipo son el algoritmo k-means, para problemas de aprendizaje no supervisado y el knn para problemas de aprendizaje supervisado.
+Los algoritmos más conocidos de este tipo son el algoritmo K-means, para problemas de aprendizaje no supervisado, y el KNN para problemas de aprendizaje supervisado.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.18]{clustering}
-\caption{Ejercicio de clustering dodne se distinguen tres grupos de datos.}
+\caption{Ejercicio de clustering donde se distinguen tres grupos de datos.}
 \end{figure}
 
 
 \subsubsection{Algoritmos de reducción de la dimensionalidad.}
 La reducción de la dimensionalidad consiste en reducir el número de características de un problema de manera que se pierda la mínima información posible.\\
-Por ejemplo, reducir las 4 características del ejemplo anterior del precio de las casas a únicamente 2 variables, esto proporcionaría una mejora significativa en el rendimiento sin afectar a la precisión del modelo.\\
+
+\noindent
+Por ejemplo, reducir las 4 características del ejemplo anterior del precio de las casas a únicamente 2 variables. Esto proporcionaría una mejora significativa en el rendimiento sin afectar a la precisión del modelo.\\
 
 \noindent
 Los métodos más utilizados son PCA (principal component analysis) y SVD (single value decomposition).
@@ -233,9 +268,9 @@ Los métodos más utilizados son PCA (principal component analysis) y SVD (singl
 \subsection{ Base matemática del Machine Learning.}
 \label{}
 
-En el presente trabajo, entenderemos por optimización, el cálculo (exacto o
-aproximado) de los máximos y/o mínimos de una funcóon en su dominio, si es
-que estos existen.\\
+En el presente trabajo entenderemos por optimización el cálculo (exacto o
+aproximado) de los máximos y/o mínimos de una funcíon en su dominio, si es
+que estos existen. En esta sección seguiremos las referencias \cite{cálculo} \cite{cálculo2} complementadas con las notas tomadas a lo largo de los seminarios presenciales.\\
 
 \noindent
 En nuestro caso, nos restringiremos a funciones que miden el error entre
@@ -246,16 +281,19 @@ teórico subyacente pretendemos establecer o aproximar.\\
 Nos serviremos de la teoría de la optimización para alcanzar (o aproximar) los valores en los que estas funciones de error alcanzan su mínimo y así obtener el mejor resultado posible de nuestro modelo. Nos referiremos a estos valores como parámetros óptimos.
 \subsubsection{Teorema
 de Weierstrass y condiciones de primer orden.}
-Lo primero es estudiar en qué condiciones se alcanzan el máximo y/ o mínimo.
+Lo primero es estudiar en qué condiciones se alcanzan el máximo y/o mínimo.
 A este respecto, uno de los resultados más importantes es el teorema de Weierstrass, que establece que toda función continua $f$, definida en un dominio cerrado
-y acotado alcanza sus valores máximos y mínimos en algún punto del dominio.
+y acotado, alcanza sus valores máximos y mínimos en algún punto del dominio.
 Más precisamente:
 \begin{theorem}
-Sea A un conjunto cerrado y acotado, denotemos por $\mathcal{C}(A,\mathbb{R})$  el conjunto de funciones continuas de $A$ en $\mathbb{R}$ entonces existen $ x_{1},x_{2} \in A$, tales que $ f(x_{1}) \leq f(x) \leq f(x_{2})$ para todo valor de $x$ en $A$.
+Sea A un conjunto cerrado y acotado, denotemos por $\mathcal{C}(A,\mathbb{R})$  el conjunto de funciones continuas de $A$ en $\mathbb{R}$, y sea $f\in\mathcal{C}(A,\mathbb{R})$. Entonces existen $ x_{1},x_{2} \in A$, tales que $ f(x_{1}) \leq f(x) \leq f(x_{2})$ para todo valor de $x$ en $A$.
 \end{theorem}
 \noindent
 Una vez sabemos que se alcanzan los extremos, veamos cómo calcularlos.
-\\Sea $A$ un subconjunto de $\mathbb{R}^n$ y denotemos por $\mathring{A}$ en interior de $A$, es decir, el mayor conjunto abierto contenido en A.
+\\
+
+\noindent
+Sea $A$ un subconjunto de $\mathbb{R}^n$ y denotemos por $\mathring{A}$ en interior de $A$, es decir, el mayor conjunto abierto contenido en $A$.
 \begin{definition}
 (Máximo relativo). Se dice que la función $f$ definida en un conjunto $D\subseteq \mathbb{R}^n$ tiene un valor máximo local o relativo en un punto $c\in\mathring{D}$, si $f(c)\geq f(x)$ para todo $x$ perteneciente a un entorno de $c$. El valor máximo relativo de $f$ correspondiente a $c$ es $d = f(c)$.
 \end{definition}
@@ -274,7 +312,7 @@ entonces $\nabla f(x)=(0,...,0)$.
 \end{proposition}
 
 \subsubsection{Búsqueda de mínimo absoluto.}
-Para buscar los extremos de una función f definida en un conjunto $A\subseteq \mathbb{R}^n$, examinamos, por un lado, los
+Para buscar los extremos de una función $f$ definida en un conjunto $A\subseteq \mathbb{R}^n$, examinamos, por un lado, los
 puntos interiores de gradiente cero (extremos relativos, conforme a la proposición
 1), los puntos de la frontera, y los puntos interiores sin derivada. \\
 
@@ -302,7 +340,9 @@ H_f(x,y)=\left(
 \right)
 $$
 \\
-Su determinante $|H_f(x,y)|$ se denomina Hessiano de $f$.
+Su determinante $|H_f(x,y)|$ se denomina Hessiano de $f$.\footnote{Se demuestra en cálculo que para $f\in \mathcal{C}^2(A, \mathbb{R})$, se tiene que $\frac{\partial^2f}{\partial x\partial y}=\frac{\partial^2f}{\partial y\partial x}$. La definición del Hessiano no exige en general la continuidad de las segundas derivadas, pero todas las funciones con las que trabajaremos en la presente memoria lo son, y por ello nos hemos restringido a este caso.}
+
+
 \end{definition}
 El siguiente resultado es una condición necesaria de segundo orden, cuya demostración se basa en el criterio de Sylvester y en el desarrollo en serie de Taylor
 para funciones de dos variables:
@@ -324,8 +364,8 @@ y $f$ tiene un máximo relativo estricto en $(x_0, y_0)$.
 Existen diversas formas de evaluar si un extremo relativo es absoluto:
 
 \begin{itemize}
-\item El dominio es cerrado y acotado y expresado con restricciones de desigualdad, el algoritmo de Karush-Khun-Tucker suele dar buenos resultados.
-\item Si hay restricciones de igualdad, se suele aplicar el algoritmo de multiplicadores de Lagrange
+\item Si el dominio es cerrado, acotado y expresado con restricciones de desigualdad, el algoritmo de Karush-Khun-Tucker suele dar buenos resultados.
+\item Si hay restricciones de igualdad, se suele aplicar el algoritmo de multiplicadores de Lagrange.
 \item Con funciones convexas utilizamos resultados específicos que revisamos a
 continuación.
 
@@ -334,7 +374,7 @@ continuación.
 
 \subsubsection{Convexidad.}
 
-El estudio de la convexidad permite evaluar si un extremo relativo es absoluto. Por lo tanto, nos interesa demostrar la convexidad de la función de error para determinar nuestro parámetros óptimos.\\
+El estudio de la convexidad permite evaluar si un extremo relativo es absoluto. Por lo tanto, nos interesa demostrar la convexidad de la función de error para determinar nuestros parámetros óptimos.\\
 
 \noindent
 \begin{definition}(Conjunto convexo). Decimos que un conjunto $D\subseteq \mathbb{R}^n$
@@ -342,8 +382,8 @@ es convexo si para todo par de puntos $x,y \in D$, el segmento que los conecta e
 \end{definition}
 \begin{definition} (Función convexa). Sea $D\subseteq \mathbb{R}^n$ un conjunto convexo y $f: D\rightarrow \mathbb{R}$ una función continua definida en $D$. Decimos que $f$ es convexa si, para todos $x,y\in D$, se tiene:
 \[
-f(tx+(1-t)y) \leq tf(x)+(1-t)f(y)
-\].
+f(tx+(1-t)y) \leq tf(x)+(1-t)f(y).
+\]
 \end{definition}
 
 \begin{proposition}
@@ -359,29 +399,35 @@ Sea $D\in\mathbb{R}^n$ un conjunto convexo y abierto, y $f\in\mathcal{C}^2(D,\ma
 \newpage
 \section{Regresión lineal}
 
-Sea un conjunto de datos $(x_i,y_i)^n_{i=1}$, queremos obtener la recta que mejor se ajuste a la nube de puntos. Esta recta tendrá la forma $h_\theta(x)= ax+b$ (puede tener  más parámetros). Es decir, debemos escoger$  (a,b)\in \mathbb{R}^2 $ tal que $\text{EMC(a,b)} = \frac{1}{N} \sum_{i=1}^{N}(y_{i}-ax_{i}-b)^2 \text{mínimo.} $
+Sea un conjunto de datos $(x_i,y_i)^n_{i=1}$, queremos obtener la recta que mejor se ajuste a la nube de puntos. Esta recta tendrá la forma $h_\theta(x)= ax+b$ (puede tener  más parámetros). Es decir, debemos escoger$  (a,b)\in \mathbb{R}^2 $ tal que $EMC(a,b) = \frac{1}{N} \sum_{i=1}^{N}(y_{i}-ax_{i}-b)^2 $mínimo. \\
 
-
+\noindent
+De nuevo, en esta sección seguiremos las referencias \cite{cálculo} \cite{cálculo2} complementadas con las notas tomadas a lo largo de los seminarios presenciales.
 
 \subsection{Cálculo de mínimos y máximos locales:}
-A continuación, mediante el gradiente, probamos que la función ECM tiene
+A continuación, mediante el gradiente, probamos que la función $ECM$ tiene
 un único extremo local, y mediante la matriz Hessiana, probamos que este es un
-mínimo local, y que al ser esta matriz semidefinida positiva, la función ECM es
+mínimo local, y que al ser esta matriz semidefinida positiva, la función $ECM$ es
 convexa y el mínimo global es el único mínimo global.
 \[\frac{\partial{H}}{\partial{b}}=-2\sum_{i=1}^{N}y_{i}-ax_{i}-b=0\Rightarrow \sum_{i=1}^{N}ax_{i}+bN=\sum_{i=1}^{N}y_{i}\Rightarrow b=\Bar{y}-a\Bar{x}\]
-\[\frac{\partial{H}}{\partial{a}}=-2\sum_{i=1}^{N}(y_{i}-ax_{i}-b)x_{i}=0\Rightarrow \sum_{i=1}^{N}x_{i}y_{i}=a\sum_{i=1}^{N}x_{i}^2+b\sum_{i=1}^{N}x_{i}\Rightarrow a \frac{1}{N}\sum_{i=1}^{N}x_{i}^2+(\Bar{y}-a\Bar{x})\Bar{x}=\sum_{i=1}^{N}x_{i}y_{i}\Rightarrow\] 
-\[\Rightarrow a[ \,\frac{1}{N} \sum_{i=1}^{N} x_{i}^2-\Bar{x}^2] \,+\Bar{y}\Bar{x}=\frac{1}{N}\sum_{i=1}^{N}x_{i}y_{i}\Rightarrow a\partial_x^2=s_{xy}\Rightarrow\]
+\[\frac{\partial{H}}{\partial{a}}=-2\sum_{i=1}^{N}(y_{i}-ax_{i}-b)x_{i}=0\Rightarrow \sum_{i=1}^{N}x_{i}y_{i}=a\sum_{i=1}^{N}x_{i}^2+b\sum_{i=1}^{N}x_{i}\Rightarrow a \frac{1}{N}\sum_{i=1}^{N}x_{i}^2+(\Bar{y}-a\Bar{x})\Bar{x}=\] 
+\[=\sum_{i=1}^{N}x_{i}y_{i}\Rightarrow a[ \,\frac{1}{N} \sum_{i=1}^{N} x_{i}^2-\Bar{x}^2] \,+\Bar{y}\Bar{x}=\frac{1}{N}\sum_{i=1}^{N}x_{i}y_{i}\Rightarrow a\partial_x^2=s_{xy}\Rightarrow\]
 \[\boxed{a=\frac{s_{xy}}{\partial_{x^2}}, b=\Bar{y}-\frac{s_{xy}}{\partial_{x^2}}\Bar{x}}\]
 \\
 \\A continuación, calculamos la matriz Hessiana.\\
-$H_f(a,b)$: $
+
+\[
+H_f(a,b): 
 \begin{bmatrix}
     \frac{\partial^2 H}{\partial a^2} & \frac{\partial^2 H}{\partial a \partial b} \\
     \frac{\partial^2 H}{\partial a \partial b} & \frac{\partial^2 H}{\partial a^2}
-\end{bmatrix} $\\
-Basta con que la matriz sea semidefinida positiva.para ello, observamos que $\frac{\partial^2 E}{\partial a^2}= 2 \sum_{i=1}^n x_{i}^2\leq 0$ y que
+\end{bmatrix} \]
+\\
+
+\noindent
+Basta con que la matriz sea semidefinida positiva. Para ello, observamos que $\frac{\partial^2 E}{\partial a^2}= 2 \sum_{i=1}^n x_{i}^2\leq 0$ y que\\
 $$
-|H_f(a,b)|=4\left(\frac{2}{N}\sum_{i_1}^N x_i^2-\overline{x}^2\right)=4\left(\frac{1}{N}\sum_{i_1}^N x_i^2+s_x^2\right)\geq 0,
+|H_f(a,b)|=4\left(\frac{2}{N}\sum_{i_1}^N x_i^2-\overline{x}^2\right)=4\left(\frac{1}{N}\sum_{i_1}^N x_i^2+s_x^2\right)\geq 0.
 $$
 \subsection{Regresión lineal multivariable.}
 
@@ -413,13 +459,13 @@ Al igual que en la Regresión Lineal univariable, se demuestra que la función E
 
 \subsection{Método iterativo.}
 
-El anterior método explicado en el apartado de regresión lineal multivariable muestra cómo obtener la hipótesis de forma directa, analítica, no obstante, en la realidad, el cálculo de la inversa de una matriz se evita en la mayoría de las ocasiones debido a la complejidad que esta requiere: O($n^3$).\\
+El anterior método explicado en el apartado de regresión lineal multivariable muestra cómo obtener la hipótesis de forma directa, analítica. No obstante, en la realidad, el cálculo de la inversa de una matriz se evita en la mayoría de las ocasiones debido a la complejidad que esta requiere: O($n^3$).\\
 
 \noindent
 En su lugar, métodos iterativos como gradient descent, el cual “desciende” por la función de error gracias al cálculo constante de los parámetros en cada iteración, muestran una complejidad inferior O($n^2$), la cual es viable computacionalmente para trabajar. 
 
 \subsection{Algoritmo Gradient Descent.}
-El algoritmo gradient descent es uno de los algoritmos de optimización más populares en el ML. Se utiliza para minimizar una función $J$  moviéndose de forma iterativa en la dirección del gradiente de dicha función. Dicha función es conocida como función de coste. \\
+El algoritmo gradient descent es uno de los algoritmos de optimización más populares en el ML. Se utiliza para minimizar una función $J$  moviéndose de forma iterativa en la dirección del gradiente de dicha función. En esta sección seguiremos la referencia \cite{granada}.\\
 
 \noindent
 En cada iteración se recalcula el gradiente y se actualiza la aproximación de
@@ -455,11 +501,11 @@ logarítmica o polinomial. Nosotros nos ocuparemos sólo de la regresión polino
 \noindent
 Comencemos por el modelo más sencillo (regresión cuadrática):
 \[
- y=\theta_0+\theta_1 x+\theta_2 x^2
+ y=\theta_0+\theta_1 x+\theta_2 x^2.
 \]
 Se trata, como antes, de resolver el problema:
 \[
- min\sum_{i=1}^{N}(y-\theta_0-\theta_1 x-\theta_2 x^2)^2\longrightarrow \hat{\theta_0},\hat{\theta_1},\hat{\theta_2}
+ min\sum_{i=1}^{N}(y-\theta_0-\theta_1 x-\theta_2 x^2)^2\longrightarrow \hat{\theta_0},\hat{\theta_1},\hat{\theta_2}.
 \] 
 \begin{figure}[H]
 \centering
@@ -473,10 +519,10 @@ Podríamos considerar una hipótesis más ambiciosa como $y=\theta_0+\theta_1 x+
 Eso nos lleva al problema de determinar el número de parámetros del modelo. Necesitamos saber cómo aplicar regresión polinomial, en qué grado.
 \subsection{Lineal vs polinomial.}
 
-En la práctica, la decisión de aplicar regresión lineal o polinomial puede no ser algo trivial, por ello, antes de reflexionar sobre el número de parámetros que queremos aplicar a nuestro modelo, debemos primero, determinar si la naturaleza del problema corresponde a un problema polinomial, o si por el contrario, la regresión lineal es suficiente para abordarlo.
+En la práctica, la decisión de aplicar regresión lineal o polinomial puede no ser algo trivial. Por ello, antes de reflexionar sobre el número de parámetros que queremos aplicar a nuestro modelo, debemos primero determinar si la naturaleza del problema corresponde a un problema polinomial, o si por el contrario, la regresión lineal es suficiente para abordarlo.
 \subsubsection{Coeficiente de Pearson.}
 
-El coeficiente de correlación lineal de Pearson ($r_{xy}$) nos sirve para determiar la naturaleza de la relación que guardan los datos entre sí. \\
+El coeficiente de correlación lineal de Pearson ($r_{xy}$) nos sirve para determinar la naturaleza de la relación que guardan los datos entre sí. \\
 
 \noindent
 El coeficiente se comprende entre 1 y -1, cuanto más cercano está a ±1 más aconsejable será aplicar regresión lineal.
@@ -492,26 +538,25 @@ varianza poblacional.
 \end{itemize}
 \subsubsection{Coeficiente de Spearman.}
 
-El coeficiente de Spearman ($\rho$) es una medida de correlación utilizada en lugar del coeficiente de Pearson, cuando no se cumple algunas de las condiciones mencionadas en el apartado anterior. El resultado de este se interpreta al igual que en el coeficiente de Pearson. \\
+El coeficiente de Spearman ($\rho$) es una medida de correlación utilizada en lugar del coeficiente de Pearson, cuando no se cumplen algunas de las condiciones mencionadas en el apartado anterior. El resultado de este se interpreta al igual que en el coeficiente de Pearson. \\
 
 \noindent
 Si el resultado es cercano 1 ó -1, no es necesario aplicar regresión polinomial.
 \[
 \rho = 1 - \frac{6\sum D^2}{N(N^2 - 1)}
 \]
-Siendo $D$  la diferencia entre los correspondientes estadísticos de orden de x - y, y siendo $N$ el número de datos.
+Siendo $D$  la diferencia entre los correspondientes estadísticos de orden de $x$ $- y$, y siendo $N$ el número de datos.
 
 \subsubsection{Sobre el término "polinomial".}
 
 \indent
-Realmente la distinción entre regresión multivariable y polinomial puede verse reducida a un mero formalismo. La diferencia sustancial radica en que en la regresión polinomial las variables son dependientes entre ellas y eso tiene una implicación crítica: se rompe la convexidad, por lo que el mínimo local puede no ser único, eso se da cuando la matriz de variables no es invertible.
+Realmente la distinción entre regresión multivariable y polinomial puede verse reducida a un mero formalismo. La diferencia sustancial radica en que en la regresión polinomial las variables son dependientes entre ellas y eso tiene una implicación crítica: se rompe la convexidad, por lo que el mínimo local puede no ser único. Eso se da cuando la matriz de variables no es invertible.
 \subsection{Regularización.}
 
-En el ajuste de un modelo polinomial, aplicando la teoría explicada hasta ahora, nos surge la duda de cuál es el grado que mejor resultado nos dará, o dicho de otra forma; ¿Qué grado en nuestro modelo es el que mejor se ajusta a nuestras necesidades?\\
+En el ajuste de un modelo polinomial, aplicando la teoría explicada hasta ahora, nos surge la duda de cuál es el grado que mejor resultado nos dará, o dicho de otra forma: ¿Qué grado en nuestro modelo es el que mejor se ajusta a nuestras necesidades?\\
 
 \noindent
-A continuación, explicamos dos posibles problemas que suelen aparecer al estimar el grado por exceso.
-o por defecto.\\
+A continuación, explicamos dos posibles problemas que suelen aparecer al estimar el grado por exceso o por defecto.\\
 \begin{definition}(Bias o sobresimplificación). Se dice que nuestro modelo está
 sobresimplificado o tiene problema de bias cuando nuestra hipótesis no se ajusta
 correctamente a los datos. También se conoce como \textit{underfitting}.
@@ -523,26 +568,26 @@ se conoce como \textit{overfitting}.
 
 
 \end{definition}
-La técnica de penalización permite penalizar los términos de mayor grado de nuestro modelo, permitiéndonos así utilizar hipótesis de un grado considerable, por lo que no hay lugar a que aparezca el problema de bias, mientras que eludimos el problema de variance. Por ejemplo, consideremos este modelo:
+La técnica de penalización consiste sancionar los términos de mayor grado de nuestro modelo, permitiéndonos así utilizar hipótesis de un grado considerable, por lo que no hay lugar a que aparezca el problema de bias, mientras que eludimos el problema de variance. Por ejemplo, consideremos este modelo:
 \[
- y=\theta_0+\theta_1 x+\theta_2 x^2+1000\theta_3 x^3+1000\theta_4 x^4 = h_\theta (x)
+ y=\theta_0+\theta_1 x+\theta_2 x^2+1000\theta_3 x^3+1000\theta_4 x^4 = h_\theta (x).
 \]
 El hecho de que los parámetros $\theta_3$ y $\theta_4$ aparezcan multiplicados por un término
 alto implica que si no son demasiado pequeños, tendrán un alto impacto en el
 modelo que debe ajustar la nube de puntos.\\
 
 \noindent
-El anterior ejemplo nos sirve para el caso en el que sabemos qué es lo que hay que penalizar, pero para poder usarlo en un caso general, en el que no conozcamos a priori los elemento a penalizar en nuestra hipótesis, la función de coste utilizada hasta ahora será modificada. Sea $J$ la función de coste:
+El anterior ejemplo nos sirve para el caso en el que sabemos qué es lo que hay que penalizar, pero para poder usarlo en un caso general, en el que no conozcamos a priori los elementos a penalizar en nuestra hipótesis, la función de coste utilizada hasta ahora será modificada. Sea $J$ la función de coste:
 
 \[
-J(\vec{\theta})=\frac{1}{2m}\left[\sum_{i=1}^{m} \left(h_\theta (x^{(i)})-y^{(i)}\right)-\lambda \sum_{j=1}^{n}\theta_{j}^2\right]
+J(\vec{\theta})=\frac{1}{2m}\left[\sum_{i=1}^{m} \left(h_\theta (x^{(i)})-y^{(i)}\right)-\lambda \sum_{j=1}^{n}\theta_{j}^2\right].
 \]
-Como vemos, aparece la variable $\lambda$, la cual será definida de forma empírica, una $\lambda$ muy superior a 1, provocaría variance, y si es muy cercana a 0, provocaría bias. Los valores típicos suelen rondar el 0,95.\\
+Como vemos, aparece la variable $\lambda$, la cual será definida de forma empírica. Una $\lambda$ muy superior a 1 provocaría variance, y si es muy cercana a 0, provocaría bias. Los valores típicos suelen rondar el 0,95.\\
 
 \noindent
-Además de ser una manera eficaz para mejorar nuestro modelo, previniendo dos de los problemas más comunes en el desarrollo del aprendizaje automático. La implementación será tan sencilla como modificar nuestro algoritmo de aprendizaje, modificando todos los términos a partir de $\theta_1$ .\\
+Además de ser una manera eficaz para mejorar nuestro modelo, previniendo dos de los problemas más comunes en el desarrollo del aprendizaje automático, la implementación será tan sencilla como modificar nuestro algoritmo de aprendizaje, modificando todos los términos a partir de $\theta_1$ .\\
 \[
-\frac{J(\theta)}{\partial\theta_j} = \frac{1}{m} \sum_{i=1}^{m} \left(h_\theta (x^{(i)})-y^{(i)}\right) x_{j}^{(i)}-\frac{\lambda}{m} \sum_{i=1}^{m} \theta_j 
+\frac{J(\theta)}{\partial\theta_j} = \frac{1}{m} \sum_{i=1}^{m} \left(h_\theta (x^{(i)})-y^{(i)}\right) x_{j}^{(i)}-\frac{\lambda}{m} \sum_{i=1}^{m} \theta_j.
 \]
 
 \subsection{Escalamiento de variables (feature scaling).}
@@ -558,35 +603,36 @@ En las redes neuronales, que veremos más adelante, esto se traduce en pesos con
 \noindent
 Esto se evita escalando las variables para que todas queden con el mismo rango, y a priori, con la misma relevancia:
 \[
-x_i \longleftarrow \frac{x_i - \overline{x}}{s_i} \epsilon [-1,1]
+x_i \longleftarrow \frac{x_i - \overline{x}}{s_i} \epsilon [-1,1].
 \]
 \hspace{0.20cm}
 \[
-s_i \hspace{0.20cm} = \  max\hspace{0.20cm}x_{i}^j -min\hspace{0.20cm}x_{i}^j \hspace{0.20cm}
+s_i \hspace{0.20cm} = \  max\hspace{0.20cm}x_{i}^j -min\hspace{0.20cm}x_{i}^j \hspace{0.20cm}.
 \]
 \newpage
 \section{Regresión logística.}
-En los problemas de clasificación, se busca encontrar un modelo que sea capaz de distinguir diferentes entradas en función de sus características, o dicho de otra forma, que sea capaz de reconocer si un elemento pertenece a una clase u otra. Esto se aplica
+En los problemas de clasificación se busca encontrar un modelo que sea capaz de distinguir diferentes entradas en función de sus características, o dicho de otra forma, que sea capaz de reconocer si un elemento pertenece a una clase u otra. Esto se aplica
 en multitud de casos como en la detección de tumores, clasificación de spam,
 reconocimiento de dígitos, escritura manual, voz, etc.\\
 
-\noindent
-Cuando en nuestro problema necesitamos distinguir entre dos clases, estamos hablando de clasificación binaria. En el próximo
-capítulo veremos cómo clasificar en varias categorías, utilizando redes neuronales.\\
 
 \noindent
-La regresión logística nos permite establecer un umbral de probabilidad rebasado el cual interpretamos que la variable aleatoria binaria bajo estudio toma el valor
+Cuando en nuestro problema necesitamos distinguir entre dos clases, estamos hablando de clasificación binaria. En el próximo
+capítulo veremos cómo clasificar en varias categorías, utilizando redes neuronales. Esta sección sigue como referencia los seminarios presenciales.\\
+
+\noindent
+La regresión logística nos permite establecer un umbral de probabilidad rebasado, sobre el cual interpretamos que la variable aleatoria binaria bajo estudio toma el valor
 1, en tanto que si no se rebasa, estimaremos que su valor es 0.\\
 
 \noindent
-Observemos que la variable dependiente la podemos interpretar como una etiqueta, que a diferencia de la regresión lineal, adquiere solo dos valores posibles,
+Observemos que la variable dependiente la podemos interpretar como una etiqueta que, a diferencia de la regresión lineal, adquiere solo dos valores posibles,
 y es dependiente de varias características (variables independientes), por lo que
 se trata igualmente de un modelo de aprendizaje supervisado.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=10.50cm, height=4.5cm]{1_Vd9ZTC1zWJPtV7iXPMJk1Q.png}
-\caption{Ejemplo del umbral que separa clases en regresiión lineal y en logística.}
+\caption{Ejemplo del umbral que separa clases en regresión lineal y en logística.}
 \end{figure}
 \noindent
 A modo de resumen, enumeramos las propiedades básicas del modelo logístico y lo comparamos con la regresión lineal:
@@ -599,7 +645,7 @@ como veremos a continuación, someter una función lineal a lo que interpretarem
 definirá una región umbral tal que si esta se rebasa, estaremos clasificando en la
 categoría 1 con una probabilidad prefijada.
 
-\item Como veremos a continuación, en regresión logística, no es fácil a priori utilizar el error cuadrático medio como función de pérdida. Se prefiere, en general,
+\item Como veremos a continuación, en regresión logística no es fácil a priori utilizar el error cuadrático medio como función de pérdida. Se prefiere, en general,
 usar la entropía cruzada, lo que convierte el problema de mínimo en un problema
 de máximo. La entropía cruzada se usará también en redes neuronales.
 
@@ -607,12 +653,12 @@ de máximo. La entropía cruzada se usará también en redes neuronales.
 La regresión logística es uno de los algoritmos más utilizados en Machine Learning, esto se debe a su gran eficiencia, simplicidad y fácil implementación.\\
 
 \noindent
-El mayor inconveniente de la regresión logística es que solo puede ser utiilizada en problemas de clasificación binaria.
+El mayor inconveniente de la regresión logística es que solo puede ser utilizada en problemas de clasificación binaria.
 
 \subsection{La función sigmoide.}
 En regresión logística principalmente se emplea la función sigmoide para resolver problemas, que se define de la siguiente manera: 
 \[
-\sigma(x)=\frac{1}{1+e^{-x}}
+\sigma(x)=\frac{1}{1+e^{-x}}.
 \]
 El resultado de esta función siempre estará comprendido entre 0 y 1, y en la práctica se interpretará como la probabilidad de que la variable dependiente pertenezca a una clase u otra.\\
 
@@ -620,16 +666,16 @@ El resultado de esta función siempre estará comprendido entre 0 y 1, y en la p
 La propiedad crucial de la función sigmoide, que nosotros utilizaremos en nuestro algoritmo de clasificación, es la siguiente ecuación diferencial de primer
 orden que recibe el nombre de ecuación logística contínua (o de Vershulst) y se demuestra con un sencillo cálculo:
 \[
-\frac{d}{dx}\sigma(x)=\frac{d}{dx}\left[\frac{1}{1+e^{-x}}\right]=\sigma(x)\cdot(1-\sigma(x))
+\frac{d}{dx}\sigma(x)=\frac{d}{dx}\left[\frac{1}{1+e^{-x}}\right]=\sigma(x)\cdot(1-\sigma(x)).
 \]
 
 \subsection{Algoritmo de regresión logística con regularización.}
 
 Asumiremos por simplicidad que solo hay una característica (por ejemplo,
-diámetro medio de los leucocitos) y tratamos de predecir la variable Y , que
+diámetro medio de los leucocitos) y tratamos de predecir la variable $y$, que
 toma el valor 1 si el paciente padece leucemia y 0 en caso contrario. El modelo
 de regresión logística estima la probabilidad de que si una combinación lineal de
-las características cae en una cierta región geométrica, la variable Y tome el
+las características cae en una cierta región geométrica, la variable $y$ tome el
 valor 1, y ello mediante los datos de entrenamiento. Esta probabilidad se expresa
 mediante la igualdad:
 \[
@@ -642,21 +688,19 @@ métodos de regresión lineal si se emplea su versión logarítmica.
 ln\left( \frac{p(Y=k|X=x)}{1-p(Y=k|X=x)}\right)=\theta_0 + \theta_1 X .
 \]
 El objetivo de nuestro problema es optimizar los parámetros $\theta_0$ y $\theta_1$ de tal
-manera que las cantidades $\sigma (\theta_0 + \theta_1 x_{i})$ se ajusten de la mejor manera posible,
-en el sentido que explicaremos a continuación, a los valores $y_i$
-, con $1 \leq i \leq m$.
-Este sentido en el que se deben ajustar los datos, viene descrito por la función de
-máxima verosimilitud, que es el análogo logístico del error cuadrático medio. Que explicamos a continuación:\\
+manera que las cantidades $\sigma (\theta_0 + \theta_1 x_{i})$ se ajusten de la mejor manera posible en el sentido que explicaremos a continuación, a los valores $y_i$, con $1 \leq i \leq m$.
+Este sentido en el que se deben ajustar los datos viene descrito por la función de
+máxima verosimilitud, que es el análogo logístico del error cuadrático medio. Lo explicamos a continuación:\\
 
 \noindent
 Denotemos por $P(x_1, x_2, x_3, ..., x_m; \theta)$ la probabilidad de que la variable Y tome
 de valores los datos $x_1, ..., x_m$, en m observaciones sucesivas, sujeto a que el error
 residual de las características se distribuya normalmente y con su media y varianza en función de los parámetros $\theta_0$ y $\theta_1$. Omitimos por razones de extensión la
-manera explícita de dicha dependencia dependencia. El objetivo es, pues estimar
+manera explícita de dicha dependencia. El objetivo es, estimar
 los parámetros $\theta_0$ y $\theta_1$ que maximizan esa probabilidad.\\
 
 \noindent
-Asumimos además que los residuos son normales e independientes, por lo que esta probabilidad factoriza como producto de m factores, y debido a la inestabilidad
+Asumimos además que los residuos son normales e independientes, por lo que esta probabilidad factoriza como producto de $m$ factores, y debido a la inestabilidad
 numérica de estimar el producto, en su lugar, estimaremos la suma de los logaritmos $\sum_{i=1}^m log(P(x_i ;\theta))$.\\
 
 \noindent
@@ -687,15 +731,15 @@ es, en la iteración k-ésima:
 \newpage
 \section{Redes neuronales.}
 
-Se define red neuronal (en adelante NN o ANN) como un modelo o estructura algorítmica que imita el comportamiento del cerebro humano con el objetivo de resolver, clasificar o predecir partiendo de unos datos de entrada.\\
+Se define red neuronal (en adelante NN o ANN) como un modelo o estructura algorítmica que imita el comportamiento del cerebro humano con el objetivo de resolver, clasificar o predecir partiendo de unos datos de entrada. En esta sección seguiremos la referencia \cite{andrew}.\\
 
 \noindent
-Su elemento mínimo es la neurona artificial, en las NN se implementan diversas neuronas en múltiples capas de acuerdo a las necesidades del problema.
+Su elemento mínimo es la neurona artificial; en las NN se implementan diversas neuronas en múltiples capas de acuerdo a las necesidades del problema.
 
 \subsection{Componentes.}
 Las NN envuelven múltiples algoritmos y características que normalmente varían de forma poco rigurosa en función del rendimiento que estas muestran y de la naturaleza del problema a abordar. Dichos aspectos irán siendo explicados en los siguientes apartados.
 \subsubsection{Neurona Artificial.}
-La neurona artificial es la unidad mínima de la que se componen las NN, dichas neuronas están basadas en la célula cerebral simplificada, denominada neurona de \textbf{McCullock-Pitts (MCP).}\\
+La neurona artificial es la unidad mínima de la que se componen las NN, dichas neuronas están basadas en la célula cerebral simplificada, denominada neurona de McCullock-Pitts (MCP).\cite{andrew}\\
 
 \noindent
  Las neuronas son células nerviosas interconectadas del cerebro que participan en el proceso y transmisión de señales eléctricas y químicas, como se muestra en la siguiente figura: \\
@@ -709,7 +753,7 @@ La neurona artificial es la unidad mínima de la que se componen las NN, dichas 
 McCullock y Pitts describieron una neurona como una simple puerta binaria que arroja una salida a partir de sus entradas o dendritas, transmitiendo dicha salida mediante el axón a sus terminaciones nerviosas, las cuales están conectadas a las dendritas de otras neuronas.\\
 
 \noindent
-De un modo más formal, podemos definir las neuronas artificiales como una estructura simple, que suma y multiplica las entradas con sus pesos, y que tras sesgar dicho resultado, genera un resultado dependiendo de su función de activación. \\
+De un modo más formal, podemos definir las neuronas artificiales como una estructura simple, que suma y multiplica las entradas con sus pesos, y que tras sesgar dicho resultado, genera uno nuevo dependiendo de su función de activación. \\
 
 \noindent
 Todos estos términos se definen a continuación:
@@ -720,13 +764,13 @@ Todos estos términos se definen a continuación:
 \end{figure}
 
 \begin{itemize}
-    \item Entradas: las entradas son el equivalente a las dendritas de la célula cerebral, son los datos del problema que estemos tratando de resolver o la salida de otra neurona. Denotamos el vector de entradas por $X=(x_1,...,x_m)$.
-    \item Pesos: los pesos son un valor numérico que representan la importancia o relevancia de la entrada correspondiente, al principio del ejercicio suelen ser definidos de forma aleatoria. Son la parte más importante del modelo, pues como veremos en adelante, serán modificados durante el proceso de entrenamiento con el objetivo de que la NN aloje los mejores resultados posibles. Denotamos el vector de pesos por $W=(w_1,...,w_m)$.
-    \item Bias (b): los bias comparten similitudes con los pesos, pueden ser establecidos de forma aleatoria, aunque algunas veces se les da el valor 0 ó 1 de manera arbitraria. También son modificados durante el aprendizaje del modelo, se diferencian en que son solo un valor por neurona. Los bias son un elemento que actúa como sesgo, para evitar que un peso crezca o decrezca más de lo debido y perjudique el rendimiento del modelo.
-    \item N: es la salida de la neurona después del cómputo entre entrada, peso y bias.\\                                           \[N=(W+X^t)+b\]
-    \item Función de activación (f(N)): función que recibe N como entrada. Las tres funciones más utilizadas son:
+    \item Entradas: las entradas son el equivalente a las dendritas de la célula cerebral. Son los datos del problema que estemos tratando de resolver o la salida de otra neurona. Denotamos el vector de entradas por $X=(x_1,...,x_m)$.
+    \item Pesos: los pesos son un valor numérico que representan la importancia o relevancia de la entrada correspondiente. Al principio del ejercicio suelen ser definidos de forma aleatoria. Son la parte más importante del modelo, pues como veremos en adelante, serán modificados durante el proceso de entrenamiento con el objetivo de que la NN aloje los mejores resultados posibles. Denotamos el vector de pesos por $W=(w_1,...,w_m)$.
+    \item Bias (b): los bias comparten similitudes con los pesos; pueden ser establecidos de forma aleatoria, aunque algunas veces se les da el valor 0 ó 1 de manera arbitraria. También son modificados durante el aprendizaje del modelo; se diferencian en que son solo un valor por neurona. Los bias son un elemento que actúa como sesgo, para evitar que un peso crezca o decrezca más de lo debido y perjudique el rendimiento del modelo.
+    \item N: es la salida de la neurona después del cómputo entre entrada, peso y bias.\\                                           \[N=(W+X^t)+b.\]
+    \item Función de activación ($f(N)$): función que recibe N como entrada. Las tres funciones más utilizadas son:
     \begin{itemize}
-    \item Lineal: $f(x)=x$ 
+    \item Lineal: $f(x)=x.$ 
     \item ReLu: 		\begin{figure}[H]
 				\centering
 				\includegraphics[width=4.5cm, height=4cm]{relu.png}
@@ -741,11 +785,11 @@ Todos estos términos se definen a continuación:
         
 \end{itemize}
 \subsubsection{Arquitectura.}
-Durante los comienzos del ML, se concluyó que una sola neurona no es capaz de
+Durante los comienzos del ML se concluyó que una sola neurona no es capaz de
 resolver problemas moderadamente complejos. Se trataba del modelo perceptrón,
 que en ocasiones da buenos resultados frente a la regresión logística en problemas
 de clasificación binaria, pero pronto quedó obsoleto. Así pues, se introdujo el
-concepto de arquitectura de las NN, que describimos a continuación:\\
+concepto de arquitectura de las NN, que describimos a continuación.\\
 
 \noindent
 Las múltiples neuronas de nuestro modelo se organizan en niveles, conocidos como capas, con distinto número de neuronas. Dichas neuronas interactúan entre capas enviando las variables de salida como entrada para la siguiente capa.
@@ -764,9 +808,9 @@ Existen tres tipos de capas:
 La función de error es aquella definida por los valores de error que muestra el modelo durante la ejecución de su entrenamiento. Se obtiene a partir de la diferencia entre el resultado esperado y el resultado real.\\
 
 \noindent
-Existen numerosos algoritmos para calcular el error pero el más común es el error cuadrátrico medio o MSE. El cual se obtiene a partir de la diferencia entre valor real y estimado en m casos:
+Existen numerosos algoritmos para calcular el error pero el más común es el error cuadrátrico medio o MSE. Se obtiene a partir de la diferencia entre valor real y estimado en $m$ casos:
 \[
-MSE=\frac{1}{m}\sum_{i=1}^m (y_i - \hat{y_i})^2
+MSE=\frac{1}{m}\sum_{i=1}^m (y_i - \hat{y_i})^2.
 \]
 \subsubsection{Función de error Cross Entropy}
 Como se vio en el capítulo de regresión logística, la función de error más
@@ -775,7 +819,7 @@ usa en el contexto de NN, es la entropía cruzada, asociada a la función de má
 verosimilitud, que, recordemos, se define como:
 
 \[
-CE=-\sum_{i=1}^m y_i \log\hat{y_i}
+CE=-\sum_{i=1}^m y_i \log\hat{y_i}.
 \]
 \subsubsection{NN-Gradient descent.}
 Es el algoritmo de aprendizaje más utilizado en NN. Su objetivo es estimar
@@ -788,36 +832,40 @@ y logística. En concreto, este algoritmo actualiza constantemente los pesos y b
 de la red mediante dos fases o subalgoritmos:
 
 \begin{itemize}
-    \item Forward Propagation: en adelante propagación hacia adelante o (FP). La información se expande por la red con la configuración inicial de los pesos, los cuales se actualizarán mediante la back propagation. Cada neurona calcula su salida y transmite la información resultante por la red hasta llegar al final de la misma, donde se genera un resultado(Yh). Durante el entrenamiento dicho resultado es comparado con el resultado real(Y) y se calcula su error para propagarlo.
-    \item Back Propagation: en adelante retropropagación hacia adelante o (BP). Es el responsable del aprendizaje del modelo, una vez calculado el error del algoritmo de backpropagation, se distribuye dicho error por todas las capas de la red con el objetivo de que los pesos y bias se reajusten de cara a errar en menor medida en la próxima iteración (k+1). \\Los pesos y bias se actualizan siguiendo las siguientes fórmulas:
+    \item Forward Propagation: en adelante propagación hacia adelante o (FP). La información se expande por la red con la configuración inicial de los pesos, los cuales se actualizarán mediante la back propagation. Cada neurona calcula su salida y transmite la información resultante por la red hasta llegar al final de la misma, donde se genera un resultado ($Y_h$). Durante el entrenamiento dicho resultado es comparado con el resultado real (Y) y se calcula su error para propagarlo.
+    \item Back Propagation: en adelante retropropagación hacia adelante o (BP). Es el responsable del aprendizaje del modelo. Una vez calculado el error del algoritmo de backpropagation, se distribuye dicho error por todas las capas de la red con el objetivo de que los pesos y bias se reajusten de cara a errar en menor medida en la próxima iteración (k+1). \\Los pesos y bias se actualizan siguiendo las siguientes fórmulas:
     \[
-    W_{k+1}^i  = W_{k}^i  - \alpha s^i (a^{i-1})^T
+    W_{k+1}^i  = W_{k}^i  - \alpha s^i (a^{i-1})^T.
     \]
     \[
-    b_{k+1}^i = W_{k}^i  - \alpha s^i
+    b_{k+1}^i = W_{k}^i  - \alpha s^i.
     \]
     \[
-    s^i = -2\dot{F}^i(N^i)(Y-Yh)
+    s^i = -2\dot{F}^i(N^i)(Y-Yh). \hspace{0.15cm}\cite{formulasann}
     \]
-    Siendo W y b, un peso y un bias de la neurona i, F la función de coste y siendo s, la sensibilidad de dicha neurona.
+    Siendo $W$ y $b$, un peso y un bias de la neurona $i$, $F$ la función de coste y siendo $s$, la sensibilidad de dicha neurona.
 \end{itemize}
 \noindent
 En los siguientes apartados se implementará toda la teoría explicada en esta sección. Empezaremos por un fichero para generar NN y luego veremos su aplicación en dos ejercicios.
 \subsection{Código de NeuralNetwork.py.}
-En este apartado explicaremos el código base que hemos desarrollado en el fichero NeuralNetwok.py para las redes neuronales utilizadas en los ejercicios de clasificación de tumores y detección de spam.\\
+En este apartado explicaremos el código base que hemos desarrollado en el fichero NeuralNetwok.py para las redes neuronales utilizadas en los ejercicios de clasificación de tumores y detección de spam. En esta sección seguiremos la referencia \cite{redes}.\\
 
 \noindent
- Esta red no se nutre de librerías de Machine Learning, solo de librerías para manejo de los datos. También cabe destacar que la red que genera este fichero es solo de 3 capas, pues es suficiente para abordar los ejercicios posteriores.
+ Esta red no se nutre de librerías de Machine Learning, solo de librerías para manejo de los datos. También cabe destacar que la red que genera este fichero es solo de 3 capas, pues es suficiente para abordar los ejercicios posteriores.\\
 
 \noindent
  El objetivo de este ejercicio es demostrar el conocimiento en NN antes de utilizar librerías de Machine y Deep Learning.
 \subsubsection{Clase NeuralNetwork.}
 
-La red se instancia como objeto de la clase NeuralNetwork que hemos desarrollado, se pasan por parámetro sus datos de entrada (x) y de salida (y), el learning rate que vamos a utilizar en el gradient descent, las dimensiones de la red (dims), las cuales solo pueden tener 3 capas: una de entrada, una oculta y una de salida. Y por último el parámetro lambda para la regularización. \\Además de estos parámetros, la clase cuenta con algunos más por defecto:
+La red se instancia como objeto de la clase NeuralNetwork que hemos desarrollad:, se pasan por parámetros sus datos de entrada (x) y de salida (y), el learning rate que vamos a utilizar en el gradient descent, las dimensiones de la red (dims), las cuales solo pueden tener 3 capas (una de entrada, una oculta y una de salida). Y por último el parámetro lambda para la regularización.
+\\
+
+\noindent
+Además de estos parámetros, la clase cuenta con algunos más por defecto:
 \begin{itemize}
     \item Yh: vector de salidas de la red, inicialmente está a 0, y mide lo mismo que el vector de las salidas Y.
     \item Param: es un diccionario (en python, digamos que un diccionario es una especie de lista con mucha más flexibilidad a la que se accede por palabras, no índices) donde vamos a guardar los pesos de la red, los bias, las salidas de la neurona antes (N) y después de pasar por la función de activación (A).
-    \item Umbral: es una variable opcional en nuestro diseño de la red, la cual sirve para establecer un límite para filtrar las salidas de la red, para que, de esta forma, no estemos obligados a que toda salida mayor que 0.5 sea igual a 1 y viceversa.
+    \item Umbral: es una variable opcional en nuestro diseño de la red. Sirve para establecer un límite para filtrar las salidas de la red, para que, de esta forma, no estemos obligados a que toda salida mayor que 0.5 sea igual a 1 y viceversa.
     \item Error: es una lista donde iremos guardando la evolución del error de la red durante la ejecución.
     \item m: es el número de samples o casos que tenemos en nuestro set de datos, es decir, el número de filas de X o Y.
 \end{itemize}
@@ -856,10 +904,10 @@ def nInit(self):
 \end{lstlisting}
 \subsubsection{Gradient descent.}
 
-La siguiente función corresponde al algoritmo de gradient descent, en ella instanciamos los pesos y bias llamando a nInint(), se avanza y retrocede por la red tantas veces como épocas hayamos introducido por parámetro. \\
+La siguiente función corresponde al algoritmo de gradient descent. En ella instanciamos los pesos y bias llamando a nInint(), donde se avanza y retrocede por la red tantas veces como épocas hayamos introducido por parámetro. \\
 
 \noindent
-También imprimimos y cada 100 iteraciones el valor del error en ese momento, y al final de la ejecución, se imprime una gráfica de la evolución de la función de error a través de las épocas.
+También imprimimos cada 100 iteraciones el valor del error en ese momento, y al final de la ejecución, se imprime una gráfica de la evolución de la función de error a través de las épocas.
 \begin{lstlisting}
 def gradient_descent(self, epochs):
         np.random.seed(1)                         
@@ -882,7 +930,10 @@ def gradient_descent(self, epochs):
 
 \subsubsection{Forward Propagation.}
 
-En la función forward() aplicamos el algoritmo de forward propagation, hay que remarcar que en esta función los pesos y bias no se modifican.\\ Calculamos las salidas de las neuronas antes y después de la función de activación acorde a la teoría y las guardamos en el diccionario param.\\
+En la función forward() aplicamos el algoritmo de forward propagation, hay que remarcar que en esta función los pesos y bias no se modifican.\\ 
+
+\noindent
+Calculamos las salidas de las neuronas antes y después de la función de activación acorde a la teoría y las guardamos en el diccionario param.\\
 
 \noindent
 Posteriormente, calculamos el error y devolvemos la salida de la red y el error.
@@ -905,10 +956,10 @@ Esta función es invocada cuando utilizamos el Gradient descent.
 En la función backward() aplicamos el algoritmo de back propagation, ejecutamos esta función después de llamar a la función forward(). \\
 
 \noindent
-Actualizamos los pesos y bias de la red, trasmitiendo el error calculado en la iteración, para ello derivamos la función de error y las funciones de activación de toda la red neuronal. \\
+Actualizamos los pesos y bias de la red, trasmitiendo el error calculado en la iteración. Para ello derivamos la función de error y las funciones de activación de toda la red neuronal. \\
 
 \noindent
-A su vez, calculamos el factor de regularización para aplicar la regularización a los pesos y bias en el momento en los que los actualizamos.
+A su vez, calculamos el factor de regularización para aplicarlo a los pesos y bias en el momento en los que los actualizamos.
 \begin{lstlisting}
 def backward(self):
     derror = - (np.divide(self.Y, self.Yh ) - 
@@ -948,7 +999,7 @@ Esta función es invocada cuando utilizamos el gradient descent.
 La función predict es la que utilizamos para predecir o clasificar datos que no hemos utilizado en el entrenamiento.\\ 
 
 \noindent
-Su funcionamiento radica en llamar a la función forward() y guardar los resultados, sin llamar a la función backward(), la red no aprende de sus errores. \\
+Su funcionamiento radica en llamar a la función forward() y guardar los resultados sin llamar a la función backward(). De esta forma la red no aprende de sus errores. \\
 
 \noindent
 Como nuestra función de activación en la última capa es una sigmoide, los resultados estarán comprendidos entre 0 y 1. Con la variable threshold (umbral) filtramos las salidas para que sean estrictamente 0 ó 1.  
@@ -974,9 +1025,9 @@ En este apartado vamos a explicar de forma detallada el proceso de desarrollo de
 Posteriormente, se comparará dicho modelo con otras arquitecturas, se mostrará el resultado al aplicar regularización y se mostrará dicho modelo con regresión logística en lugar de una red neuronal. \\
 
 \noindent
-Al igual que en el apartado anterior, este código no utiliza ninguna librería de machinle laerning, solo las funciones desarrolladas por nosotros previamente.
+Al igual que en el apartado anterior, este código no utiliza ninguna librería de Machine Learning, solo las funciones desarrolladas por nosotros previamente.
 \subsubsection{Carga y transformación de los datos.}
-Los datos utilizados corresponden a un fichero csv proporcionadorepositorio de Machine Learning UCI.\\
+Los datos utilizados corresponden a un fichero csv extraido del repositorio UCI Machine Learning \cite{uci} .\\
 
 \noindent
 Dicho dataset incluye 11 columnas de datos, las cuales son: Person ID, Clump Thickness, Uniformity of Cell Size, Uniformity of Cell Shape, Marginal Adhesion, Single Epithelial Cell Size, Bare Nuclei, Bland Chromatin, Normal Nucleoli, Mitoses, Output.\\
@@ -992,13 +1043,13 @@ La última columna esta compuesta por los valores 2 y 4,  para hacer el desarrol
 df.iloc[:,10].replace(2, 0,inplace=True)
 df.iloc[:,10].replace(4, 1,inplace=True)
 \end{lstlisting}
-Ahora el set de datos luce así: 
+Ahora el set de datos resulta así: 
 \begin{figure}[H]
 \centering
 \includegraphics{Annotation 2020-03-23 185932.png}
 \end{figure}
 \subsubsection{Normalización.}
-Aplicamos normalización maxmin para mejorar el rendimiento y evitar que la columna con valores más altos monopolice el modelo. 
+Aplicamos normalización max-min para mejorar el rendimiento y evitar que la columna con valores más altos monopolice el modelo. 
 \begin{lstlisting}
 names = df.columns[0:10]
 scaler = MinMaxScaler() 
@@ -1015,16 +1066,16 @@ xval=scaled_df.iloc[501:683,1:10].values.transpose()
 yval=df.iloc[501:683,10:].values.transpose()#168 para el tets
 \end{lstlisting}
 \subsubsection{Implementación de la red.}
-En este apartado hacemos uso de las funciones de NeuralNetwork.py, la razón de desarrollar dicho fichero fue poder implementar redes neuronales de forma sencilla y poder aplicarla en distintos problemas sin tener que programar lo mismo otra vez. Ahora lo vemos en práctica.\\
+En este apartado hacemos uso de las funciones de NeuralNetwork.py. La razón de desarrollar dicho fichero fue poder implementar redes neuronales de forma sencilla y poder aplicarla en distintos problemas sin tener que programar lo mismo otra vez. Ahora lo vemos en práctica.\\
 
 \noindent
-Declaramos la red neuronal con los valores de entrenamiento y un learning rate de 0.01. La red funciona con una arquitectura [9 - 15 - 1], la cual utiliza funciones de salida lineales en la capa intermedia y una sigmoidal en la de salida. Utiliza como función de error, en lugar del clásico MSE, el Cross-Entropy. \\
+Declaramos la red neuronal con los valores de entrenamiento y un learning rate de 0.01. La red funciona con una arquitectura [9 - 15 - 1], que utiliza funciones de salida lineales en la capa intermedia y una sigmoidal en la de salida. Utiliza como función de error, en lugar del clásico MSE, el Cross-Entropy. \\
 
 \noindent
 El algoritmo de aprendizaje utilizado es el descenso por gradiente, el cual implementa el algoritmo de backpropagation.\\
 
 \noindent
-Tanto la arquitectura como el learning rate son valores que hemos definido basándonos en la experiencia, en el anexo se muestran diversas implementaciones que nos han llevado a elegir la mejor.
+Tanto la arquitectura como el learning rate son valores que hemos definido basándonos en la experiencia. En el anexo (documento 3) se muestran diversas implementaciones que nos han llevado a elegir la mejor.
 \begin{lstlisting}
 nn = NeuralNetwork(x,y,0.01,0)
 nn.gradient_descent(50000)
@@ -1045,7 +1096,7 @@ Acc: 0.9835164835164836
 
 
 \subsubsection{Visualización.}
-Para visualizar los datos de forma más explicativa se ha recurrido a una matriz de confusión que muestra el número de positivos clasificados correctamente, falsos positivos, falsos negativos, y  negativos clasificados correctamente. La función es la siguiente:
+Para visualizar los datos de forma más explicativa hemos recurrido a una matriz de confusión que muestra el número de positivos clasificados correctamente, falsos positivos, falsos negativos, y  negativos clasificados correctamente. La función es la siguiente:
 \begin{lstlisting}
 def plotCf(a,b,t):
     cf =confusion_matrix(a,b)
@@ -1063,7 +1114,7 @@ def plotCf(a,b,t):
            color='white' if cf[i,j] > (cf.max()*0.7) else 'black')
     plt.show();
 \end{lstlisting}
-Aquí podemos aplicar el umbral que deseamos, como estamos hablando de un tema tan sensible como el cáncer, nuestro umbral debe ser alto para solo afirmar en caso de mucha certeza.
+Aquí podemos aplicar el umbral que deseamos. Como estamos hablando de un tema tan sensible como el cáncer, nuestro umbral debe ser alto para solo afirmar en caso de mucha certeza.
 
 \begin{lstlisting}
 nn.X,nn.Y=xval, yval 
@@ -1097,7 +1148,7 @@ Con el fin de comprobar si un modelo más rápido y sencillo podría superar al 
 Al igual que en la sección anterior, este ejercicio implementa las funciones definidas en el archivo NeuralNetwork.py.\\ 
 
 \noindent
-En este caso el ejercicio exige un enfoque ligeramente diferente respecto al anterior a causa de los datos. Los datos utilizados son numerosos mensajes, los cuales algunos son spam y otros mensajes corrientes. \\
+En este caso el ejercicio exige un enfoque ligeramente diferente respecto al anterior a causa de los datos. Los datos utilizados son numerosos mensajes, algunos son spam y otros mensajes corrientes. Los datos han sido extraidos del repositorio UCI Machine Learning \cite{uci} .\\
 
 \noindent
 De dichos mensajes solo se pueden extraer sus palabras, así que, en este caso, no tenemos distintas características que evaluar.
@@ -1117,7 +1168,7 @@ raw.head()
 \includegraphics[scale=0.9]{Annotation 2020-03-23 174228.png}
 \end{figure}
 \begin{lstlisting}
-raw.drop(['Unnamed: 2' ,'Unnamed: 3' ,'Unnamed: 4'], axis=1)
+raw.drop(['Unnamed: 2' ,'Unnamed: 3' ,'Unnamed: 4'],axis=1)
 raw = raw.dropna(how='any',axis=0)# drop Nan rows
 raw.head()
 \end{lstlisting}
@@ -1125,7 +1176,7 @@ raw.head()
 \centering
 \includegraphics{Annotation 2020-03-23 174341.png}
 \end{figure}
-Como ya hemos comentado, la única información que podemos extraer de los datos son palabras, en total hay aproximadamente 1000. Como no es viable desarrollar en nuestro equipo una red neuronal con 10000 valores en la capa de entrada, debemos sesgar cuáles queremos.\\ 
+Como ya hemos comentado, la única información que podemos extraer de los datos son palabras y en total hay aproximadamente 1000. Como no es viable desarrollar en nuestro equipo una red neuronal con 1000 valores en la capa de entrada, debemos sesgar cuáles queremos.\\ 
 
 \noindent
 En este caso hemos elegido 100, las 100 que más se repiten. Nótese que con intención de hacer un modelo más eficiente, se podrían considerar otros criterios a parte de la frecuencia de aparición en el dataset.\\
@@ -1161,7 +1212,7 @@ print(df_columns)
 \end{lstlisting}
 
 \paragraph{Transformar la información.}
-Ahora lo relevante es determinar cómo vamos a introducir la información en la red. Las redes neuronales no aceptan otra entrada que no sea de carácter numérico, eso nos lleva a transformar nuestro set de datos. Utilizaremos un 1 cuando la palabra de la frase sea una de las palabras elegidas como entrada de la red y 0 cuando en caso contrario.
+Ahora lo relevante es determinar cómo vamos a introducir la información en la red. Las redes neuronales no aceptan otra entrada que no sea de carácter numérico, y eso nos lleva a transformar nuestro set de datos. Utilizaremos un 1 cuando la palabra de la frase sea una de las palabras elegidas como entrada de la red y 0 en caso contrario.
 \begin{lstlisting}
 binary_rows = np.zeros((len(rows),len(df_columns)),dtype=int) 
 for i in range(0, len(rows)): 
@@ -1195,7 +1246,7 @@ x_train, x_test = X[:,0:size], X[:,size:]
 y_train, y_test = Y[0:size], Y[size:]
 \end{lstlisting}
 \subsubsection{Implementación de la red.}
-De nuevo utilizamos el fichero NeuralNetwork.py, en este caso, la  arquitectura  que mejor rendimiento muestra es la 100-25-1, 25 neuronas en una única capa oculta y un ratio de aprendizaje (learning rate) de 0.2. Diversas arquitecturas pueden contrastarse en el anexo de este trabajo.
+De nuevo utilizamos el fichero NeuralNetwork.py; en este caso, la  arquitectura  que mejor rendimiento muestra es la 100-25-1, 25 neuronas en una única capa oculta y un ratio de aprendizaje (learning rate) de 0.2. Diversas arquitecturas pueden contrastarse en el anexo (documento 5) de este trabajo.
 \begin{lstlisting}
 from NeuralNetwork import * 
 nn = NeuralNetwork(x_train,y_train,0.02,[100,25,1],0)
@@ -1207,7 +1258,7 @@ nn.gradient_descent(5000)#gradient descent algorithm
 \caption{Evolución del descenso de error durante el entrenamiento.}
 \end{figure}
 \noindent
-En la anterior figura se aprecia un descenso poco drástico del error entre la iteración 10 y . Esto se debe a que en ese intervalo, el algoritmo itera en torno a un mínimo local, pero una vez rebasado, tiende rápidamente hacia el mínimo global. 
+En la anterior figura se aprecia un descenso poco drástico del error entre la iteración 5 y 15. Esto se debe a que en ese intervalo el algoritmo itera en torno a un mínimo local, pero una vez rebasado, tiende rápidamente hacia el mínimo global. 
 \subsubsection{Visualización.}
 Implementamos de nuevo la función de la matriz de confusión. La función es la siguiente:
 \begin{lstlisting}
@@ -1227,7 +1278,7 @@ def plotCf(a,b,t):
 	   color='white' if cf[i,j] > (cf.max()*0.7) else 'black')
     plt.show();
 \end{lstlisting}
-Llamamos de nuevo a la función. Observamos que esta vez el rendimiento está al rededor del 95 por ciento.
+Llamamos de nuevo a la función. Observamos que esta vez el rendimiento está alrededor del 95 por ciento.
 \begin{lstlisting}
 nn.X,nn.Y=x_test, y_test 
 target= nn.Y
@@ -1239,12 +1290,12 @@ plotCf(target,predicted[0],'Cf Validation Set')
 \includegraphics[scale=0.6]{Annotation 2020-03-23 161410}
 \caption{Matriz de confusión con los resultados del set de prueba.}
 \end{figure}
-Hemos fallado 63 mensajes, de los cuales, 14 han sido clasificado erróneamente como spam y 59 como spam
+Hemos fallado 63 mensajes, de los cuales 14 han sido clasificados erróneamente como spam y 59 como no spam.
 \subsubsection{Con regularización.}
-En este caso la regularización no aporta ninguna mejora, este método ha sido evaluado con distintos valores, pero ninguna prueba ha aportado ninguna mejora. Teniendo en cuenta esto, es posible que el anterior resultado sea el correspondiente al alcanzar el mínimo absoluto en la función de error.
+En este caso la regularización no aporta ninguna mejora, este método ha sido evaluado con distintos valores, pero ninguna prueba ha resultado beneficiosa. Teniendo en cuenta esto, es posible que el anterior resultado sea el correspondiente al alcanzar el mínimo absoluto en la función de error.
 
 \subsubsection{Implementación con regresión logística.}
-Como podemos observar, en este caso la regresión logística es igual de efectiva que la red neuronal, esto es otra indicación que podemos haber hallado el mínimo absoluto de la función de error.
+Como podemos observar, en este caso la regresión logística es igual de efectiva que la red neuronal. Esto es otra indicación que podemos haber hallado el mínimo absoluto de la función de error.
 \begin{lstlisting}
 logistic_regression= LogisticRegression()
 logistic_regression.fit(x_train.T,y_train)
@@ -1265,7 +1316,7 @@ visualizando una fotografía, el sistema visual humano es capaz
 de percibir y definir una gran cantidad de información acerca de ella. Por ejemplo, con la fotografía mostrada, podemos interpretar una inmensa variedad de tonos y colores deducidos del efecto de la luz incidiendo en los pétalos de la flor.\\
 
 \noindent
-Gracias al proceso de detección que realiza el ojo humano, podemos reconocer figuras, bordes, contornos, etc., podemos incluso segmentar la flor del resto de la imagen e interpretar factores como la profundidad a pesar de estar viendo una imagen en dos dimensiones (virtualmente).\\
+Gracias al proceso de detección que realiza el ojo humano, podemos reconocer figuras, bordes, contornos, etc., podemos incluso segmentar la flor del resto de la imagen e interpretar factores como la profundidad, a pesar de estar viendo una imagen en dos dimensiones (virtualmente). En esta sección seguiremos la referencia \cite{otrocurso}\\
 
 \noindent
 El proceso seguido para ello consta de dos partes:
@@ -1282,13 +1333,13 @@ el cual reconstruye un modelo en tres dimensiones de la imagen, gracias a la int
 \caption{Fotografía de una flor de cerezo.}
 \end{figure}
 \noindent
-La Visión Artificial, conocida también como visión por computador, es la disciplina que trata de otorgar a los ordenadores la capacidad de percibir, procesar  e interpretar imágenes de forma análoga a la visión humana. \\Nótese que el ordenador percibe imágenes como matrices de valores numéricos, típicamente comprendidos en el rango de 0 a 255. En el caso de las imágenes RGB este rango se mantiene, pero se amplia la cantidad de información a tres matrices, una por color.\\
+La Visión Artificial, conocida también como visión por computador, es la disciplina que trata de otorgar a los ordenadores la capacidad de percibir, procesar  e interpretar imágenes de forma análoga a la visión humana. \\Nótese que el ordenador percibe imágenes como matrices de valores numéricos, típicamente comprendidos en el rango de 0 a 255. En el caso de las imágenes RGB este rango se mantiene, pero se amplía la cantidad de información a tres matrices, una por color.\\
 
 \noindent
 En las siguientes subsecciones veremos las aplicaciones más comunes de la visión artificial, además de explicar sus limitaciones.
 
 \subsubsection{Aplicaciones.}
-En la actualidad existe una gran variedad de aplicaciones de la visión artificial, es una ciencia que está presente en muchísimos campos. Los más comunes son:
+En la actualidad existen una gran variedad de aplicaciones de la visión artificial; es una ciencia que está presente en muchísimos campos. Los más comunes son:
 \begin{itemize}
 \item Reconocimiento óptico de caracteres (OCR): esta técnica consiste en la lectura e identificación de los caracteres alfanuméricos de una imagen.\\ 
 \noindent
@@ -1318,7 +1369,7 @@ Un claro ejemplo se puede ver en la vigilancia de carreteras. En la actualidad e
 \includegraphics[width=6.5cm, height=4.5cm]{melanoma.jpg}
 \caption{Clasificación de lunares.}
 \end{figure}
-\item Conducción autómata: la conducción autómata es uno de los campos más investigados actualmente. Empresas como Tesla están a la cabeza en la investigación sobre este tema. \\
+\item Conducción autómata: la conducción autómata es el área más puntera de la visión artificial. Empresas como Tesla están a la cabeza en la investigación sobre este tema. \\
 \noindent
 A día de hoy, ya es posible circular en un vehículo que conduce solo por vías fuera de poblado.
 \begin{figure}[H]
@@ -1330,14 +1381,16 @@ A día de hoy, ya es posible circular en un vehículo que conduce solo por vías
 
 \subsubsection{Problemas y limitaciones de la Visión Artificial.}
 El rendimiento de los algoritmos de Visión Artificial está drásticamente ligado a la calidad de los datos. Es mucho más difícil adquirir un buen set de datos cuando hablamos de imágenes que en el caso de otras ramas del Machine Learning.
-\\Aunque existen técnicas de filtrado digital es frecuente encontrarse con limitaciones que dificultan el trabajo de los profesionales. Estas son:
+\\
+
+\noindent
+Aunque existen técnicas de filtrado digital es frecuente encontrarse con limitaciones que dificultan el trabajo de los profesionales. Estas son:
 \begin{itemize}
 \item Variaciones en el punto de vista: es frecuente encontrarse en los conjuntos de imágenes que han sido tomadas desde diferentes tipos de vista. \\
-
 \noindent
 En ocasiones, como en la conducción automática, esto es inevitable y tratar con ello es parte de la tarea de desarrollo. Pero este problema también se presenta en campos como en la medicina, donde no hay una razón aparente que justifique esta inconveniencia. 
 \item Variaciones de escala: es frecuente encontrar imágenes con distintos tamaños, bien por la posición desde donde se han tomado o por las cámaras que se han usado.
-\item Variación lumínica: una variación en la luz puede cambiar drásticamente los valores de una imagen: Recordemos que una imagen es interpretada como una matriz de píxeles por el ordenador.
+\item Variación lumínica: una variación en la luz puede cambiar drásticamente los valores de una imagen. Recordemos que una imagen es interpretada como una matriz de píxeles por el ordenador.
 \item Oclusión:  un objeto puede estar oculto parcialmente en la imagen. Por ejemplo, un peatón que otro coche tapa parcialmente.
 \item Ruido inherente: existen matices frecuentes en algunas fotografías que dificultan mucho el tratamiento de estas. Por ejemplo, la presencia del cabello del paciente en una foto de su lunar.
 
@@ -1347,13 +1400,16 @@ En ocasiones, como en la conducción automática, esto es inevitable y tratar co
 
 \newpage
 \subsection{Redes convolucionales.}
-En este apartado explicaremos las redes neuronales que vamos a necesitar para implementar el último ejercicio del trabajo; estas son las redes convolucionales, en adelante CNN. \\Las CNN se utilizan en problemas de clasificación de imágenes como alternativa al tipo de red que ya hemos visto, pues este queda obsoleto ante una gran cantidad de datos en la capa de entrada, como es en el caso de las imágenes.\\ 
+En este apartado explicaremos las redes neuronales que vamos a necesitar para implementar el último ejercicio del trabajo; estas son las redes convolucionales, en adelante CNN. Seguiremos las referencias \cite{redes}\cite{otrocurso} para esta sección.\\
+
+\noindent
+Las CNN se utilizan en problemas de clasificación de imágenes como alternativa al tipo de red que ya hemos visto, pues este queda obsoleto ante una gran cantidad de datos en la capa de entrada, como es en el caso de las imágenes.\\ 
 
 \noindent
 Procedemos a explicar las novedades y conceptos que dicha red incorpora.
 
 \subsubsection{Filtros.}
-Los filtros son matrices de tamaño configurable, siempre menores que la matriz de entrada, estos se aplican por toda la imagen. El resultado es una nueva matriz cuyos datos derivan de los productos matriciales del filtro y la fotografía. Estos filtros son capaces de extraer características como líneas, curvas, contornos, etc.  \\
+Los filtros son matrices de tamaño configurable, siempre menores que la matriz de entrada. Estos se aplican por toda la imagen. El resultado es una nueva matriz cuyos datos derivan de los productos matriciales del filtro y la fotografía. Estos filtros son capaces de extraer características como líneas, curvas, contornos, etc.  \\
 
 \noindent
 Es decir, si aplicamos un filtro para las líneas verticales y otro para las horizontales, el resultado serán dos imágenes, cada una solo con la información para la que hemos aplicado el filtro.
@@ -1368,8 +1424,8 @@ Si lo comparamos con una ANN, los filtros son los pesos que se entrenan. De esta
 \noindent
 Hay tres parámetros imprescindibles a la hora de definir un filtro:
 \begin{itemize}
-\item Tamaño: podemos definir el tamaño del filtro, que varía en función del tamaño de la imagen y de las características que nos gustaría extraer.  Normalmente se utilizan matrices. cuadradas
-\item Stride:  es el intervalo de posiciones en el que aplicamos el filtro. Si nuestro filtro tiene un stride de 1, el filtro se desplazará por la imagen de píxel en píxel,  si ponemos el valor a dos, lo hará de dos píxeles en dos píxeles. Es decir, se aplicará el filtro cubriendo todos los valores de la imagen, pero el centro del filtro solo coincidirá con la mitad los datos de la imagen. 
+\item Tamaño: podemos definir el tamaño del filtro, que varía en función del tamaño de la imagen y de las características que nos gustaría extraer.  Normalmente se utilizan matrices cuadradas.
+\item Stride:  es el intervalo de posiciones en el que aplicamos el filtro. Si nuestro filtro tiene un stride de 1, el filtro se desplazará por la imagen de píxel en píxel;  si ponemos el valor a dos, lo hará de dos píxeles en dos píxeles. Es decir, se aplicará el filtro cubriendo todos los valores de la imagen, pero el centro del filtro solo coincidirá con la mitad los datos de la imagen. 
 \item Padding: es evidente que al aplicar un filtro no es posible que este recorra la matriz de forma equitativa independientemente del stride. Por ejemplo, en caso de los datos de las esquinas solo se les aplicaría una vez según la explicación dada. El padding indica un margen adicional que introducimos con valores de cero alrededor de la matriz para permitir aplicar el filtro por la totalidad de la imagen. \\
 
 \noindent
@@ -1383,13 +1439,13 @@ Existen dos tipos de padding:
 	\item Same: incluye tantas como sea necesario para que el tamaño de la salida sea igual al de entrada.\begin{figure}[H]
 \centering
 \includegraphics[width=11.0cm, height=4.5cm]{Annotation 2020-04-13 215118.png}
-\caption{Resultado de aplicar same padding a una matriz con 16 elementos. En este caso se crea un paddding de grosor 1.}
+\caption{Resultado de aplicar same padding a una matriz con 16 elementos. En este caso se aplica un paddding de grosor 1.}
 \end{figure}
 	\end{itemize}
 \end{itemize}
-Estos factores son los que determinan el tamaño de la matriz de salida (n), siendo el tamaño del filtro (f), el de la matriz de entrada (i), padding (p) y stride(s).
+Estos factores son los que determinan el tamaño de la matriz de salida ($n$), siendo el tamaño del filtro ($f$), el de la matriz de entrada ($i$), padding ($p$) y stride($s$).
 \[
-n=\frac{i+2p-f}{s}  +1
+n=\frac{i+2p-f}{s}  +1.
 \]
 
 
@@ -1403,16 +1459,16 @@ La operación consiste en desplazar el filtro por la matriz, aplicándolo en cad
 La siguiente fórmula muestra cómo se calcula el número de datos correspondiente a la salida de la capa convolucional.
 
 \[
-n=\frac{i+2p-f}{s}  +1
+n=\frac{i+2p-f}{s}  +1.
 \]
 \[
-output = k * n
+output = k * n.
 \]
 
 Normalmente, tras la capa de convolución, todas las salidas son procesadas por una función ReLu.\\
 
 \noindent
-A primera vista puede parecer que 25.088 datos para una foto tan simple resultan algo disparatado, pero si nos planteamos la cantidad de datos que habría en una red neuronal convencional, no lo es. \\
+A primera vista puede parecer que 25.088 datos para una foto tan simple resulta algo disparatado, pero si nos planteamos la cantidad de datos que habría en una red neuronal convencional, no lo es. \\
 
 \noindent
 Supongamos que tenemos la misma imagen, pero en lugar de una capa convolucional, implementamos una capa con el mismo número de neuronas que el de la capa de entrada. Si cada entrada está conectada a todas las neuronas de la capa siguiente (característica bastante frecuente), el resultado del número de datos sería el cuadrado de la entrada, es decir, 614.656 datos, solo para abordar los pesos. \\
@@ -1427,7 +1483,7 @@ Esta es la capa que se encarga de realizar la reducción del volumen de datos, p
 \noindent
 Existen dos tipos de pooling:
 \begin{itemize}
-\item Max pooling: consiste en reducir las dimensiones de una matriz, separándola en subconjuntos de tamaño configurable y conservando solo el valor mayor de cada fragmento. Dichos subconjuntos se hacen sigiuendo el mismo criterio que seguimos para desplazar los filtros, de forma que, a mayor stride, más se reducirá la matriz.
+\item Max pooling: consiste en reducir las dimensiones de una matriz, separándola en subconjuntos de tamaño configurable y conservando solo el valor mayor de cada fragmento. Dichos subconjuntos se hacen siguiendo el mismo criterio que seguimos para desplazar los filtros, de forma que a mayor stride, más se reducirá la matriz.
 \begin{figure}[H]
 \centering
 \includegraphics[width=11.0cm, height=4.5cm]{maxpool.png}
@@ -1447,7 +1503,7 @@ Esta capa, también conocida como flatten, es una capa a la que se conectan toda
 Aunque este tipo de regularización no es exclusiva de las CNN, la regularización dropout nos será de gran utilidad en la práctica. \\
 
 \noindent
-Esta consiste en desechar aleatoriamente el porcentaje indicado de pesos de una capa en concreto. Dichos pesos ignorados, serán diferentes en cada iteración del entrenamiento, dejando al azar cuales lo son de forma consecutiva y cuales no.\\ 
+Esta consiste en desechar aleatoriamente el porcentaje indicado de pesos de una capa en concreto. Dichos pesos ignorados serán diferentes en cada iteración del entrenamiento, dejando al azar cuales lo son de forma consecutiva y cuales no.\\ 
 
 \noindent
 Este método, aunque pueda parecer algo tosco, es una herramienta muy utilizada en algunos campos del Machine Learning y su eficacia ha sido ampliamente probada.
@@ -1479,14 +1535,14 @@ En el desarrollo de la CNN, podemos usar nuestros conocimientos teóricos para p
 \newpage
 
 \subsection{Aplicación práctica: Clasificación de señales de tráfico.}
-En el siguiente ejercicio vamos a clasificar 43 tipos de imágenes de señales de tráfico en python mediante una CNN. \\
+En el siguiente ejercicio vamos a clasificar 43 tipos de imágenes de señales de tráfico en python mediante una CNN. En esta sección seguiremos la referencia \cite{keras}. Los datos han sido extraidos del repositorio INI Benchmark \cite{ini}.\\
 
 \noindent
 El set de datos que utilizaremos contiene 32902 imágenes divididas en carpetas en función del tipo para el entrenamiento y 12630 para la prueba.
 \subsubsection{Carga de los datos.}
 En esta ocasión los datos de entrenamiento y prueba están almacenados de distinta forma, por ello es necesario que implementemos dos funciones para realizar la carga.
 \paragraph{Carga de datos de entrenamiento.}
-Los datos de entrenamiento están almacenados dentro en 43 carpetas dentro de la carpeta "Train". Debemos recorrer dicho directorio, importar las imágenes RGB y transformarlas en un array de cara a poder manejarlas posteriormente.\\
+Los datos de entrenamiento están almacenados dentro en 43 carpetas dentro de la carpeta "Train". Debemos recorrer dicho directorio, importar las imágenes RGB y transformarlas en una lista de cara a poder manejarlas posteriormente.\\
 
 \noindent
 Como no todas las fotos presentan el mismo tamaño, modificamos ligeramente sus dimensiones con el fin de trabajar siempre con matrices del mismo tamaño, en este caso de 30*30.\\
@@ -1516,7 +1572,7 @@ def load_train(folders,size):
 \end{lstlisting}
 
 \paragraph{Carga de datos de prueba.}
-Esta función carga los datos de prueba. A diferencia de en el apartado anterior, la clase de cada foto se extrae de un archivo csv de con los metadatos. En el resto de la función es igual a la utilizada en la carga de datos.
+Esta función carga los datos de prueba. A diferencia del apartado anterior, la clase de cada foto se extrae de un archivo csv de con los metadatos. En el resto de la función es igual a la utilizada en la carga de datos.
 
 \begin{lstlisting}
 def load_train(folders,size):
@@ -1541,7 +1597,7 @@ def load_train(folders,size):
 Tras cargar los datos, debemos mezclarlos. El modelo debe tener las imágenes barajadas para no ir entrenando clase por clase, esto afecta drásticamente al rendimiento. \\
 
 \noindent
-También creamos un set de datos de validación del 20\% del volumen total de entrenamiento para estudiar la evolución del entrenamiento en tiempo real.
+También creamos un set de datos de validación del 20\% del volumen total para estudiar la evolución del entrenamiento en tiempo real.
 \begin{lstlisting}
 X,Y=load_train(43,[30,30])
 #shuffle the data
@@ -1569,7 +1625,7 @@ plt.show()
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.8]{Annotation 2020-04-28 121743.png}
-\caption{Señales utilizadas en el ejercicio. Sus tamaños reajustados son de 30x30 píxeles.}
+\caption{Muestra de señales utilizadas en el ejercicio. Sus tamaños reajustados son de 30x30 píxeles.}
 \end{figure}
 
 
@@ -1591,7 +1647,7 @@ La arquitectura escogida es una versión simplificada del modelo VGG16. La arqui
 Los elementos de la arquitectura han sido elegidos como resultado del estudio de la materia mostrada y se han ido ajustando en función de los resultados obtenidos durante el desarrollo. Las principales razones son:
 \begin{itemize}
 \item Debido al tamaño de las fotos, los filtros no sobrepasan el tamaño de 5. 
-\item Dado que en todas las fotografías las señales no se ajustan a los bordes, los píxeles que forman el contorno de la imagen no aportan información respecto a la naturaleza de la señal, es por ello que hemos decidido establecer el padding como valid.
+\item Dado que en todas las fotografías las señales no se ajustan a los bordes, los píxeles que forman el contorno de la imagen no aportan información respecto a la naturaleza de la señal; es por ello que hemos decidido establecer el padding como valid.
 \item Por otro lado, la razón de que el stride sea igual a 1, lo cual supone una bajada de rendimiento como se muestra en la fórmula del apartado 5.6.2, es que no queremos perder información de imágenes con tan poca cantidad de píxeles.
 \end{itemize}
 \noindent
@@ -1619,7 +1675,7 @@ def build_model():
 \end{lstlisting}
 
 \subsubsection{Entrenamiento y resultados.}
-Por último, entrenamos la CNN utilizando  la función de error de crross-entropy y el optimizador Adam, el cual es una versión mejorada del gradient descent que permite modificar el learning rate durante el entrenamiento. Entrenamos durante 5 iteraciones con la función compile y fit de la librería.
+Por último, entrenamos la CNN utilizando  la función de error de crross-entropy y el optimizador Adam, que es una versión mejorada del gradient descent que permite modificar el learning rate durante el entrenamiento. Entrenamos durante 5 iteraciones con la función compile y fit de la librería.
 \begin{lstlisting}
 #Compilation of the model
 model=build_model()
@@ -1628,7 +1684,7 @@ model.compile(
     optimizer='adam', 
     metrics=['accuracy']
 )
-#entrenamos el modelo 55 iteraciones
+#entrenamos el modelo 5 iteraciones
 epochs = 5
 history=model.fit(X_train, y_train, batch_size=32, epochs=epochs,
 				validation_data=(X_val, y_val))
@@ -1663,6 +1719,36 @@ print(accuracy_score(Y_test, y_pred))
 \end{lstlisting}
 \newpage
 
+\section{Conclusiones.}
+
+El aprendizaje automático supervisado comprende dos grandes grupos principales de algoritmos claramente diferenciados: los algoritmos de regresión y los de clasificación. En los primeros, la variable dependiente toma un valor continuo, mientras que en los segundos toma un valor discreto. \\
+
+\noindent
+Los modelos de regresión pueden ser lineales o no lineales. Nosotros hemos examinado aquí el modelo lineal, con solución única debido a la convexidad, y el modelo polinomial, donde esta puede no darse. Por otro lado, los modelos de clasificación, pueden ser binarios o multicategoriales. En el primer caso, el algoritmo más simple es el de máxima verosimilitud, que examinamos también en este trabajo.\\
+
+\noindent
+En el segundo caso, los modelos multicategoriales requieren de herramientas más sofisticadas y, muy especialmente, las redes neuronales. Éstas pueden tener varias capas y su etapa de entrenamiento se basa en el algoritmo de retropropagación, una variante en el contexto de redes del método de descenso de gradiente, que ha sido objeto de estudio en el presente trabajo. \\
+
+\noindent
+Tanto en los modelos de regresión como en los de clasificación, ya sean logísticos o basados en redes reuronales, se pueden presentar diversas dificultades, como la velocidad de la convergencia asociada a la determinación óptima de la tasa de aprendizaje, o bien un exceso o defecto de ajuste que podemos corregir mediante diversas técnicas. En el presente trabajo tratamos las técnicas de regularización y escalamiento de variables, y las implementamos en nuestros ejemplos numéricos.\\
+
+\noindent
+Cabe comparar, y así lo hacemos, los modelos logístico y de redes multicapa para problemas de clasificación binaria, como la detección de spam. No es sorprendente que el modelo de redes sea mucho más preciso que el logístico, como atestiguan nuestras simulaciones.\\
+
+\noindent
+Otro aspecto a tener en cuenta en el diseño de una red multicapa es, precisamente, el número de capas intermedias y la cantidad de neuronas de cada capa. Es un tema que depende en gran medida del fenómeno bajo estudio, en otras palabras, no existe un enfoque general.\\
+
+\noindent
+Nosotros hemos implementado diversos modelos multicapa, variando tanto el número de neuronas por capa, como la manera de aplicar regularización. Esto se ha realizado, en gran medida, mediante ensayo-error, pero también analizando cómo cada propuesta descartada se acercaba a determinados mínimos locales no globales, fenómeno que ocurre con cierta frecuencia cuando un modelo es demasiado complejo para el problema que trata de resolver. \\
+
+\noindent
+Por último, dentro de la teoría de redes neuronales, estudiamos la variante convolucional, asociada a problemas de clasificación de imágenes con cierto nivel de complejidad. Se trata de uno de los principales objetos de estudio del Aprendizaje Profundo, que también examinamos en detalle en nuestra memoria, tanto desde un punto de vista matemático como desde su implementación para un problema concreto: clasificación de señales de tráfico, en el que hemos obtenido un 97\%  de precisión, usando regularización.\\
+
+\noindent
+Consideramos necesario mencionar el papel fundamental que desempeña la elección del algoritmo de optimización más adecuado a cada problema, aspecto que hemos discutido con todo rigor en cada apartado. Comenzamos motivados por la minimización de la función de coste en el caso de regresión, con especial atención a la prueba de su convexidad, después, discutimos por qué es preferible maximizar la función de verosimilitud en el modelo logístico, y por qué es preferible una solución aproximada (como descenso de gradiente o su generalización en redes) a la solución exacta proporcionada por métodos matriciales directos. Finalmente, en nuestro problema de redes convolucionales, hemos de ir un paso allá y sustituir el método de descenso de gradiente por el algoritmo de Adam.\\
+
+\newpage
+
 \section{Marco técnico.}
 En este apartado cubriremos las herramientas utilizadas en el desarrollo del trabajo. Estas se desglosan en:
 \begin{itemize}
@@ -1671,7 +1757,7 @@ En este apartado cubriremos las herramientas utilizadas en el desarrollo del tra
 \item Entornos  de desarrollo.
 \end{itemize}
 \subsection{Python.}
-Python es un lenguaje de programación	más usado actualmente, destaca por la legibilidad en su código. Su nombre es en honor al grupo británico de cómicos Monty Python, su creador decidió llamarlo así debido a que el lenguaje es "sencillo y divertido".\\
+Python es uno de los lenguajes de programación más usado actualmente, destaca por la legibilidad en su código. Su nombre es en honor al grupo británico de cómicos Monty Python, su creador decidió llamarlo así debido a que el lenguaje es "sencillo y divertido".\\
 
 \noindent
 Es un lenguaje interpretado y  multiparadigma, ya que soporta programación orientada objetos, imperativa y funcional. Otro de los grandes puntos a favor es que Python es un lenguaje no tipado.\\
@@ -1679,17 +1765,17 @@ Es un lenguaje interpretado y  multiparadigma, ya que soporta programación orie
 \noindent
 Todas estas características describen una herramienta versátil ideal para este trabajo. 
 \subsection{Frameworks y librerías.}
-Los frameworks y librerías de Python son la razón de que sea el lenguaje ideal para el desarrollo de inteligencia artificial. Acontinucaión se describen los más usados en este trabajo.
+Los frameworks y librerías de Python son la razón de que sea el lenguaje ideal para el desarrollo de inteligencia artificial. A continuación se describen los más usados en este trabajo.
 \begin{itemize}
 \item Numpy: es la librería utilizada para las operaciones de datos. Permite realizar cálculos tediosos en una sola línea de código. Su mejor faceta reside en las listas de la librería, las cuales pueden ser n-dimensionales.
 \item Pandas: es la librería referente en extracción de datos. Durante todo el desarrollo trabajaremos cargando los datos gracias a esta librería y usando constantemente sus dataframes.
 \item Matplotlib: librería muy utilizada para visualización de datos. En este trabajo solo utilizaremos un ápice de su potencial.
 \item Tensorflow: es el framework que utilizaremos para los modelos. Es un framework de código abierto desarrollado por Google. Permite instanciar redes neuronales, así como configurar sus capas en pocas líneas de código, solo preocupándonos de los parámetros a configurar. En el trabajo usaremos su versión de GPU, la cual utiliza la tarjeta gráfica para procesar la información, agilizando mucho la tarea de entrenamiento del modelo.
-\item Keras: es la librería "front end"  de Tensorflow, esto significa que es el intermediario entre nosotros y el propio framework. En el desarrollo, utilizaremos keras pero Tensorflow hará el trabajo  computacional.
+\item Keras: es la librería "front end"\hspace{0.15cm}de Tensorflow, esto significa que es el intermediario entre nosotros y el propio framework. En el desarrollo, utilizaremos keras pero Tensorflow hará el trabajo  computacional.
 \end{itemize}
 
 \subsection{Entornos de desarrollo.}
-Los entornos de desarrollo (o IDE's) son las herramientas que nos permiten programar de manera más sencilla y eficaz. A continuación, describimos los utilizados en el trabajo.
+Los entornos de desarrollo (o IDE's) son las herramientas que nos permiten programar de manera más sencilla y eficaz, proporcionando al desarrollador múltiples funcionalidades que aligeran su tarea. A continuación describimos los utilizados en el trabajo.
 \subsubsection{Visual Studio Code.}
 Es un entorno creado por Microsoft a caballo entre los entornos clásicos y los editores de texto. No es exclusivo de Python pero aporta multitud de facilidades al desarrollador gracias a su gran cantidad de extensiones.
 \subsubsection{Jupyter Notebooks.}
@@ -1698,6 +1784,43 @@ Es uno de los entornos más utilizados en Ciencia de Datos. Tiene dos caracterí
 \item  Celdas: permite ejecutar el código por celdas o bloques. Esto agiliza mucho el desarrollo, permitiendo realizar la carga de datos una sola vez pero realizar tantas modificaciones como queramos en el modelo.
 \item Markdown: en los notebooks podemos implementar celdas en lenguaje Markdown, un lenguaje sencillo que permite añadir explicaciones al código. El resultado es un notebook en el que se explica cada paso y resultado del código de una forma muy intuitiva.
 \end{itemize}
+
+\newpage
+
+
+\begin{thebibliography}{99}
+\addcontentsline{toc}{section}{References}
+
+\bibitem{cálculo} Demidovich, B.P., Maron, I.A.: Cálculo Numérico,  Ed. Thompson Paraninfo, 1988.
+\bibitem{cálculo2} Strang, G.: Álgebra lineal y sus aplicaciones, Ed. Thompson Paraninfo, 2007.
+\bibitem{granada} Fernando Berzal: Backpropagation, Universidad de Granada.
+\bibitem{formulasann} Hung T. Nguyen, Nadipuram R. Prasad, Carol L. Walker, Elbert A. Walker: A First Course in Fuzzy and Neural Contro, Chapman and Hall/CRC, 2002.
+\bibitem{andrew} Andrew NG: Machine Learning. Stanford University (online course).
+\bibitem{otrocurso} CS231n Convolutional Neural Networks for Visual Recognition: Module 2. Stanford University (online course).
+\bibitem{redes} Sebastian Raschka, Vahid Mirjalili: Python Machine Learning, Marcombo, 2019.
+\bibitem{keras} Keras-Tensorflow de Python.
+\bibitem{uci} UCI Machine Learning Repository.
+\bibitem{ini} INI Benchmark Repository.
+\end{thebibliography}
+\newpage
+
+\section*{Anexo.}
+\addcontentsline{toc}{section}{Anexo}
+En el siguiente anexo se explica el contenido de cada uno de los documentos adjuntos a este trabajo:
+\begin{itemize}
+\item NeuralNetwork.py: su contenido es el código mostrado en la sección 5.2.
+\item cancer-classificator.html: su contenido es el código mostrado en la sección 5.3.
+\item cancer-classificator.html: muestra las arquitecturas alternativas probadas para el ejercicio de la sección 5.3.
+\item Spam-classifier.html: su contenido es el código mostrado en la sección 5.4.
+\item Spam-classifier otras arquitecturas.html: muestra las arquitecturas alternativas probadas para el ejercicio de la sección 5.4.
+\item Traffic-sign-clasificator.html: su contenido es el código mostrado en la sección 5.7.
+\item Handwritten-Recognition-CNN-test.html: su contenido es el desarrollo de un clasificaddor de número escrito a mano. No ha sido incluido en la memoria por su simplicidad.
+\item Handwritten-Recognition-otras-arquitecturas.html: recoge las distintas arquitecturas probadas para el anterior documento.
+\item Skin-cancer-try.html: recoge un intento de un clasificador de melanomas. No ha sido incluido en el trabajo por su bajo rendimento.
+
+
+\end{itemize}
+
 \end{document}	
 
 

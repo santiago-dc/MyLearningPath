@@ -1,0 +1,17 @@
+1. Apartados previos.
+
+En esta sección se realizan los apartados demandados en la descripción de la PEC 1 que no aparecen en el capítulo 1 de la plantilla.
+
+1.1	Propuesta de título: Desarrollo de un modelo predictivo sobre fraude en transacciones basadas en el uso de tarjetas de crédito.
+1.2	Palabras clave (keywords): Machine Learning, imbalanced dataset, credit card fraud detection.
+1.3	Resumen de la propuesta (abstract):
+1.4	Explicación de la motivación personal: 
+
+Elegí este trabajo porque buscaba una tarea realista, en la que los datos supusieran el mayor desafío en el proyecto. 
+
+Como estudiantes estamos acostumbrados a pasar la mayor parte del probando modelos y jugando con los hiperparámetros de los mismos. En este proyecto el desafío principal es balancear los datos, esto me parece una aproximación a cómo debe ser el día de un data scientist en el mundo laboral.
+
+Por otra parte, el hecho de que los datos provengan de tarjetas de crédito resulta para mí un aliciente. Me motiva la idea de trabajar en un proyecto relacionado con el sector bancario ya que me parece uno de los mejores en los que trabajar como data scientist.
+
+1.5	Bibliografía
+
